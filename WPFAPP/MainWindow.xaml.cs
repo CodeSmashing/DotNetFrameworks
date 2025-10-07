@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +21,29 @@ namespace WPFAPP
         public MainWindow()
         {
             InitializeComponent();
+
+            AgendaDbContext context = new();
+            dgAppointments.ItemsSource = context.Appointments
+                                                    .Where(app => app.Deleted >= DateTime.Now &&
+                                                    app.From > DateTime.Now)
+                                                    .Include(app => app.AppointmentType)
+                                                    .ToList();
+        }
+
+        private void dgAppointments_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgAppointments.SelectedIndex == dgAppointments.Items.Count - 1)
+            {
+                btnAdd.IsEnabled = true;
+                btnEdit.IsEnabled = false;
+                btnDelete.IsEnabled = false;
+            }
+            else
+            {
+                btnEdit.IsEnabled = true;
+                btnDelete.IsEnabled = true;
+                btnAdd.IsEnabled = false;
+            }
         }
     }
 }

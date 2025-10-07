@@ -5,8 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFAPP"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="MainWindow" Height="614" Width="1115">
+    <StackPanel Margin="15,45,0,0" Orientation="Vertical">
+        <Label Content="Appointments"></Label>
+        <DataGrid x:Name="dgAppointments" Height="400" Width="auto" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionMode="Single" SelectionChanged="dgAppointments_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Wanneer" Binding="{Binding From}" Width="150"/>
+                <DataGridTextColumn Header="Tot" Binding="{Binding To}" Width="150"/>
+                <DataGridTextColumn Header="Afspraak" Binding="{Binding Title}" Width="200"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="300"/>
+                <DataGridTextColumn Header="Hele Dag?" Binding="{Binding AllDay}" Width="150"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding AppointmentType.Name}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,15,0,0">
+            <Button x:Name="btnAdd" Content="Toevoegen" Width="100" Height="30" IsEnabled="False"/>
+            <Button x:Name="btnEdit" Content="Wijzigen" Width="100" Height="30" IsEnabled="False" />
+            <Button x:Name="btnDelete" Content="Verwijderen" Width="100" Height="30" IsEnabled="False" />
+        </StackPanel>
+    </StackPanel>
 </Window>
