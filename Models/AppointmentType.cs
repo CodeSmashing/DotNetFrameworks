@@ -10,7 +10,7 @@ namespace Models
     public class AppointmentType
     {
         // Dummy instantie voor referentie
-        static public AppointmentType Dummy = null;
+        static public AppointmentType Dummy;
 
         // [Key]
         public int Id { get; set; }
@@ -30,7 +30,7 @@ namespace Models
             return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
         }
 
-        // Voorzie ook een seeding data
+        // seeding data
         public static List<AppointmentType> SeedingData()
         {
             var list = new List<AppointmentType>();

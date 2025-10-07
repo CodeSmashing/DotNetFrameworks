@@ -19,7 +19,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,15,0,0">
-            <Button x:Name="btnAdd" Content="Toevoegen" Width="100" Height="30" IsEnabled="False"/>
+            <Button x:Name="btnAdd" Content="Toevoegen" Width="100" Height="30"/>
             <Button x:Name="btnEdit" Content="Wijzigen" Width="100" Height="30" IsEnabled="False" />
             <Button x:Name="btnDelete" Content="Verwijderen" Width="100" Height="30" IsEnabled="False" />
         </StackPanel>

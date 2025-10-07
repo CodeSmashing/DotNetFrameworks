@@ -12,8 +12,8 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(AgendaDbContext))]
-    [Migration("20251006132713_Agenda")]
-    partial class Agenda
+    [Migration("20251007091206_AnotherTest")]
+    partial class AnotherTest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

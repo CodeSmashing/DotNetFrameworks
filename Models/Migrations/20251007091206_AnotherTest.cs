@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Models.Migrations
 {
     /// <inheritdoc />
-    public partial class Agenda : Migration
+    public partial class AnotherTest : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
