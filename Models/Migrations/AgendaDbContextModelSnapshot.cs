@@ -30,9 +30,6 @@ namespace Models.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<bool>("AllDay")
-                        .HasColumnType("bit");
-
                     b.Property<int>("AppointmentTypeId")
                         .HasColumnType("int");
 
@@ -85,6 +82,29 @@ namespace Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppointmentTypes");
+                });
+
+            modelBuilder.Entity("Models.Todo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Ready")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("Models.Appointment", b =>

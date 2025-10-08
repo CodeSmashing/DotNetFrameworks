@@ -21,10 +21,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Eindopdracht\Eindopdracht.csproj" />
+    
+	<ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
-  </ItemGroup>
+	</ItemGroup>
 
 </Project>

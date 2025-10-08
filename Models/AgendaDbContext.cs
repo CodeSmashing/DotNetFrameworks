@@ -11,6 +11,7 @@ namespace Models
     {
         public DbSet<AppointmentType> AppointmentTypes { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Todo> Todos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +32,12 @@ namespace Models
             if (!context.Appointments.Any())
             {
                 context.Appointments.AddRange(Appointment.SeedingData());
+                context.SaveChanges();
+            }
+
+            if (!context.Todos.Any())
+            {
+                context.Todos.AddRange(Todo.SeedingData());
                 context.SaveChanges();
             }
         }

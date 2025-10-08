@@ -40,10 +40,6 @@ namespace Models
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Hele dag")]
-        public bool AllDay { get; set; } = false;
-
-        [Required]
         [Display(Name = "Aangemaakt")]
         public DateTime Created { get; set; } = DateTime.Now;
 
@@ -55,7 +51,7 @@ namespace Models
         [Required]
         [Display(Name = "Type")]
         [ForeignKey("AppointmentType")]
-        public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id;
+        public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id = 0;
 
         // Navigatie-eigenschap
         public AppointmentType? AppointmentType { get; set; }
@@ -76,14 +72,9 @@ namespace Models
                 new Appointment { Title = "-", Deleted = DateTime.Now },
 
                 // Voeg enkele test-appointments toe
-                new Appointment { Title = "Meeting with Bob", Description = "Discuss project updates", From = DateTime.Now.AddDays(2).AddHours(10), To = DateTime.Now.AddDays(2).AddHours(11), AppointmentTypeId = 1 },
-                new Appointment { Title = "Doctor's Appointment", Description = "Annual check-up", From = DateTime.Now.AddDays(3).AddHours(9), To = DateTime.Now.AddDays(3).AddHours(10), AppointmentTypeId = 2 },
-                new Appointment { Title = "Team Conference", Description = "Quarterly team meeting", From = DateTime.Now.AddDays(5).AddHours(14), To = DateTime.Now.AddDays(5).AddHours(16), AppointmentTypeId = 4 },
-                new Appointment { Title = "Holiday", Description = "Family vacation", From = DateTime.Now.AddDays(10), To = DateTime.Now.AddDays(15), AllDay = true, AppointmentTypeId = 3 },
-                new Appointment { Title = "Project Deadline", Description = "Submit final project report", From = DateTime.Now.AddDays(7).AddHours(17), To = DateTime.Now.AddDays(7).AddHours(18), AppointmentTypeId = 1 },
-                new Appointment { Title = "Client Meeting", Description = "Meeting with client to discuss requirements", From = DateTime.Now.AddDays(4).AddHours(11), To = DateTime.Now.AddDays(4).AddHours(12), AppointmentTypeId = 1 },
-                new Appointment { Title = "Webinar", Description = "Attend online marketing webinar", From = DateTime.Now.AddDays(6).AddHours(15), To = DateTime.Now.AddDays(6).AddHours(16), AppointmentTypeId = 4 },
-                new Appointment { Title = "Dentist Appointment", Description = "Routine dental check-up", From = DateTime.Now.AddDays(8).AddHours(10), To = DateTime.Now.AddDays(8).AddHours(11), AppointmentTypeId = 2 }
+                new Appointment { Title = "Afspraak met Jan", Description = "Bespreking van het tuinontwerp", From = DateTime.Now.AddDays(2).AddHours(10), To = DateTime.Now.AddDays(2).AddHours(11), AppointmentTypeId = 2 },
+                new Appointment { Title = "Onderhoud tuin bij Piet", Description = "Jaarlijks onderhoud van de tuin", From = DateTime.Now.AddDays(5).AddHours(9), To = DateTime.Now.AddDays(5).AddHours(10), AppointmentTypeId = 1 },
+                new Appointment { Title = "Kennismaking met Klaas", Description = "Eerste gesprek over mogelijke tuinprojecten", From = DateTime.Now.AddDays(7).AddHours(14), To = DateTime.Now.AddDays(7).AddHours(15), AppointmentTypeId = 3 }
                 );
 
             return list;

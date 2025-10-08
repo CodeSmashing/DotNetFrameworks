@@ -27,14 +27,14 @@ namespace WPFAPP
             //dgAppointments.ItemsSource = context.Appointments
             //                                        .Where(app => app.Deleted >= DateTime.Now &&
             //                                                        app.From > DateTime.Now)
-            //                                        .Include(app => app.AppointmentType) 
+            //                                        .Include(app => app.AppointmentType)
             //                                        .ToList();
 
             //Anatief met query syntax(Efficient, can use only the data you need)
             dgAppointments.ItemsSource = (from app in context.Appointments
                                           where app.Deleted >= DateTime.Now && app.From > DateTime.Now
                                           orderby app.From
-                                          select new { app.From, app.To, app.Title, app.Description, app.AllDay, app.AppointmentType })
+                                          select new { app.From, app.To, app.Title, app.Description, app.AppointmentType })
                                           .ToList();
         }
 
