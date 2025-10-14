@@ -1,45 +1,48 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
-{
-    public class AgendaDbContext : DbContext
-    {
-        public DbSet<AppointmentType> AppointmentTypes { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<Todo> Todos { get; set; }
+namespace Models {
+	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
+		public DbSet<AppointmentType> AppointmentTypes {
+			get; set;
+		}
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
+		public DbSet<Appointment> Appointments {
+			get; set;
+		}
 
-            optionsBuilder.UseSqlServer(connectionString);
-        }
+		public DbSet<ToDo> ToDos {
+			get; set;
+		}
 
-        public static void Seeder(AgendaDbContext context)
-        {
-            if (!context.AppointmentTypes.Any())
-            {
-                context.AppointmentTypes.AddRange(AppointmentType.SeedingData());
-                context.SaveChanges();
-            }
-            AppointmentType.Dummy = context.AppointmentTypes.First(at => at.Name == "-");
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
 
-            if (!context.Appointments.Any())
-            {
-                context.Appointments.AddRange(Appointment.SeedingData());
-                context.SaveChanges();
-            }
+			optionsBuilder.UseSqlServer(connectionString);
+		}
 
-            if (!context.Todos.Any())
-            {
-                context.Todos.AddRange(Todo.SeedingData());
-                context.SaveChanges();
-            }
-        }
-    }
+		public static void Seeder(AgendaDbContext context) {
+			AgendaUser.Seeder(context);
+
+			if (!context.AppointmentTypes.Any()) {
+				context.AppointmentTypes.AddRange(AppointmentType.SeedingData());
+				context.SaveChanges();
+			}
+
+			if (!context.Appointments.Any()) {
+				context.Appointments.AddRange(Appointment.SeedingData());
+				context.SaveChanges();
+			}
+
+			if (!context.ToDos.Any()) {
+				context.ToDos.AddRange(ToDo.SeedingData());
+				context.SaveChanges();
+			}
+		}
+	}
 }

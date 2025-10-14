@@ -6,7 +6,7 @@ using (var context = new AgendaDbContext())
 
     // Haal alle appointments op en toon deze
     var alleAppointments = context.Appointments;
-    var alleTodos = context.Todos;
+    var alleTodos = context.ToDos;
     Console.WriteLine("Alle afspraken: ");
     foreach (var appointment in alleAppointments)
     {

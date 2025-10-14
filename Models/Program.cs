@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            
-        }
-    }
+namespace Models {
+	internal class Program {
+		static void Main(string[] args) {
+
+		}
+	}
 }

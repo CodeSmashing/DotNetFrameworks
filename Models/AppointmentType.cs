@@ -5,48 +5,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
-{
-    public class AppointmentType
-    {
-        // Dummy instantie voor referentie
-        
+namespace Models {
+	public class AppointmentType {
+		// Dummy instantie voor referentie
+		static public readonly AppointmentType Dummy = new() { Name = "-", Description = "-", Deleted = DateTime.MaxValue };
 
-        // [Key]
-        public int Id { get; set; }
+		// [Key]
+		public int Id {
+			get; set;
+		}
 
-        [Required]
-        public string Name { get; set; } = "";
+		[Required]
+		public string Name { get; set; } = string.Empty;
 
-        [Required]
-        public string Description { get; set; } = "";
+		[Required]
+		public string Description { get; set; } = string.Empty;
 
-        [Required]
-        public DateTime Deleted { get; set; } = DateTime.MaxValue;
+		[Required]
+		public DateTime Deleted { get; set; } = DateTime.MaxValue;
 
+		public override string ToString() {
+			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
+		}
 
-        public override string ToString()
-        {
-            return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
-        }
+		// seeding data
+		public static List<AppointmentType> SeedingData() {
+			List<AppointmentType> list = new();
 
-        static public AppointmentType Dummy = new AppointmentType { Name = "-", Description = "-", Deleted = DateTime.MaxValue };
-        // seeding data
-        public static List<AppointmentType> SeedingData()
-        {
-            var list = new List<AppointmentType>();
-            list.AddRange(list = new List<AppointmentType>
-            {
-                // Voeg een dummy AppointmentType toe
-                Dummy,
+			list.AddRange(list = new() {
+				// Voeg een dummy AppointmentType toe
+				Dummy,
 
-                // Voeg enkele voorbeeld AppointmentTypes toe
-                new AppointmentType { Name = "Onderhoud", Description = "Algemeen onderhoud"},
-                new AppointmentType { Name = "Aanleg", Description = "Aanleggen van tuin" },
-                new AppointmentType { Name = "Kennismaking", Description = "Kennismaking klant" }
-            });
-            return list;
+				// Voeg enkele voorbeeld AppointmentTypes toe
+				new() { Name = "Onderhoud", Description = "Algemeen onderhoud"},
+				new() { Name = "Aanleg", Description = "Aanleggen van tuin" },
+				new() { Name = "Kennismaking", Description = "Kennismaking klant" }
+			});
 
-        }
-    }
+			return list;
+		}
+	}
 }

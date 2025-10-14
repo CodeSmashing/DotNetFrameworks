@@ -6,54 +6,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
-{
-    public class Todo
-    {
+namespace Models {
+	public class ToDo {
+		static public readonly ToDo Dummy = new() { Title = "-", Ready = false, AppointmentId = 0 };
 
-        public long Id { get; set; }
+		public long Id {
+			get; set;
+		}
 
-        [Required]
-        [Display(Name = "Title")]
-        public string Title { get; set; } = string.Empty;
+		[Required]
+		[Display(Name = "Title")]
+		public string Title { get; set; } = string.Empty;
 
-        [Required]
-        [Display(Name = "Klaar")]
-        public bool Ready { get; set; } = false;
+		[Required]
+		[Display(Name = "Klaar")]
+		public bool Ready { get; set; } = false;
 
+		// Foreign key naar Appointment
+		[Required]
+		[Display(Name = "Appointment")]
+		[ForeignKey("Appointment")]
+		public int AppointmentId {
+			get; set;
+		}
 
-        // Foreign key naar Appointment
-        [Required]
-        [Display(Name = "Appointment")]
-        [ForeignKey("Appointment")]
-        public int AppointmentId { get; set; }
+		public override string ToString() {
+			return $"TodoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
+		}
 
-        static public Todo Dummy = new Todo { Title = "-", Ready = false, AppointmentId = 0};
+		// seeding data
+		public static List<ToDo> SeedingData() {
+			List<ToDo> list = new();
 
-        public override string ToString()
-        {
-            return $"TodoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
-        }
+			list.AddRange(list = new() {
+				// Voeg een dummy ToDo toe
+				Dummy,
 
-        // seeding data
-        public static List<Todo> SeedingData()
-        {
-            var list = new List<Todo>();
-            list.AddRange(list = new List<Todo>
-            {
-                // Voeg een dummy Todo toe
-                Dummy,
+				// Voeg enkele voorbeeld ToDos toe
+				new ToDo { Title = "Eerste ToDo", Ready = false, AppointmentId = 1},
+				new ToDo { Title = "Tweede ToDo", Ready = true, AppointmentId = 1},
+				new ToDo { Title = "Derde ToDo", Ready = false , AppointmentId = 1},
+				new ToDo { Title = "Eerste ToDo", Ready = false, AppointmentId = 2},
+				new ToDo { Title = "Tweede ToDo", Ready = true, AppointmentId = 2},
+				new ToDo { Title = "Derde ToDo", Ready = false , AppointmentId = 2 }
+			});
 
-                // Voeg enkele voorbeeld Todos toe
-                new Todo { Title = "Eerste Todo", Ready = false, AppointmentId = 1},
-                new Todo { Title = "Tweede Todo", Ready = true, AppointmentId = 1},
-                new Todo { Title = "Derde Todo", Ready = false , AppointmentId = 1},
-                new Todo { Title = "Eerste Todo", Ready = false, AppointmentId = 2},
-                new Todo { Title = "Tweede Todo", Ready = true, AppointmentId = 2},
-                new Todo { Title = "Derde Todo", Ready = false , AppointmentId = 2 }
-            });
-            return list;
-
-        }
-    }
+			return list;
+		}
+	}
 }
