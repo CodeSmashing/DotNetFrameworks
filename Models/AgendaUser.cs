@@ -38,9 +38,9 @@ namespace Models {
 						Name = "Employee",
 						NormalizedName = "EMPLOYEE" },
 					new() {
-						Id = "Guest",
-						Name = "Guest",
-						NormalizedName = "GUEST" }
+						Id = "User",
+						Name = "User",
+						NormalizedName = "USER" }
 				});
 				context.SaveChanges();
 			}
@@ -65,12 +65,12 @@ namespace Models {
 					Email = "employee@gardenDb.org",
 					EmailConfirmed = true
 				};
-				AgendaUser guest = new() {
+				AgendaUser user = new() {
 					FirstName = "-",
 					LastName = "-",
-					UserName = "guest",
-					NormalizedUserName = "GUEST",
-					Email = "guest@gardenDb.org",
+					UserName = "user",
+					NormalizedUserName = "USER",
+					Email = "user@gardenDb.org",
 					EmailConfirmed = true
 				};
 
@@ -83,7 +83,7 @@ namespace Models {
 
 				await userManager.CreateAsync(admin, "P@ssword1");
 				await userManager.CreateAsync(employee, "P@ssword1");
-				await userManager.CreateAsync(guest, "P@ssword1");
+				await userManager.CreateAsync(user, "P@ssword1");
 
 				while (context.Users.Count() < 5) {
 					// Wait until the users are created
@@ -92,7 +92,7 @@ namespace Models {
 
 				await userManager.AddToRoleAsync(admin, "Admin");
 				await userManager.AddToRoleAsync(employee, "Employee");
-				await userManager.AddToRoleAsync(guest, "Guest");
+				await userManager.AddToRoleAsync(user, "Guest");
 				return;
 			}
 		}

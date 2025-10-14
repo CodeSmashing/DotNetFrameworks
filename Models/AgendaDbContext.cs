@@ -26,8 +26,8 @@ namespace Models {
 			optionsBuilder.UseSqlServer(connectionString);
 		}
 
-		public static void Seeder(AgendaDbContext context) {
-			AgendaUser.Seeder(context);
+		public static async void Seeder(AgendaDbContext context) {
+			await AgendaUser.Seeder(context);
 
 			if (!context.AppointmentTypes.Any()) {
 				context.AppointmentTypes.AddRange(AppointmentType.SeedingData());
