@@ -1,0 +1,73 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WPFAPP {
+	/// <summary>
+	/// Interaction logic for LoginControl.xaml
+	/// </summary>
+	public partial class LoginControl : UserControl {
+		private readonly UserManager<AgendaUser> _userManager;
+		public event EventHandler SwapRequested = null!;
+
+		public LoginControl(UserManager<AgendaUser> userManager) {
+			_userManager = userManager;
+			InitializeComponent();
+		}
+
+		private async void btnLogin_Click(object sender, RoutedEventArgs e) {
+			// Return early if inputs are empty
+			if (string.IsNullOrEmpty(tbUsername.Text)) {
+				tbError.Text = "Username is required";
+				return;
+			}
+
+			if (string.IsNullOrEmpty(pbPassword.Password)) {
+				tbError.Text = "Password is required";
+				return;
+			}
+
+			if (!string.IsNullOrEmpty(pbPassword.Password) && !string.IsNullOrEmpty(tbUsername.Text)) {
+				AgendaUser? user = await _userManager.FindByNameAsync(tbUsername.Text);
+
+				if (user != null) {
+					bool succeeded = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
+
+					if (succeeded) {
+						// Update UI for logged in user
+						App.User = user;
+
+						// Return to appointments tab
+						App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tiAppointmentRequest;
+
+						// Show/hide relevant controls
+						App.MainWindow.FormContainer.Visibility = Visibility.Collapsed;
+						App.MainWindow.btnLogout.Visibility = Visibility.Visible;
+						App.MainWindow.tbUsernameInfo.Text = user.UserName?.ToString();
+					}
+					tbError.Text = "Invalid username or password";
+				} else {
+					tbError.Text = "Invalid username or password";
+				}
+			}
+		}
+
+		// Notify MainWindow to swap to whatever control it wants
+		private void btnSwap_Click(object sender, RoutedEventArgs e) {
+			SwapRequested?.Invoke(this, EventArgs.Empty);
+		}
+	}
+}

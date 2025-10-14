@@ -6,16 +6,32 @@
         xmlns:local="clr-namespace:WPFAPP"
         mc:Ignorable="d"
         Title="MainWindow" Height="614" Width="1115">
-    <StackPanel Margin="15,45,0,0" Orientation="Vertical">
-        <Label Content="Appointments"></Label>
-        <DataGrid x:Name="dgAppointments" Height="400" Width="auto" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionMode="Single" Margin="10px" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="From" Binding="{Binding From}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="To" Binding="{Binding To}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Appointment" Binding="{Binding Title}" Width="200" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="300" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding AppointmentType.Name}" Width="150" IsReadOnly="True"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </StackPanel>
+	<StackPanel Margin="15,0,0,0" Orientation="Vertical">
+		<TabControl x:Name="tcNavigation">
+			<TabItem x:Name="tiAppointmentRequest" Header="Appointment request">
+				<DataGrid x:Name="dgAppointments" Height="400" Width="auto" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionMode="Single" Margin="10px" AutoGenerateColumns="False">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="From" Binding="{Binding From}" Width="150" IsReadOnly="True"/>
+						<DataGridTextColumn Header="To" Binding="{Binding To}" Width="150" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Appointment" Binding="{Binding Title}" Width="200" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="300" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Type" Binding="{Binding AppointmentType.Name}" Width="150" IsReadOnly="True"/>
+					</DataGrid.Columns>
+				</DataGrid>
+			</TabItem>
+			<TabItem x:Name="tiRegisterLogin" Header="Register/login">
+				<Grid x:Name="FormContainer" />
+			</TabItem>
+			<TabItem x:Name="tiUserInfo" Header="UserInfo" Visibility="Hidden">
+				<StackPanel Orientation="Vertical" Margin="10px">
+					<TextBlock Text="User" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+					<StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+						<TextBlock Text="Username:" FontWeight="Bold" Width="100"/>
+						<TextBlock x:Name="tbUsernameInfo"/>
+					</StackPanel>
+					<Button x:Name="btnLogout" Content="Logout" Width="100" Margin="0,10,0,0" Click="btnLogout_Click"/>
+				</StackPanel>
+			</TabItem>
+		</TabControl>
+	</StackPanel>
 </Window>
