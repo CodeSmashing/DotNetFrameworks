@@ -8,7 +8,7 @@
         Title="MainWindow" Height="614" Width="1115">
     <StackPanel Margin="15,45,0,0" Orientation="Vertical">
         <Label Content="Appointments"></Label>
-        <DataGrid x:Name="dgAppointments" Height="400" Width="auto" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionMode="Single" SelectionChanged="dgAppointments_SelectionChanged" Margin="10px">
+        <DataGrid x:Name="dgAppointments" Height="400" Width="auto" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionMode="Single" Margin="10px">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Wanneer" Binding="{Binding From}" Width="150"/>
                 <DataGridTextColumn Header="Tot" Binding="{Binding To}" Width="150"/>
@@ -18,11 +18,5 @@
                 <DataGridTextColumn Header="Todos" Binding="{Binding Todo}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
-
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,15,0,0">
-            <Button x:Name="btnAdd" Content="Toevoegen" Width="100" Height="30"/>
-            <Button x:Name="btnEdit" Content="Wijzigen" Width="100" Height="30" IsEnabled="False" />
-            <Button x:Name="btnDelete" Content="Verwijderen" Width="100" Height="30" IsEnabled="False" />
-        </StackPanel>
     </StackPanel>
 </Window>

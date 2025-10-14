@@ -26,7 +26,6 @@ namespace WPFAPP
             AgendaDbContext context = new();
 
             dgAppointments.ItemsSource = (from app in context.Appointments
-                                          where app.Deleted >= DateTime.Now && app.From > DateTime.Now
                                           orderby app.From
                                           select new
                                           {
@@ -34,28 +33,9 @@ namespace WPFAPP
                                               app.To,
                                               app.Title,
                                               app.Description,
-                                              app.AppointmentType,
-                                              Todos = context.Todos
-                                                  .Where(todo => todo.AppointmentId == app.Id)
-                                                  .Select(todo => new { todo.Id, todo.Title, todo.Ready })
-                                                  .ToList()
+                                              app.AppointmentType
                                           })
                                           .ToList();
-        }
-        private void dgAppointments_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgAppointments.SelectedIndex == dgAppointments.Items.Count - 1)
-            {
-                btnAdd.IsEnabled = true;
-                btnEdit.IsEnabled = false;
-                btnDelete.IsEnabled = false;
-            }
-            else
-            {
-                btnEdit.IsEnabled = true;
-                btnDelete.IsEnabled = true;
-                btnAdd.IsEnabled = false;
-            }
         }
     }
 }
