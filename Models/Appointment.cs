@@ -51,7 +51,7 @@ namespace Models
         [Required]
         [Display(Name = "Type")]
         [ForeignKey("AppointmentType")]
-        public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id = 0;
+        public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id;
 
         // Navigatie-eigenschap
         public AppointmentType? AppointmentType { get; set; }

@@ -14,10 +14,11 @@
                 <DataGridTextColumn Header="Tot" Binding="{Binding To}" Width="150"/>
                 <DataGridTextColumn Header="Afspraak" Binding="{Binding Title}" Width="200"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="300"/>
-                <DataGridTextColumn Header="Hele Dag?" Binding="{Binding AllDay}" Width="150"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding AppointmentType.Name}" Width="150"/>
+                <DataGridTextColumn Header="Todos" Binding="{Binding Todo}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
+
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,15,0,0">
             <Button x:Name="btnAdd" Content="Toevoegen" Width="100" Height="30"/>
             <Button x:Name="btnEdit" Content="Wijzigen" Width="100" Height="30" IsEnabled="False" />

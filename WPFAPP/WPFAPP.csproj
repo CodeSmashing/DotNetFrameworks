@@ -21,9 +21,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-    
-	<ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Console\Console.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
-	</ItemGroup>
+  </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(AgendaDbContext))]
-    [Migration("20251008105436_New")]
+    [Migration("20251008130138_New")]
     partial class New
     {
         /// <inheritdoc />

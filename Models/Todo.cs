@@ -32,7 +32,7 @@ namespace Models
 
         public override string ToString()
         {
-            return $"{Id}: {Title} ({Ready})";
+            return $"TodoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
         }
 
         // seeding data
@@ -48,6 +48,9 @@ namespace Models
                 new Todo { Title = "Eerste Todo", Ready = false, AppointmentId = 1},
                 new Todo { Title = "Tweede Todo", Ready = true, AppointmentId = 1},
                 new Todo { Title = "Derde Todo", Ready = false , AppointmentId = 1},
+                new Todo { Title = "Eerste Todo", Ready = false, AppointmentId = 2},
+                new Todo { Title = "Tweede Todo", Ready = true, AppointmentId = 2},
+                new Todo { Title = "Derde Todo", Ready = false , AppointmentId = 2 }
             });
             return list;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Numerics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,20 +25,23 @@ namespace WPFAPP
 
             AgendaDbContext context = new();
 
-            //dgAppointments.ItemsSource = context.Appointments
-            //                                        .Where(app => app.Deleted >= DateTime.Now &&
-            //                                                        app.From > DateTime.Now)
-            //                                        .Include(app => app.AppointmentType)
-            //                                        .ToList();
-
-            //Anatief met query syntax(Efficient, can use only the data you need)
             dgAppointments.ItemsSource = (from app in context.Appointments
                                           where app.Deleted >= DateTime.Now && app.From > DateTime.Now
                                           orderby app.From
-                                          select new { app.From, app.To, app.Title, app.Description, app.AppointmentType })
+                                          select new
+                                          {
+                                              app.From,
+                                              app.To,
+                                              app.Title,
+                                              app.Description,
+                                              app.AppointmentType,
+                                              Todos = context.Todos
+                                                  .Where(todo => todo.AppointmentId == app.Id)
+                                                  .Select(todo => new { todo.Id, todo.Title, todo.Ready })
+                                                  .ToList()
+                                          })
                                           .ToList();
         }
-
         private void dgAppointments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgAppointments.SelectedIndex == dgAppointments.Items.Count - 1)
