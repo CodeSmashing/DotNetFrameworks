@@ -55,6 +55,10 @@ namespace Models {
 		[ForeignKey("AppointmentType")]
 		public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id;
 
+		[Required]
+		[Display(Name = "IsApproved")]
+		public bool IsApproved { get; set; } = false;
+
 		// Navigatie-eigenschap
 		public AppointmentType? AppointmentType {
 			get; set;
