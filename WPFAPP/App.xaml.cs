@@ -14,7 +14,6 @@ namespace WPFAPP
         {
             base.OnStartup(e);
             AgendaDbContext context = new AgendaDbContext();
-            MainWindow mainWindow = new();
             AgendaDbContext.Seeder(context);
         }
     }

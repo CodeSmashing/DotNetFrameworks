@@ -27,15 +27,28 @@ namespace WPFAPP
 
             dgAppointments.ItemsSource = (from app in context.Appointments
                                           orderby app.From
-                                          select new
-                                          {
-                                              app.From,
-                                              app.To,
-                                              app.Title,
-                                              app.Description,
-                                              app.AppointmentType
-                                          })
+                                          select app)
                                           .ToList();
+
+            dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
+        }
+
+        private void dgAppointments_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (dgAppointments.SelectedItem is Appointment selectedAppointment)
+            {
+                // Show appointment details in a popup
+                MessageBox.Show(
+                    $"From: {selectedAppointment.From}\n" +
+                    $"To: {selectedAppointment.To}\n" +
+                    $"Title: {selectedAppointment.Title}\n" +
+                    $"Description: {selectedAppointment.Description}\n" +
+                    $"Type: {selectedAppointment.AppointmentType}",
+                    "Appointment Details",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
     }
 }
