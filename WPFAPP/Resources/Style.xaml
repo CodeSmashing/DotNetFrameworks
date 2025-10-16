@@ -124,6 +124,12 @@
 		<Setter Property="Margin" Value="10,20"/>
 	</Style>
 
+	<!-- H4 style for title, inherits -->
+	<Style x:Key="TitleH4" TargetType="TextBlock" BasedOn="{StaticResource BaseTitle}">
+		<Setter Property="FontSize" Value="20"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+	</Style>
+
 	<!-- H5 style for title, inherits -->
 	<Style x:Key="TitleH5" TargetType="TextBlock" BasedOn="{StaticResource BaseTitle}">
 		<Setter Property="FontSize" Value="24"/>
