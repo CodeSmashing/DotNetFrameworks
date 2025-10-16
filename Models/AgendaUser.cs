@@ -12,7 +12,8 @@ namespace Models {
 
 		public string LastName { get; set; } = "-";
 
-		private static readonly AgendaUser Dummy = new() {
+		public static readonly AgendaUser Dummy = new() {
+			Id = "-",
 			FirstName = "-",
 			LastName = "-",
 			UserName = "dummy",
@@ -37,6 +38,10 @@ namespace Models {
 						Id = "Employee",
 						Name = "Employee",
 						NormalizedName = "EMPLOYEE" },
+					new() {
+						Id = "UserAdmin",
+						Name = "UserAdmin",
+						NormalizedName = "USERADMIN" },
 					new() {
 						Id = "User",
 						Name = "User",
@@ -65,6 +70,14 @@ namespace Models {
 					Email = "employee@gardenDb.org",
 					EmailConfirmed = true
 				};
+				AgendaUser userAdmin = new() {
+					FirstName = "-",
+					LastName = "-",
+					UserName = "useradmin",
+					NormalizedUserName = "USERADMIN",
+					Email = "useradmin@gardenDb.org",
+					EmailConfirmed = true
+				};
 				AgendaUser user = new() {
 					FirstName = "-",
 					LastName = "-",
@@ -83,6 +96,7 @@ namespace Models {
 
 				await userManager.CreateAsync(admin, "P@ssword1");
 				await userManager.CreateAsync(employee, "P@ssword1");
+				await userManager.CreateAsync(userAdmin, "P@ssword1");
 				await userManager.CreateAsync(user, "P@ssword1");
 
 				while (context.Users.Count() < 5) {
@@ -92,7 +106,8 @@ namespace Models {
 
 				await userManager.AddToRoleAsync(admin, "Admin");
 				await userManager.AddToRoleAsync(employee, "Employee");
-				await userManager.AddToRoleAsync(user, "Guest");
+				await userManager.AddToRoleAsync(userAdmin, "UserAdmin");
+				await userManager.AddToRoleAsync(user, "User");
 				return;
 			}
 		}

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Models {
 	public class AppointmentType {
-		// Dummy instantie voor referentie
+		// Dummy default user
 		static public readonly AppointmentType Dummy = new() { Name = "-", Description = "-", Deleted = DateTime.MaxValue };
 
 		// [Key]
@@ -16,10 +17,17 @@ namespace Models {
 		}
 
 		[Required]
+		[ForeignKey("AgendaUser")]
+		public string UserId { get; set; } = AgendaUser.Dummy.Id;
+		public AgendaUser? AgendaUser { get; set; }
+
+		[Required]
 		public string Name { get; set; } = string.Empty;
 
 		[Required]
 		public string Description { get; set; } = string.Empty;
+
+		public string Color { get; set; } = "#FF000000"; // Color in which the appointment wil be shown, default is black
 
 		[Required]
 		public DateTime Deleted { get; set; } = DateTime.MaxValue;

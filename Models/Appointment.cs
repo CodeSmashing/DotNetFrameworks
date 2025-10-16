@@ -15,6 +15,11 @@ namespace Models {
 		}
 
 		[Required]
+		[ForeignKey("AgendaUser")]
+		public string UserId { get; set; } = AgendaUser.Dummy.Id;
+		public AgendaUser? AgendaUser { get; set; }
+
+		[Required]
 		[Display(Name = "Vanaf")]
 		[DataType(DataType.DateTime)]
 		public DateTime From {
@@ -55,14 +60,14 @@ namespace Models {
 		[ForeignKey("AppointmentType")]
 		public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id;
 
-		[Required]
-		[Display(Name = "IsApproved")]
-		public bool IsApproved { get; set; } = false;
-
 		// Navigatie-eigenschap
 		public AppointmentType? AppointmentType {
 			get; set;
 		}
+
+		[Required]
+		[Display(Name = "IsApproved")]
+		public bool IsApproved { get; set; } = false;
 
 		public override string ToString() {
 			return Id + "  Afspraak op " + From + " betreffende " + Title;
