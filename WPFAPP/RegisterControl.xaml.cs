@@ -53,8 +53,8 @@ namespace WPFAPP {
 				tbError.Text = "Password is required";
 				return;
 			}
-			if (string.IsNullOrEmpty(pbConfirmPassword.Password)) {
-				tbError.Text = "Password confirmation is required";
+			if (pbPassword.Password != pbConfirmPassword.Password) {
+				tbError.Text = "Passwords aren't the same";
 				return;
 			}
 
