@@ -16,7 +16,7 @@ namespace WPFAPP {
 
 		static public AgendaUser User {
 			get; set;
-		} = null!;
+		} = AgendaUser.Dummy;
 
 		static public MainWindow MainWindow {
 			get; private set;
@@ -48,7 +48,9 @@ namespace WPFAPP {
 			AgendaDbContext context = new();
 			AgendaDbContext.Seeder(context);
 
-			MainWindow = new(App.ServiceProvider.GetRequiredService<AgendaDbContext>());
+			MainWindow = new(
+				App.ServiceProvider.GetRequiredService<AgendaDbContext>(),
+				App.ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
 			MainWindow.Show();
 		}
 	}

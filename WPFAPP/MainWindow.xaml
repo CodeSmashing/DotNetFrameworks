@@ -1,28 +1,64 @@
 ﻿<Window x:Class="WPFAPP.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFAPP"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="614" Width="1115">
-	<StackPanel Margin="15,0,0,0" Orientation="Vertical">
+		  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		  xmlns:local="clr-namespace:WPFAPP"
+		  mc:Ignorable="d"
+		  Title="MainWindow" Height="614" Width="1115">
+	<StackPanel Margin="15,0,0,0" Orientation="Horizontal">
 		<TabControl x:Name="tcNavigation">
-			<TabItem x:Name="tiAppointmentRequest" Header="Appointment request">
-				<DataGrid x:Name="dgAppointments" Height="400" Width="auto" VerticalAlignment="Top" HorizontalAlignment="Left" SelectionMode="Single" Margin="10px" AutoGenerateColumns="False">
+			<TabItem x:Name="tciAppointmentRequest" Header="Appointment request">
+				<DataGrid
+					x:Name="dgAppointments"
+					Height="400"
+					Width="auto"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left"
+					SelectionMode="Single"
+					Margin="10px"
+					AutoGenerateColumns="False">
+
 					<DataGrid.Columns>
-						<DataGridTextColumn Header="From" Binding="{Binding From}" Width="150" IsReadOnly="True"/>
-						<DataGridTextColumn Header="To" Binding="{Binding To}" Width="150" IsReadOnly="True"/>
-						<DataGridTextColumn Header="Appointment" Binding="{Binding Title}" Width="200" IsReadOnly="True"/>
-						<DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="300" IsReadOnly="True"/>
-						<DataGridTextColumn Header="Type" Binding="{Binding AppointmentType.Name}" Width="150" IsReadOnly="True"/>
+						<DataGridTextColumn
+							Header="From"
+							Binding="{Binding From}"
+							Width="150"
+							IsReadOnly="True"/>
+
+						<DataGridTextColumn
+							Header="To"
+							Binding="{Binding To}"
+							Width="150"
+							IsReadOnly="True"/>
+
+						<DataGridTextColumn
+							Header="Appointment"
+							Binding="{Binding Title}"
+							Width="200"
+							IsReadOnly="True"/>
+
+						<DataGridTextColumn
+							Header="Description"
+							Binding="{Binding Description}"
+							Width="300"
+							IsReadOnly="True"/>
+
+						<DataGridTextColumn
+							Header="Type"
+							Binding="{Binding AppointmentType.Name}"
+							Width="150"
+							IsReadOnly="True"/>
 					</DataGrid.Columns>
 				</DataGrid>
 			</TabItem>
-			<TabItem x:Name="tiRegisterLogin" Header="Register/login">
+			<TabItem x:Name="tciRegisterLogin" Header="Register/login">
 				<Grid x:Name="FormContainer" />
 			</TabItem>
-			<TabItem x:Name="tiUserInfo" Header="UserInfo" Visibility="Hidden">
+			<TabItem x:Name="tciUsers" Header="Users" Visibility="Visible">
+				<StackPanel x:Name="UserRoleInfoContainer" />
+			</TabItem>
+			<TabItem x:Name="tciGeneral" Header="General" Visibility="Visible">
 				<StackPanel Orientation="Vertical" Margin="10px">
 					<TextBlock Text="User" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 					<StackPanel Orientation="Horizontal" Margin="0,0,0,5">

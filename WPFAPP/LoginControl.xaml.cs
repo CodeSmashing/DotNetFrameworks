@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,12 @@ namespace WPFAPP {
 	/// Interaction logic for LoginControl.xaml
 	/// </summary>
 	public partial class LoginControl : UserControl {
+		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
 
-		public LoginControl(UserManager<AgendaUser> userManager) {
+		public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+			_context = context;
 			_userManager = userManager;
 			InitializeComponent();
 		}
@@ -44,17 +47,19 @@ namespace WPFAPP {
 				AgendaUser? user = await _userManager.FindByNameAsync(tbUsername.Text);
 
 				if (user != null) {
-					bool succeeded = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
+					bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
 
-					if (succeeded) {
+					if (loginSuccess) {
 						// Update UI for logged in user
 						App.User = user;
 
 						// Return to appointments tab
-						App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tiAppointmentRequest;
+						App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tciAppointmentRequest;
 
 						// Show/hide relevant controls
-						App.MainWindow.FormContainer.Visibility = Visibility.Collapsed;
+						App.MainWindow.dgAppointments.Visibility = Visibility.Visible;
+						App.MainWindow.tciGeneral.Visibility = Visibility.Visible;
+						App.MainWindow.tciRegisterLogin.Visibility = Visibility.Hidden;
 						App.MainWindow.btnLogout.Visibility = Visibility.Visible;
 						App.MainWindow.tbUsernameInfo.Text = user.UserName?.ToString();
 					}

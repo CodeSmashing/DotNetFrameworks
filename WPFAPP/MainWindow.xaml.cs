@@ -21,16 +21,19 @@ namespace WPFAPP {
 	/// </summary>
 	public partial class MainWindow : Window {
 		private readonly AgendaDbContext _context;
+		private readonly UserManager<AgendaUser> _userManager;
 		private readonly LoginControl loginControl;
 		private readonly RegisterControl registerControl;
+		private readonly RoleControl roleControl;
 
-		public MainWindow(AgendaDbContext context) {
+		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
+			_userManager = userManager;
 			InitializeComponent();
 
-			// Instantiate controls
-			loginControl = new LoginControl(App.ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
-			registerControl = new RegisterControl(App.ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
+			// Instantiate controls and their containers
+			loginControl = new(_context, _userManager);
+			registerControl = new(_context, _userManager);
 			FormContainer.Children.Clear();
 			FormContainer.Children.Add(registerControl);
 
@@ -38,13 +41,19 @@ namespace WPFAPP {
 			loginControl.SwapRequested += SwapControlsHandler;
 			registerControl.SwapRequested += SwapControlsHandler;
 
-			// Show register by default
-			FormContainer.Children.Clear();
-			FormContainer.Children.Add(registerControl);
+			// Hide and show elements based on required authentication
+			dgAppointments.Visibility = Visibility.Hidden;
+			tciUsers.Visibility = Visibility.Hidden;
+			btnLogout.Visibility = Visibility.Hidden;
+			tciGeneral.Visibility = Visibility.Hidden;
+			tbUsernameInfo.Text = string.Empty;
 
-			dgAppointments.ItemsSource = (from app in context.Appointments
-													orderby app.From
-													select app)
+			dgAppointments.ItemsSource = _context.Appointments
+													.Where(app => app.Deleted >= DateTime.Now
+																	&& app.From > DateTime.Now
+																	&& app.UserId == App.User.Id)
+													.OrderBy(app => app.From)
+													.Select(app => app)
 													.ToList();
 
 			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
@@ -68,13 +77,16 @@ namespace WPFAPP {
 
 		private void btnLogout_Click(object sender, RoutedEventArgs e) {
 			// Update UI for logged in user
-			App.User = new();
-			FormContainer.Visibility = Visibility.Visible;
+			App.User = AgendaUser.Dummy;
+			dgAppointments.Visibility = Visibility.Hidden;
+			tciRegisterLogin.Visibility = Visibility.Visible;
+			tciUsers.Visibility = Visibility.Hidden;
 			btnLogout.Visibility = Visibility.Hidden;
+			tciGeneral.Visibility = Visibility.Hidden;
 			tbUsernameInfo.Text = string.Empty;
 
 			// Return to appointments tab
-			tcNavigation.SelectedItem = tiAppointmentRequest;
+			tcNavigation.SelectedItem = tciAppointmentRequest;
 		}
 
 		private void SwapControlsHandler(object sender, EventArgs e) {

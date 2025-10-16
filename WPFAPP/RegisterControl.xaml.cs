@@ -26,9 +26,9 @@ namespace WPFAPP {
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
 
-		public RegisterControl(UserManager<AgendaUser> userManager) {
+		public RegisterControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+			_context = context;
 			_userManager = userManager;
-			_context = App.ServiceProvider.GetRequiredService<AgendaDbContext>();
 			InitializeComponent();
 		}
 
@@ -80,10 +80,12 @@ namespace WPFAPP {
 				App.User = registeredUser;
 
 				// Return to appointments tab
-				App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tiAppointmentRequest;
+				App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tciAppointmentRequest;
 
 				// Show/hide relevant controls
-				App.MainWindow.FormContainer.Visibility = Visibility.Collapsed;
+				App.MainWindow.dgAppointments.Visibility = Visibility.Visible;
+				App.MainWindow.tciGeneral.Visibility = Visibility.Visible;
+				App.MainWindow.tciRegisterLogin.Visibility = Visibility.Hidden;
 				App.MainWindow.btnLogout.Visibility = Visibility.Visible;
 				App.MainWindow.tbUsernameInfo.Text = registeredUser.UserName?.ToString();
 			} else {
