@@ -74,6 +74,18 @@ namespace WPFAPP {
 				tbError.Text = "User registered successfully";
 
 				_context.Add(new IdentityUserRole<string>() { RoleId = "User", UserId = registeredUser.Id });
+
+				// Make it so the user gets the "default" appointment types
+				List<AppointmentType> types = _context.AppointmentTypes.Where(at => at.UserId == AgendaUser.Dummy.Id).ToList();
+				foreach (AppointmentType type in types) {
+					AppointmentType at = new() {
+						UserId = App.User.Id,
+						Color = type.Color,
+						Description = type.Description,
+						Name = type.Name
+					};
+					_context.Add(at);
+				}
 				_context.SaveChanges();
 
 				// Update UI for logged in user

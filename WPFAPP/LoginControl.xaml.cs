@@ -62,6 +62,13 @@ namespace WPFAPP {
 						App.MainWindow.tciRegisterLogin.Visibility = Visibility.Hidden;
 						App.MainWindow.btnLogout.Visibility = Visibility.Visible;
 						App.MainWindow.tbUsernameInfo.Text = user.UserName?.ToString();
+
+						IdentityUserRole<string>? isUserAdmin = _context.UserRoles.FirstOrDefault(ur => ur.UserId == App.User.Id && ur.RoleId == "UserAdmin");
+						if (isUserAdmin != null) {
+							App.MainWindow.tciUsers.Visibility = Visibility.Visible;
+						} else {
+							App.MainWindow.tciUsers.Visibility = Visibility.Hidden;
+						}
 					}
 					tbError.Text = "Invalid username or password";
 				} else {

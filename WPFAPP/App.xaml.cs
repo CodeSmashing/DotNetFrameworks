@@ -38,7 +38,9 @@ namespace WPFAPP {
 				options.Password.RequireUppercase = false;
 				options.Password.RequiredLength = 3;
 				options.Password.RequiredUniqueChars = 1;
-			}).AddEntityFrameworkStores<AgendaDbContext>();
+			})
+				.AddEntityFrameworkStores<AgendaDbContext>()
+				.AddRoles<IdentityRole>();
 
 			serviceSet.AddLogging();
 

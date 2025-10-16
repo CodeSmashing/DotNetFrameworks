@@ -34,8 +34,10 @@ namespace WPFAPP {
 			// Instantiate controls and their containers
 			loginControl = new(_context, _userManager);
 			registerControl = new(_context, _userManager);
+			roleControl = new(_context, _userManager);
 			FormContainer.Children.Clear();
 			FormContainer.Children.Add(registerControl);
+			UserRoleInfoContainer.Children.Add(roleControl);
 
 			// Subscribe to swap events
 			loginControl.SwapRequested += SwapControlsHandler;
