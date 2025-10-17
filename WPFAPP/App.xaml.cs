@@ -50,7 +50,12 @@ namespace WPFAPP {
 			AgendaDbContext context = new();
 			AgendaDbContext.Seeder(context);
 
-			MainWindow = new(
+            //while (context.AppointmentTypes.Count() == 0) {
+            //    // Wait until the users are created
+            //    await Task.Delay(100);
+            //}
+
+            MainWindow = new(
 				App.ServiceProvider.GetRequiredService<AgendaDbContext>(),
 				App.ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
 			MainWindow.Show();

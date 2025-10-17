@@ -140,7 +140,7 @@
 
 	<!-- Base style for TextBox -->
 	<Style TargetType="TextBox">
-		<Setter Property="Background" Value="Blue"/>
+		<Setter Property="Background" Value="DarkOliveGreen"/>
 	</Style>
 
 	<!-- Wider TextBox style, inherits -->

@@ -61,11 +61,11 @@ namespace Models {
 		public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id;
 
 		// Navigatie-eigenschap
-		public AppointmentType? AppointmentType {
+		public AppointmentType AppointmentType {
 			get; set;
-		}
+		} = AppointmentType.Dummy;
 
-		[Required]
+        [Required]
 		[Display(Name = "IsApproved")]
 		public bool IsApproved { get; set; } = false;
 

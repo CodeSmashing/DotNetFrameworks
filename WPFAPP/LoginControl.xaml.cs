@@ -20,58 +20,73 @@ namespace WPFAPP {
 	/// <summary>
 	/// Interaction logic for LoginControl.xaml
 	/// </summary>
-	public partial class LoginControl : UserControl {
+	public partial class LoginControl : UserControl
+	{
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
+		public event EventHandler LoginSucceeded = null!;
 
-		public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+        public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager)
+		{
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();
 		}
 
-		private async void btnLogin_Click(object sender, RoutedEventArgs e) {
+		private async void btnLogin_Click(object sender, RoutedEventArgs e)
+		{
 			// Return early if inputs are empty
-			if (string.IsNullOrEmpty(tbUsername.Text)) {
+			if (string.IsNullOrEmpty(tbUsername.Text))
+			{
 				tbError.Text = "Username is required";
 				return;
 			}
 
-			if (string.IsNullOrEmpty(pbPassword.Password)) {
+			if (string.IsNullOrEmpty(pbPassword.Password))
+			{
 				tbError.Text = "Password is required";
 				return;
 			}
 
-			if (!string.IsNullOrEmpty(pbPassword.Password) && !string.IsNullOrEmpty(tbUsername.Text)) {
+			if (!string.IsNullOrEmpty(pbPassword.Password) && !string.IsNullOrEmpty(tbUsername.Text))
+			{
 				AgendaUser? user = await _userManager.FindByNameAsync(tbUsername.Text);
 
-				if (user != null) {
+				if (user != null)
+				{
 					bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
 
-					if (loginSuccess) {
+					if (loginSuccess)
+					{
 						// Update UI for logged in user
 						App.User = user;
 
-						// Return to appointments tab
-						App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tciAppointmentRequest;
-
-						// Show/hide relevant controls
-						App.MainWindow.dgAppointments.Visibility = Visibility.Visible;
+                        // Show/hide relevant controls
+                        App.MainWindow.dgAppointments.Visibility = Visibility.Visible;
 						App.MainWindow.tciGeneral.Visibility = Visibility.Visible;
 						App.MainWindow.tciRegisterLogin.Visibility = Visibility.Hidden;
 						App.MainWindow.btnLogout.Visibility = Visibility.Visible;
 						App.MainWindow.tbUsernameInfo.Text = user.UserName?.ToString();
 
 						IdentityUserRole<string>? isUserAdmin = _context.UserRoles.FirstOrDefault(ur => ur.UserId == App.User.Id && ur.RoleId == "UserAdmin");
-						if (isUserAdmin != null) {
+						if (isUserAdmin != null)
+						{
 							App.MainWindow.tciUsers.Visibility = Visibility.Visible;
-						} else {
+						}
+						else
+						{
 							App.MainWindow.tciUsers.Visibility = Visibility.Hidden;
 						}
+
+                        // Return to appointments tab
+                        // Notify MainWindow if succreesfully logged in
+                        LoginSucceeded?.Invoke(this, EventArgs.Empty);
 					}
 					tbError.Text = "Invalid username or password";
-				} else {
+				}
+				else
+				{
 					tbError.Text = "Invalid username or password";
 				}
 			}
