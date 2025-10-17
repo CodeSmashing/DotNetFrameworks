@@ -108,7 +108,7 @@
 			Style="{StaticResource ButtonCentered}"
 			Click="btnSwap_Click" />
 
-		<TextBlock
+		<StackPanel
 			x:Name="tbError"
 			Grid.Row="9"
 			Grid.Column="1"

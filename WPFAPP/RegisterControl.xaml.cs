@@ -25,6 +25,18 @@ namespace WPFAPP {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
+		public event EventHandler<AgendaUser> RegisterSuccess = null!;
+
+		// Define registration requirements
+		// Key: Field name, Value: Human-readable name
+		public KeyValuePair<string, string>[] registerRequirements = [
+			new("tbUsername", "Username"),
+			new("tbFirstName", "First name"),
+			new("tbLastName", "Last name"),
+			new("tbEmail", "Email"),
+			new("pbPassword", "Password"),
+			new("pbConfirmPassword", "Password confirmation"),
+		];
 
 		public RegisterControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
@@ -33,32 +45,44 @@ namespace WPFAPP {
 		}
 
 		private void btnRegister_Click(object sender, RoutedEventArgs e) {
-			if (string.IsNullOrEmpty(tbUsername.Text)) {
-				tbError.Text = "Username is required";
-				return;
+			// Clear previous errors
+			tbError.Children.Clear();
+
+			// Validate inputs
+			foreach (var field in new Control[] { tbUsername, tbFirstName, tbLastName, tbEmail, pbPassword, pbConfirmPassword }) {
+				// If field is required
+				KeyValuePair<string, string> fieldRequirement = registerRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
+				if (fieldRequirement.Value == null) {
+					continue;
+				}
+
+				// Get value and check if empty
+				string? value = (string?) field.GetType().GetProperty(field is TextBox ? "Text" : "Password")?.GetValue(field);
+				bool isEmpty = string.IsNullOrEmpty(value);
+				field.ClearValue(Border.BorderBrushProperty);
+
+				// If empty, add error
+				if (isEmpty) {
+					field.BorderBrush = Brushes.Red;
+					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is required" });
+				}
+
+				// Special case: Check if passwords match
+				if (field is PasswordBox passwordBox && !passwordBox.Equals(pbConfirmPassword)) {
+					if (!pbConfirmPassword.Password.Equals(passwordBox.Password)) {
+						field.BorderBrush = Brushes.Red;
+						tbError.Children.Add(new TextBlock { Text = "Passwords aren't the same" });
+					}
+				}
 			}
-			if (string.IsNullOrEmpty(tbFirstName.Text)) {
-				tbError.Text = "First name is required";
-				return;
-			}
-			if (string.IsNullOrEmpty(tbLastName.Text)) {
-				tbError.Text = "Last name is required";
-				return;
-			}
-			if (string.IsNullOrEmpty(tbEmail.Text)) {
-				tbError.Text = "Email is required";
-				return;
-			}
-			if (string.IsNullOrEmpty(pbPassword.Password)) {
-				tbError.Text = "Password is required";
-				return;
-			}
-			if (pbPassword.Password != pbConfirmPassword.Password) {
-				tbError.Text = "Passwords aren't the same";
+
+			// If there are errors, return early
+			if (tbError.Children.Count > 0) {
 				return;
 			}
 
-			AgendaUser registeredUser = new() {
+			// Attempt to create user
+			AgendaUser newUser = new() {
 				UserName = tbUsername.Text,
 				FirstName = tbFirstName.Text,
 				LastName = tbLastName.Text,
@@ -67,43 +91,32 @@ namespace WPFAPP {
 				LockoutEnabled = false,
 				TwoFactorEnabled = false
 			};
-			var result = _userManager.CreateAsync(registeredUser, pbPassword.Password).Result;
-
-			if (result.Succeeded) {
-				MessageBox.Show("Account created successfully. You can now log in.");
-				tbError.Text = "User registered successfully";
-
-				_context.Add(new IdentityUserRole<string>() { RoleId = "User", UserId = registeredUser.Id });
-
-				// Make it so the user gets the "default" appointment types
-				List<AppointmentType> types = _context.AppointmentTypes.Where(at => at.UserId == AgendaUser.Dummy.Id).ToList();
-				foreach (AppointmentType type in types) {
-					AppointmentType at = new() {
-						UserId = App.User.Id,
-						Color = type.Color,
-						Description = type.Description,
-						Name = type.Name
-					};
-					_context.Add(at);
-				}
-				_context.SaveChanges();
-
-				// Update UI for logged in user
-				App.User = registeredUser;
-
-				// Return to appointments tab
-				App.MainWindow.tcNavigation.SelectedItem = App.MainWindow.tciAppointmentRequest;
-
-				// Show/hide relevant controls
-				App.MainWindow.dgAppointments.Visibility = Visibility.Visible;
-				App.MainWindow.tciGeneral.Visibility = Visibility.Visible;
-				App.MainWindow.tciRegisterLogin.Visibility = Visibility.Hidden;
-				App.MainWindow.btnLogout.Visibility = Visibility.Visible;
-				App.MainWindow.tbUsernameInfo.Text = registeredUser.UserName?.ToString();
-			} else {
-				tbError.Text = string.Join("\n", result.Errors.Select(err => err.Description));
+			var result = _userManager.CreateAsync(newUser, pbPassword.Password).Result;
+			if (!result.Succeeded) {
+				tbError.Children.Add(new TextBlock { Text = string.Join("\n", result.Errors.Select(err => err.Description)) });
 				return;
 			}
+
+			// Clear previous errors and show success message
+			tbError.Children.Clear();
+			MessageBox.Show("Account created successfully. You can now log in.");
+			_context.Add(new IdentityUserRole<string>() { RoleId = "User", UserId = newUser.Id });
+
+			// Make it so the user gets the "default" appointment types
+			List<AppointmentType> types = _context.AppointmentTypes.Where(at => at.UserId == AgendaUser.Dummy.Id).ToList();
+			foreach (AppointmentType type in types) {
+				AppointmentType at = new() {
+					UserId = App.User.Id,
+					Color = type.Color,
+					Description = type.Description,
+					Name = type.Name
+				};
+				_context.Add(at);
+			}
+			_context.SaveChanges();
+
+			// Notify MainWindow if registration was successful
+			RegisterSuccess?.Invoke(this, newUser);
 		}
 
 		// Notify MainWindow to swap to whatever control it wants

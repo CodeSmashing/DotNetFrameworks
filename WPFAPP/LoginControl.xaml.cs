@@ -20,76 +20,69 @@ namespace WPFAPP {
 	/// <summary>
 	/// Interaction logic for LoginControl.xaml
 	/// </summary>
-	public partial class LoginControl : UserControl
-	{
+	public partial class LoginControl : UserControl {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
-		public event EventHandler LoginSucceeded = null!;
+		public event EventHandler<AgendaUser> LoginSuccess = null!;
 
-        public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager)
-		{
+		// Define login requirements
+		// Key: Field name, Value: Human-readable name
+		public KeyValuePair<string, string>[] loginRequirements = [
+			new("tbUsername", "Username"),
+			new("pbPassword", "Password")
+		];
+
+		public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();
 		}
 
-		private async void btnLogin_Click(object sender, RoutedEventArgs e)
-		{
-			// Return early if inputs are empty
-			if (string.IsNullOrEmpty(tbUsername.Text))
-			{
-				tbError.Text = "Username is required";
+		private async void btnLogin_Click(object sender, RoutedEventArgs e) {
+			// Clear previous errors
+			tbError.Children.Clear();
+
+			// Validate inputs
+			foreach (var field in new Control[] { tbUsername, pbPassword }) {
+				// If field is required
+				KeyValuePair<string, string> fieldRequirement = loginRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
+				if (fieldRequirement.Value == null) {
+					continue;
+				}
+
+				// Get value and check if empty
+				string? value = (string?) field.GetType().GetProperty(field is TextBox ? "Text" : "Password")?.GetValue(field);
+				bool isEmpty = string.IsNullOrEmpty(value);
+				field.ClearValue(Border.BorderBrushProperty);
+
+				// If empty, add error
+				if (isEmpty) {
+					field.BorderBrush = Brushes.Red;
+					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is required" });
+				}
+			}
+
+			// If there are errors, return early
+			if (tbError.Children.Count > 0) {
 				return;
 			}
 
-			if (string.IsNullOrEmpty(pbPassword.Password))
-			{
-				tbError.Text = "Password is required";
+			// Check if user exists and password is correct
+			AgendaUser? user = await _userManager.FindByNameAsync(tbUsername.Text);
+			if (user == null) {
+				tbError.Children.Add(new TextBlock { Text = "User not found" });
 				return;
 			}
 
-			if (!string.IsNullOrEmpty(pbPassword.Password) && !string.IsNullOrEmpty(tbUsername.Text))
-			{
-				AgendaUser? user = await _userManager.FindByNameAsync(tbUsername.Text);
-
-				if (user != null)
-				{
-					bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
-
-					if (loginSuccess)
-					{
-						// Update UI for logged in user
-						App.User = user;
-
-                        // Show/hide relevant controls
-                        App.MainWindow.dgAppointments.Visibility = Visibility.Visible;
-						App.MainWindow.tciGeneral.Visibility = Visibility.Visible;
-						App.MainWindow.tciRegisterLogin.Visibility = Visibility.Hidden;
-						App.MainWindow.btnLogout.Visibility = Visibility.Visible;
-						App.MainWindow.tbUsernameInfo.Text = user.UserName?.ToString();
-
-						IdentityUserRole<string>? isUserAdmin = _context.UserRoles.FirstOrDefault(ur => ur.UserId == App.User.Id && ur.RoleId == "UserAdmin");
-						if (isUserAdmin != null)
-						{
-							App.MainWindow.tciUsers.Visibility = Visibility.Visible;
-						}
-						else
-						{
-							App.MainWindow.tciUsers.Visibility = Visibility.Hidden;
-						}
-
-                        // Return to appointments tab
-                        // Notify MainWindow if succreesfully logged in
-                        LoginSucceeded?.Invoke(this, EventArgs.Empty);
-					}
-					tbError.Text = "Invalid username or password";
-				}
-				else
-				{
-					tbError.Text = "Invalid username or password";
-				}
+			bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
+			if (!loginSuccess) {
+				tbError.Children.Add(new TextBlock { Text = "Invalid username or password" });
+				return;
 			}
+
+			// Notify MainWindow if successfully logged in
+			LoginSuccess?.Invoke(this, user);
 		}
 
 		// Notify MainWindow to swap to whatever control it wants

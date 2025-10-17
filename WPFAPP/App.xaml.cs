@@ -28,9 +28,8 @@ namespace WPFAPP {
 			// Setup dependency injection
 			var serviceSet = new ServiceCollection();
 
-			serviceSet.AddDbContext<AgendaDbContext>();
-
 			// Setup DbContext as service
+			serviceSet.AddDbContext<AgendaDbContext>();
 			serviceSet.AddIdentityCore<AgendaUser>(options => {
 				options.Password.RequireDigit = false;
 				options.Password.RequireLowercase = false;
@@ -50,12 +49,12 @@ namespace WPFAPP {
 			AgendaDbContext context = new();
 			AgendaDbContext.Seeder(context);
 
-            //while (context.AppointmentTypes.Count() == 0) {
-            //    // Wait until the users are created
-            //    await Task.Delay(100);
-            //}
+			//while (context.AppointmentTypes.Count() == 0) {
+			//    // Wait until the users are created
+			//    await Task.Delay(100);
+			//}
 
-            MainWindow = new(
+			MainWindow = new(
 				App.ServiceProvider.GetRequiredService<AgendaDbContext>(),
 				App.ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
 			MainWindow.Show();

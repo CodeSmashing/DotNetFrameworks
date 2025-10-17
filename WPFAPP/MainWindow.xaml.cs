@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WPFAPP {
 	/// <summary>
@@ -42,24 +41,26 @@ namespace WPFAPP {
 			// Subscribe to swap events
 			loginControl.SwapRequested += SwapControlsHandler;
 			registerControl.SwapRequested += SwapControlsHandler;
-            loginControl.LoginSucceeded += SuccessfulLoginHandler;
 
-            // Hide and show elements based on required authentication
-            dgAppointments.Visibility = Visibility.Hidden;
+			// Subscribe to login and register success events
+			loginControl.LoginSuccess += SuccessfulLoginHandler;
+			registerControl.RegisterSuccess += SuccessfulRegisterHandler;
+
+			// Hide and show elements based on required authentication
+			dgAppointments.Visibility = Visibility.Hidden;
 			tciUsers.Visibility = Visibility.Hidden;
 			btnLogout.Visibility = Visibility.Hidden;
 			tciGeneral.Visibility = Visibility.Hidden;
 			tbUsernameInfo.Text = string.Empty;
 
-            // Load appointments data
+			// Load appointments data
 			UpdateDgAppointments();
 
-            dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
+			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
 
-            // Load appointment types into combobox
-            cbTypes.ItemsSource = _context.AppointmentTypes
-                                       .ToList();
-        }
+			// Load appointment types into combobox
+			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
+		}
 
 		private void dgAppointments_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
@@ -115,8 +116,6 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-
-
 		private void btnAdd_Click(object sender, RoutedEventArgs e) {
 			btnSave.Visibility = Visibility.Hidden;
 			grDetails.Visibility = Visibility.Visible;
@@ -128,26 +127,22 @@ namespace WPFAPP {
 			grDetails.Visibility = Visibility.Visible;
 			grDetails.DataContext = dgAppointments.SelectedItem;
 		}
+
 		private void btnDelete_Click(object sender, RoutedEventArgs e) {
-			try
-			{
-                Appointment appointment = (Appointment)dgAppointments.SelectedItem;
-                Appointment? contextAppointment = _context.Appointments.FirstOrDefault(app => app.Id == appointment.Id);
+			try {
+				Appointment appointment = (Appointment) dgAppointments.SelectedItem;
+				Appointment? contextAppointment = _context.Appointments.FirstOrDefault(app => app.Id == appointment.Id);
 
-                if (contextAppointment != null)
-                {
-                    contextAppointment.Deleted = DateTime.Now;
-                    _context.SaveChanges();
+				if (contextAppointment != null) {
+					contextAppointment.Deleted = DateTime.Now;
+					_context.SaveChanges();
 
-                    UpdateDgAppointments();
-                }
-            }catch (Exception errorInfo)
-			{
+					UpdateDgAppointments();
+				}
+			} catch (Exception errorInfo) {
 				Console.WriteLine("Fout bij verwijderen afspraak; " + errorInfo.Message);
-            }
-
-
-        }
+			}
+		}
 
 		private void btnSave_Click(object sender, RoutedEventArgs e) {
 			try {
@@ -159,31 +154,30 @@ namespace WPFAPP {
 				appointment.To = contextAppointment.To;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
-                //appointment.AppointmentType = _context.AppointmentTypes
-                //							.FirstOrDefault(apt => apt.Id == contextAppointment.AppointmentType.Id)
-                //							?? AppointmentType.Dummy;
+				//appointment.AppointmentType = _context.AppointmentTypes
+				//							.FirstOrDefault(apt => apt.Id == contextAppointment.AppointmentType.Id)
+				//							?? AppointmentType.Dummy;
 
-                appointment.AppointmentType = contextAppointment.AppointmentType;
+				appointment.AppointmentType = contextAppointment.AppointmentType;
 
-                if (appointment.AppointmentType == AppointmentType.Dummy) {
+				if (appointment.AppointmentType == AppointmentType.Dummy) {
 					throw new Exception("Ongeldig afspraaktype geselecteerd.");
-                }
+				}
 
-                appointment.AppointmentTypeId = appointment.AppointmentType.Id;
+				appointment.AppointmentTypeId = appointment.AppointmentType.Id;
 
-                _context.Appointments.Add(appointment);
-                _context.SaveChanges();
-                btnSave.Visibility = Visibility.Hidden;
+				_context.Appointments.Add(appointment);
+				_context.SaveChanges();
+				btnSave.Visibility = Visibility.Hidden;
 
-                UpdateDgAppointments();
-                
+				UpdateDgAppointments();
+
 			} catch (Exception erorrInfo) {
 				Console.WriteLine("Fout bij opslaan afspraak; " + erorrInfo.Message);
-            }
+			}
 		}
 
-		private void SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-		{
+		private void SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
 			btnSave.Visibility = Visibility.Visible;
 		}
 
@@ -192,26 +186,65 @@ namespace WPFAPP {
 		}
 
 		private void UpdateDgAppointments() {
-            dgAppointments.ItemsSource = _context.Appointments
-											.Where(app => app.Deleted >= DateTime.Now
-												&& app.From > DateTime.Now
-												&& app.UserId == App.User.Id)
-											.OrderBy(app => app.From)
-											.Select(app => app)
-											//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
-											.ToList();
+			dgAppointments.ItemsSource = _context.Appointments
+										.Where(app => app.Deleted >= DateTime.Now
+											&& app.From > DateTime.Now
+											&& app.UserId == App.User.Id)
+										.OrderBy(app => app.From)
+										.Select(app => app)
+										//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
+										.ToList();
 
-            // After reloading the items, update the button visibility
-            UpdateButtonsVisibilityForSelectedRow();
-        }
+			// After reloading the items, update the button visibility
+			UpdateButtonsVisibilityForSelectedRow();
+		}
 
-		private void SuccessfulLoginHandler(object sender, EventArgs e) {
-            UpdateDgAppointments();
-            tcNavigation.SelectedItem = tciAppointmentRequest;
+		private void SuccessfulLoginHandler(object sender, AgendaUser user) {
+			// Set the current user of the app
+			App.User = user;
+
+			// Update appointments DataGrid
+			UpdateDgAppointments();
+
+			// Return to appointments tab
+			tcNavigation.SelectedItem = tciAppointmentRequest;
+
+			// Show/hide relevant elements
+			dgAppointments.Visibility = Visibility.Visible;
+			tciGeneral.Visibility = Visibility.Visible;
+			tciRegisterLogin.Visibility = Visibility.Hidden;
+			btnLogout.Visibility = Visibility.Visible;
+			tbUsernameInfo.Text = App.User.UserName?.ToString();
+
+			// Show/hide admin controls
+			IdentityUserRole<string>? isUserAdmin = _context.UserRoles.FirstOrDefault(ur => ur.UserId == App.User.Id && ur.RoleId == "UserAdmin");
+			if (isUserAdmin != null) {
+				tciUsers.Visibility = Visibility.Visible;
+			} else {
+				tciUsers.Visibility = Visibility.Hidden;
+			}
 
 			// Ensure button visibility is correct after successful login
 			UpdateButtonsVisibilityForSelectedRow();
-        }
+		}
+
+		private void SuccessfulRegisterHandler(object sender, AgendaUser user) {
+			// Set the newly created user as the current user
+			App.User = user;
+
+			// Return to appointments tab
+			tcNavigation.SelectedItem = tciAppointmentRequest;
+
+			// Show/hide relevant elements
+			dgAppointments.Visibility = Visibility.Visible;
+			tciGeneral.Visibility = Visibility.Visible;
+			tciRegisterLogin.Visibility = Visibility.Hidden;
+			btnLogout.Visibility = Visibility.Visible;
+			tbUsernameInfo.Text = App.User.UserName?.ToString();
+
+			// Ensure button visibility is correct after successful login
+			UpdateButtonsVisibilityForSelectedRow();
+		}
 
 		/// <summary>
 		/// Show/hide/enable/disable add/edit/delete buttons based on the currently selected row in the appointments datagrid
@@ -252,5 +285,5 @@ namespace WPFAPP {
 				}
 			}
 		}
-    }
+	}
 }

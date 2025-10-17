@@ -41,9 +41,7 @@ namespace WPFAPP {
 			if (user == AgendaUser.Dummy) {
 				lbRoles.Visibility = Visibility.Hidden;
 				return;
-			}
-
-			if (user != AgendaUser.Dummy) {
+			} else {
 				List<ListBoxItem> roles = new();
 				List<string> userRoles = _context.UserRoles
 													.Where(ur => ur.UserId == user.Id)
@@ -53,7 +51,10 @@ namespace WPFAPP {
 				// Populate roles ListBox
 				foreach (IdentityRole role in _context.Roles) {
 					bool isSelected = userRoles.Contains(role.Id);
-					roles.Add(new() { Content = role.Id, IsSelected = isSelected });
+					roles.Add(new() {
+						Content = role.Id,
+						IsSelected = isSelected
+					});
 				}
 				lbRoles.ItemsSource = roles;
 				lbRoles.Visibility = Visibility.Visible;
