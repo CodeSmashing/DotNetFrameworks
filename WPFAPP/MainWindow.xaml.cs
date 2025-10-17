@@ -87,6 +87,9 @@ namespace WPFAPP {
 			tciGeneral.Visibility = Visibility.Hidden;
 			tbUsernameInfo.Text = string.Empty;
 
+			// Ensure buttons are updated for logged out state
+			UpdateButtonsVisibilityForSelectedRow();
+
 			// Return to appointments tab
 			tcNavigation.SelectedItem = tciAppointmentRequest;
 		}
@@ -108,14 +111,11 @@ namespace WPFAPP {
 			grDetails.Visibility = Visibility.Hidden;
 			btnSave.Visibility = Visibility.Hidden;
 
-			if (dgAppointments.SelectedIndex == dgAppointments.Items.Count - 1) {
-				btnEdit.IsEnabled = false;
-				btnDelete.IsEnabled = false;
-			} else {
-				btnEdit.IsEnabled = true;
-				btnDelete.IsEnabled = true;
-			}
+			// Existing index-based logic removed in favor of clearer helper
+			UpdateButtonsVisibilityForSelectedRow();
 		}
+
+
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e) {
 			btnSave.Visibility = Visibility.Hidden;
@@ -129,16 +129,25 @@ namespace WPFAPP {
 			grDetails.DataContext = dgAppointments.SelectedItem;
 		}
 		private void btnDelete_Click(object sender, RoutedEventArgs e) {
-			Appointment appointment = (Appointment) dgAppointments.SelectedItem;
-			Appointment? contextAppointment = _context.Appointments.FirstOrDefault(app => app.Id == appointment.Id);
+			try
+			{
+                Appointment appointment = (Appointment)dgAppointments.SelectedItem;
+                Appointment? contextAppointment = _context.Appointments.FirstOrDefault(app => app.Id == appointment.Id);
 
-			if (contextAppointment != null) {
-				contextAppointment.Deleted = DateTime.Now;
-				_context.SaveChanges();
+                if (contextAppointment != null)
+                {
+                    contextAppointment.Deleted = DateTime.Now;
+                    _context.SaveChanges();
 
-                UpdateDgAppointments();
+                    UpdateDgAppointments();
+                }
+            }catch (Exception errorInfo)
+			{
+				Console.WriteLine("Fout bij verwijderen afspraak; " + errorInfo.Message);
             }
-		}
+
+
+        }
 
 		private void btnSave_Click(object sender, RoutedEventArgs e) {
 			try {
@@ -191,11 +200,57 @@ namespace WPFAPP {
 											.Select(app => app)
 											//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
 											.ToList();
+
+            // After reloading the items, update the button visibility
+            UpdateButtonsVisibilityForSelectedRow();
         }
 
 		private void SuccessfulLoginHandler(object sender, EventArgs e) {
             UpdateDgAppointments();
             tcNavigation.SelectedItem = tciAppointmentRequest;
+
+			// Ensure button visibility is correct after successful login
+			UpdateButtonsVisibilityForSelectedRow();
         }
+
+		/// <summary>
+		/// Show/hide/enable/disable add/edit/delete buttons based on the currently selected row in the appointments datagrid
+		/// Rules:
+		/// - If no selection: hide/disable edit & delete
+		/// - If selected appointment is dummy or deleted in the past: hide/disable edit & delete
+		/// - Otherwise show/enable edit & delete only if current user owns the appointment
+		/// - btnAdd is visible only when a real user is logged in
+		/// </summary>
+		private void UpdateButtonsVisibilityForSelectedRow() {
+			// Default states
+			btnEdit.Visibility = Visibility.Hidden;
+			btnDelete.Visibility = Visibility.Hidden;
+			btnEdit.IsEnabled = false;
+			btnDelete.IsEnabled = false;
+
+			// btnAdd visible when a real user is logged in
+			btnAdd.Visibility = (App.User != null && App.User != AgendaUser.Dummy) ? Visibility.Visible : Visibility.Hidden;
+
+			// If no selection, nothing more to do
+			if (dgAppointments.SelectedItem == null || dgAppointments.SelectedIndex < 0) {
+				return;
+			}
+
+			// If the selected item is an Appointment, evaluate ownership and validity
+			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
+				// If dummy or deleted already -> keep hidden/disabled
+				if (selectedAppointment == Appointment.Dummy || selectedAppointment.Deleted <= DateTime.Now) {
+					return;
+				}
+
+				// Only allow edit/delete for appointments belonging to the logged-in user
+				if (App.User != null && App.User != AgendaUser.Dummy && selectedAppointment.UserId == App.User.Id) {
+					btnEdit.Visibility = Visibility.Visible;
+					btnDelete.Visibility = Visibility.Visible;
+					btnEdit.IsEnabled = true;
+					btnDelete.IsEnabled = true;
+				}
+			}
+		}
     }
 }
