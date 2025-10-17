@@ -58,7 +58,6 @@ namespace WPFAPP {
 
             // Load appointment types into combobox
             cbTypes.ItemsSource = _context.AppointmentTypes
-                                       .Where(apt => apt.Deleted >= DateTime.Now)
                                        .ToList();
         }
 
@@ -151,10 +150,13 @@ namespace WPFAPP {
 				appointment.To = contextAppointment.To;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
-				appointment.AppointmentType = _context.AppointmentTypes
-											.FirstOrDefault(apt => apt.Id == contextAppointment.AppointmentType.Id)
-											?? AppointmentType.Dummy;
-				if (appointment.AppointmentType == AppointmentType.Dummy) {
+                //appointment.AppointmentType = _context.AppointmentTypes
+                //							.FirstOrDefault(apt => apt.Id == contextAppointment.AppointmentType.Id)
+                //							?? AppointmentType.Dummy;
+
+                appointment.AppointmentType = contextAppointment.AppointmentType;
+
+                if (appointment.AppointmentType == AppointmentType.Dummy) {
 					throw new Exception("Ongeldig afspraaktype geselecteerd.");
                 }
 

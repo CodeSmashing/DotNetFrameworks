@@ -26,7 +26,7 @@ namespace Models {
 			return $"{FirstName} {LastName} ({UserName})";
 		}
 
-		public static async Task Seeder(AgendaDbContext context) {
+		public static async void Seeder(AgendaDbContext context) {
 			// Add the necessary roles here
 			if (!context.Roles.Any()) {
 				context.Roles.AddRange(new List<IdentityRole> {

@@ -27,7 +27,6 @@ namespace Models {
 		}
 
 		public static async void Seeder(AgendaDbContext context) {
-			await AgendaUser.Seeder(context);
 
 			if (!context.AppointmentTypes.Any()) {
 				context.AppointmentTypes.AddRange(AppointmentType.SeedingData());
@@ -43,6 +42,13 @@ namespace Models {
 				context.ToDos.AddRange(ToDo.SeedingData());
 				context.SaveChanges();
 			}
-		}
+
+            AgendaUser.Seeder(context);
+            while (context.Users.Count() < 5)
+            {
+                // Wait until the users are created
+                await Task.Delay(100);
+            }
+        }
 	}
 }
