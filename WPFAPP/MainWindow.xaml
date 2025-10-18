@@ -5,173 +5,41 @@
 		  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		  xmlns:local="clr-namespace:WPFAPP"
 		  mc:Ignorable="d"
-		  Title="MainWindow" Height="614" Width="1115">
-<<<<<<< Updated upstream
-	<StackPanel Margin="15,0,0,0" Orientation="Horizontal">
-		<TabControl x:Name="tcNavigation">
-			<TabItem x:Name="tciAppointmentRequest" Header="Appointment request">
-				<StackPanel>
-					<DataGrid
-						x:Name="dgAppointments"
-						Height="400"
-						Width="auto"
-						VerticalAlignment="Top"
-						HorizontalAlignment="Left"
-						SelectionMode="Single"
-						Margin="10px"
-						AutoGenerateColumns="False">
-
-						<DataGrid.Columns>
-							<DataGridTextColumn
-								Header="From"
-								Binding="{Binding From}"
-								Width="150"
-								IsReadOnly="True"/>
-
-							<DataGridTextColumn
-								Header="To"
-								Binding="{Binding To}"
-								Width="150"
-								IsReadOnly="True"/>
-
-							<DataGridTextColumn
-								Header="Appointment"
-								Binding="{Binding Title}"
-								Width="200"
-								IsReadOnly="True"/>
-
-							<DataGridTextColumn
-								Header="Description"
-								Binding="{Binding Description}"
-								Width="300"
-								IsReadOnly="True"/>
-
-							<DataGridTextColumn
-								Header="Type"
-								Binding="{Binding AppointmentType.Name}"
-								Width="150"
-								IsReadOnly="True"/>
-						</DataGrid.Columns>
-					</DataGrid>
-
-					<Grid x:Name="grDetails" Margin="50,15,0,0" Visibility="Hidden">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="*"/>
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="*"/>
-						</Grid.RowDefinitions>
-
-						<Label Content="Wanneer:" Grid.Row="0" Grid.Column="0"/>
-						<DatePicker
-							x:Name="dpFrom"
-							Grid.Row="0"
-							Grid.Column="1"
-							Text="{Binding From,Mode=TwoWay}"
-=======
-    <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
-        <TabControl x:Name="tcNavigation">
+		  Title="MainWindow" Height="1080" Width="1920">
+    <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+        <TabControl x:Name="tcNavigation" Width="1920">
             <TabItem x:Name="tciAppointmentRequest" Header="Appointment request">
-                <StackPanel>
+                <StackPanel Width="auto">
                     <DataGrid
 					x:Name="dgAppointments"
 					Height="auto"
-					Width="auto"
+                    Width="auto"
+                    MaxHeight="300"
 					VerticalAlignment="Top"
-					HorizontalAlignment="Left"
+					HorizontalAlignment="Center"
 					SelectionMode="Single"
 					Margin="10px"
 					AutoGenerateColumns="False">
-
 
                         <DataGrid.Columns>
                             <DataGridTextColumn
 							Header="From"
 							Binding="{Binding From}"
->>>>>>> Stashed changes
 							Width="150"
-							HorizontalAlignment="Left"
-							SelectedDateChanged="SelectedDateChanged" />
+							IsReadOnly="True"/>
 
-						<Label Content="Titel:"  Grid.Row="1" Grid.Column="0" />
-						<TextBox
-							x:Name="tbTitle"
-							Grid.Row="1"
-							Grid.Column="1"
-							Text="{Binding Title,Mode=TwoWay}"
-							TextChanged="TextChanged" />
-
-						<Label Content="Type Afspraak:"  Grid.Row="1" Grid.Column="2"/>
-						<ComboBox
-							x:Name="cbTypes"
-							Grid.Row="1"
-							Grid.Column="3"
-							SelectedItem="{Binding AppointmentType,Mode=TwoWay}"
+                            <DataGridTextColumn
+							Header="To"
+							Binding="{Binding To}"
 							Width="150"
-							HorizontalAlignment="Left"
-							SelectionChanged="SelectedDateChanged" />
+							IsReadOnly="True"/>
 
-						<Label Content="Extra Informatie:"  VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
-						<TextBox
-							x:Name="tbDescription"
-							Grid.Row="2" Grid.Column="1"
-							Grid.ColumnSpan="3"
-							Width="550"
-							VerticalScrollBarVisibility="Auto"
-							Text="{Binding Description,Mode=TwoWay}"
-							AcceptsReturn="True"
-							TextChanged="TextChanged" />
-					</Grid>
+                            <DataGridTextColumn
+							Header="Appointment"
+							Binding="{Binding Title}"
+							Width="200"
+							IsReadOnly="True"/>
 
-<<<<<<< Updated upstream
-					<StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,-100,0,0">
-						<Button
-							x:Name="btnAdd"
-							Content="Toevoegen"
-							Click="btnAdd_Click"/>
-						<Button
-							x:Name="btnEdit"
-							Content="Wijzigen"
-							IsEnabled="False"
-							Click="btnEdit_Click"/>
-						<Button
-							x:Name="btnDelete"
-							Content="Verwijderen"
-							IsEnabled="False"
-							Click="btnDelete_Click" />
-						<Button
-							x:Name="btnSave"
-							Content="Opslaan"
-							Margin="0,30,0,0"
-							Visibility="Visible"
-							Click="btnSave_Click"/>
-					</StackPanel>
-				</StackPanel>
-			</TabItem>
-			<TabItem x:Name="tciRegisterLogin" Header="Register/login">
-				<Grid x:Name="FormContainer" />
-			</TabItem>
-			<TabItem x:Name="tciUsers" Header="Users" Visibility="Visible">
-				<StackPanel x:Name="UserRoleInfoContainer" />
-			</TabItem>
-			<TabItem x:Name="tciGeneral" Header="General" Visibility="Visible">
-				<StackPanel Orientation="Vertical" Margin="10px">
-					<TextBlock Text="User" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
-					<StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-						<TextBlock Text="Username:" FontWeight="Bold" Width="100"/>
-						<TextBlock x:Name="tbUsernameInfo"/>
-					</StackPanel>
-					<Button x:Name="btnLogout" Content="Logout" Width="100" Margin="0,10,0,0" Click="btnLogout_Click"/>
-				</StackPanel>
-			</TabItem>
-		</TabControl>
-	</StackPanel>
-=======
                             <DataGridTextColumn
 							Header="Description"
 							Binding="{Binding Description}"
@@ -186,9 +54,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
                         <Button
                             x:Name="btnAdd"
                             Content="Toevoegen"
@@ -206,11 +72,10 @@
                         <Button
                             x:Name="btnSave"
                             Content="Opslaan"
-                            Margin="0,30,0,0"
-                            Visibility="Hidden"
-                            Click="btnSave_Click"/>
+                            Visibility="Visible"
+                            Click="btnSave_Click" Height="66"/>
                     </StackPanel>
-                    <Grid x:Name="grDetails" Margin="0,15,0,0" Visibility="Hidden">
+                    <Grid x:Name="grDetails" Visibility="Visible">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
@@ -226,42 +91,42 @@
 
                         <Label Content="Wanneer:" Grid.Row="0" Grid.Column="0"/>
                         <DatePicker
-                        x:Name="dpFrom"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Text="{Binding From,Mode=TwoWay}"
-                        Width="150"
-                        HorizontalAlignment="Left"
-                        SelectedDateChanged="SelectedDateChanged" />
+                            x:Name="dpFrom"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding From, Mode=TwoWay}"
+                            Width="150"
+                            HorizontalAlignment="Left"
+                            SelectedDateChanged="SelectedDateChanged" />
 
                         <Label Content="Titel:"  Grid.Row="1" Grid.Column="0" />
                         <TextBox
-                        x:Name="tbTitle"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Text="{Binding Title,Mode=TwoWay}"
-                        TextChanged="TextChanged" />
+                            x:Name="tbTitle"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding Title, Mode=TwoWay}"
+                            TextChanged="TextChanged" />
 
                         <Label Content="Type Afspraak:"  Grid.Row="2" Grid.Column="0"/>
                         <ComboBox
-                        x:Name="cbTypes"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        SelectedItem="{Binding AppointmentType,Mode=TwoWay}"
-                        Width="150"
-                        HorizontalAlignment="Left"
-                        SelectionChanged="SelectedDateChanged" />
+                            x:Name="cbTypes"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            SelectedItem="{Binding AppointmentType, Mode=TwoWay}"
+                            Width="150"
+                            HorizontalAlignment="Center"
+                            SelectionChanged="SelectedDateChanged" Margin="0,44,0,44" Grid.RowSpan="3" />
 
-                        <Label Content="Extra Informatie:" Grid.Row="3" Grid.Column="0" />
+                        <Label Content="Extra Informatie:"  VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
                         <TextBox
-                        x:Name="tbDescription"
-                        Grid.Row="3" Grid.Column="1"
-                        Grid.ColumnSpan="3"
-                        Width="550"
-                        VerticalScrollBarVisibility="Auto"
-                        Text="{Binding Description,Mode=TwoWay}"
-                        AcceptsReturn="True"
-                        TextChanged="TextChanged" Margin="0,0,241,0" />
+                            x:Name="tbDescription"
+                            Grid.Row="3" Grid.Column="1"
+                            Grid.ColumnSpan="3"
+                            Width="550"
+                            VerticalScrollBarVisibility="Auto"
+                            Text="{Binding Description, Mode=TwoWay}"
+                            AcceptsReturn="True"
+                            TextChanged="TextChanged" Margin="0,0,1233,-1" />
                     </Grid>
                 </StackPanel>
             </TabItem>
@@ -283,5 +148,4 @@
             </TabItem>
         </TabControl>
     </StackPanel>
->>>>>>> Stashed changes
 </Window>
