@@ -41,8 +41,8 @@ namespace Models {
 						Name = "Employee",
 						NormalizedName = "EMPLOYEE" },
 					new() {
-						Id = "UserAdmin",
-						Name = "UserAdmin",
+						Id = "Useradmin",
+						Name = "Useradmin",
 						NormalizedName = "USERADMIN" },
 					new() {
 						Id = "User",
@@ -78,6 +78,6 @@ namespace Models {
 				context.ToDos.AddRange(ToDo.SeedingData());
 				context.SaveChanges();
 			}
-	  }
+		}
 	}
 }

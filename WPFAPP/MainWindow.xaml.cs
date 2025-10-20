@@ -43,15 +43,11 @@ namespace WPFAPP {
 			registerControl.SwapRequested += SwapControlsHandler;
 
 			// Subscribe to login and register success events
-			loginControl.LoginSuccess += SuccessfulLoginHandler;
-			registerControl.RegisterSuccess += SuccessfulRegisterHandler;
+			loginControl.LoginSuccess += SuccessfulLoginRegisterHandler;
+			registerControl.RegisterSuccess += SuccessfulLoginRegisterHandler;
 
-			// Hide and show elements based on required authentication
-			dgAppointments.Visibility = Visibility.Hidden;
-			tciUsers.Visibility = Visibility.Hidden;
-			btnLogout.Visibility = Visibility.Hidden;
-			tciGeneral.Visibility = Visibility.Hidden;
-			tbUsernameInfo.Text = string.Empty;
+			// Show/hide relevant elements
+			DisplayUI("guest");
 
 			// Load appointments data
 			UpdateDgAppointments();
@@ -79,14 +75,9 @@ namespace WPFAPP {
 		}
 
 		private void btnLogout_Click(object sender, RoutedEventArgs e) {
-			// Update UI for logged in user
+			// Show/hide relevant elements
 			App.User = AgendaUser.Dummy;
-			dgAppointments.Visibility = Visibility.Hidden;
-			tciRegisterLogin.Visibility = Visibility.Visible;
-			tciUsers.Visibility = Visibility.Hidden;
-			btnLogout.Visibility = Visibility.Hidden;
-			tciGeneral.Visibility = Visibility.Hidden;
-			tbUsernameInfo.Text = string.Empty;
+			DisplayUI("guest");
 
 			// Ensure buttons are updated for logged out state
 			UpdateButtonsVisibilityForSelectedRow();
@@ -199,7 +190,7 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-		private void SuccessfulLoginHandler(object sender, AgendaUser user) {
+		private void SuccessfulLoginRegisterHandler(object sender, AgendaUser user) {
 			// Set the current user of the app
 			App.User = user;
 
@@ -210,37 +201,10 @@ namespace WPFAPP {
 			tcNavigation.SelectedItem = tciAppointmentRequest;
 
 			// Show/hide relevant elements
-			dgAppointments.Visibility = Visibility.Visible;
-			tciGeneral.Visibility = Visibility.Visible;
-			tciRegisterLogin.Visibility = Visibility.Hidden;
-			btnLogout.Visibility = Visibility.Visible;
-			tbUsernameInfo.Text = App.User.UserName?.ToString();
-
-			// Show/hide admin controls
-			IdentityUserRole<string>? isUserAdmin = _context.UserRoles.FirstOrDefault(ur => ur.UserId == App.User.Id && ur.RoleId == "UserAdmin");
-			if (isUserAdmin != null) {
-				tciUsers.Visibility = Visibility.Visible;
-			} else {
-				tciUsers.Visibility = Visibility.Hidden;
-			}
-
-			// Ensure button visibility is correct after successful login
-			UpdateButtonsVisibilityForSelectedRow();
-		}
-
-		private void SuccessfulRegisterHandler(object sender, AgendaUser user) {
-			// Set the newly created user as the current user
-			App.User = user;
-
-			// Return to appointments tab
-			tcNavigation.SelectedItem = tciAppointmentRequest;
-
-			// Show/hide relevant elements
-			dgAppointments.Visibility = Visibility.Visible;
-			tciGeneral.Visibility = Visibility.Visible;
-			tciRegisterLogin.Visibility = Visibility.Hidden;
-			btnLogout.Visibility = Visibility.Visible;
-			tbUsernameInfo.Text = App.User.UserName?.ToString();
+			// Normal user or userAdmin otherwise
+			string? currentRole = _context.UserRoles.FirstOrDefault(role =>
+					role.UserId == App.User.Id)?.RoleId.ToLower();
+			DisplayUI(currentRole != null ? currentRole : "user");
 
 			// Ensure button visibility is correct after successful login
 			UpdateButtonsVisibilityForSelectedRow();
@@ -283,6 +247,38 @@ namespace WPFAPP {
 					btnEdit.IsEnabled = true;
 					btnDelete.IsEnabled = true;
 				}
+			}
+		}
+
+		private void DisplayUI(string role = "") {
+			switch (role) {
+				case "user":
+					dgAppointments.Visibility = Visibility.Visible;
+					tciRegisterLogin.Visibility = Visibility.Hidden;
+					tciGeneral.Visibility = Visibility.Visible;
+					btnLogout.Visibility = Visibility.Visible;
+					tciUsers.Visibility = Visibility.Hidden;
+					tbUsernameInfo.Text = App.User.UserName?.ToString();
+					break;
+				case "admin":
+				case "useradmin":
+				case "employee":
+					dgAppointments.Visibility = Visibility.Visible;
+					tciRegisterLogin.Visibility = Visibility.Hidden;
+					tciGeneral.Visibility = Visibility.Visible;
+					btnLogout.Visibility = Visibility.Visible;
+					tciUsers.Visibility = Visibility.Visible;
+					tbUsernameInfo.Text = App.User.UserName?.ToString();
+					break;
+				case "guest":
+				default:
+					dgAppointments.Visibility = Visibility.Hidden;
+					tciRegisterLogin.Visibility = Visibility.Visible;
+					tciGeneral.Visibility = Visibility.Hidden;
+					btnLogout.Visibility = Visibility.Hidden;
+					tciUsers.Visibility = Visibility.Hidden;
+					tbUsernameInfo.Text = string.Empty;
+					break;
 			}
 		}
 	}
