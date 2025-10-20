@@ -17,11 +17,6 @@ namespace Models {
 		}
 
 		[Required]
-		[ForeignKey("AgendaUser")]
-		public string UserId { get; set; } = AgendaUser.Dummy.Id;
-		public AgendaUser? AgendaUser { get; set; }
-
-		[Required]
 		public string Name { get; set; } = string.Empty;
 
 		[Required]

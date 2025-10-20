@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models {
 	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
@@ -26,7 +22,47 @@ namespace Models {
 			optionsBuilder.UseSqlServer(connectionString);
 		}
 
-		public static async void Seeder(AgendaDbContext context) {
+		public static async Task Seeder(AgendaDbContext context) {
+			UserManager<AgendaUser> userManager = new(
+				new UserStore<AgendaUser>(context),
+				null,
+				new PasswordHasher<AgendaUser>(),
+				null, null, null, null, null, null
+			);
+
+			if (!context.Roles.Any()) {
+				context.Roles.AddRange(new List<IdentityRole> {
+					new() {
+						Id = "Admin",
+						Name = "Admin",
+						NormalizedName = "ADMIN" },
+					new() {
+						Id = "Employee",
+						Name = "Employee",
+						NormalizedName = "EMPLOYEE" },
+					new() {
+						Id = "UserAdmin",
+						Name = "UserAdmin",
+						NormalizedName = "USERADMIN" },
+					new() {
+						Id = "User",
+						Name = "User",
+						NormalizedName = "USER" }
+				});
+				context.SaveChanges();
+			}
+
+			if (!context.Users.Any()) {
+				context.Add(AgendaUser.Dummy);
+				context.SaveChanges();
+
+				List<AgendaUser> userList = AgendaUser.SeedingData();
+				foreach (var user in userList) {
+					await userManager.CreateAsync(user, "P@ssword1");
+					await userManager.AddToRoleAsync(user, user.UserName.ElementAt(0) + user.UserName.Substring(1));
+				}
+				context.SaveChanges();
+			}
 
 			if (!context.AppointmentTypes.Any()) {
 				context.AppointmentTypes.AddRange(AppointmentType.SeedingData());
@@ -42,13 +78,6 @@ namespace Models {
 				context.ToDos.AddRange(ToDo.SeedingData());
 				context.SaveChanges();
 			}
-
-            AgendaUser.Seeder(context);
-            while (context.Users.Count() < 5)
-            {
-                // Wait until the users are created
-                await Task.Delay(100);
-            }
-        }
+	  }
 	}
 }

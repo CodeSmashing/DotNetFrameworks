@@ -65,7 +65,7 @@ namespace Models {
 			get; set;
 		} = AppointmentType.Dummy;
 
-        [Required]
+		[Required]
 		[Display(Name = "IsApproved")]
 		public bool IsApproved { get; set; } = false;
 

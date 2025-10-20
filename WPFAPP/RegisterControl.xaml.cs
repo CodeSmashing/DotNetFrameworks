@@ -101,18 +101,6 @@ namespace WPFAPP {
 			tbError.Children.Clear();
 			MessageBox.Show("Account created successfully. You can now log in.");
 			_context.Add(new IdentityUserRole<string>() { RoleId = "User", UserId = newUser.Id });
-
-			// Make it so the user gets the "default" appointment types
-			List<AppointmentType> types = _context.AppointmentTypes.Where(at => at.UserId == AgendaUser.Dummy.Id).ToList();
-			foreach (AppointmentType type in types) {
-				AppointmentType at = new() {
-					UserId = App.User.Id,
-					Color = type.Color,
-					Description = type.Description,
-					Name = type.Name
-				};
-				_context.Add(at);
-			}
 			_context.SaveChanges();
 
 			// Notify MainWindow if registration was successful

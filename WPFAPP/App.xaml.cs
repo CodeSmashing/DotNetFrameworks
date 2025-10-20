@@ -22,7 +22,7 @@ namespace WPFAPP {
 			get; private set;
 		}
 
-		protected override void OnStartup(StartupEventArgs e) {
+		protected override async void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
 			// Setup dependency injection
@@ -47,12 +47,7 @@ namespace WPFAPP {
 			ServiceProvider = serviceSet.BuildServiceProvider();
 
 			AgendaDbContext context = new();
-			AgendaDbContext.Seeder(context);
-
-			//while (context.AppointmentTypes.Count() == 0) {
-			//    // Wait until the users are created
-			//    await Task.Delay(100);
-			//}
+			await AgendaDbContext.Seeder(context);
 
 			MainWindow = new(
 				App.ServiceProvider.GetRequiredService<AgendaDbContext>(),
