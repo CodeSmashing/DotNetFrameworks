@@ -31,21 +31,23 @@ namespace Models {
 			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
 		}
 
-		// seeding data
+		// Seeding data
 		public static List<AppointmentType> SeedingData() {
-			List<AppointmentType> list = new();
-
-			list.AddRange(list = new() {
+			return new() {
 				// Voeg een dummy AppointmentType toe
 				Dummy,
 
 				// Voeg enkele voorbeeld AppointmentTypes toe
-				new() { Name = "Onderhoud", Description = "Algemeen onderhoud"},
-				new() { Name = "Aanleg", Description = "Aanleggen van tuin" },
-				new() { Name = "Kennismaking", Description = "Kennismaking klant" }
-			});
-
-			return list;
+				new() {
+					Name = "Onderhoud",
+					Description = "Algemeen onderhoud"},
+				new() {
+					Name = "Aanleg",
+					Description = "Aanleggen van tuin" },
+				new() {
+					Name = "Kennismaking",
+					Description = "Kennismaking klant" }
+			};
 		}
 	}
 }

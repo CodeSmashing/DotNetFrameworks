@@ -17,7 +17,9 @@ namespace Models {
 		[Required]
 		[ForeignKey("AgendaUser")]
 		public string UserId { get; set; } = AgendaUser.Dummy.Id;
-		public AgendaUser? AgendaUser { get; set; }
+		public AgendaUser? AgendaUser {
+			get; set;
+		}
 
 		[Required]
 		[Display(Name = "Vanaf")]
@@ -73,9 +75,9 @@ namespace Models {
 			return Id + "  Afspraak op " + From + " betreffende " + Title;
 		}
 
+		// Seeding data
 		public static List<Appointment> SeedingData() {
-			var list = new List<Appointment>();
-			list.AddRange(
+			return new() {
 				// Voeg een default-appointment toe
 				Dummy,
 
@@ -100,9 +102,7 @@ namespace Models {
 					From = DateTime.Now.AddDays(7).AddHours(14),
 					To = DateTime.Now.AddDays(7).AddHours(15),
 					AppointmentTypeId = 3 }
-			);
-
-			return list;
+			};
 		}
 	}
 }

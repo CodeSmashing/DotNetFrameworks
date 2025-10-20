@@ -28,7 +28,7 @@ namespace Models {
 
 		// Seeding data
 		public static List<AgendaUser> SeedingData() {
-			List<AgendaUser> list = new() {
+			return new() {
 				new() {
 					FirstName = "-",
 					LastName = "-",
@@ -62,7 +62,6 @@ namespace Models {
 					EmailConfirmed = true
 				}
 			};
-			return list;
 		}
 	}
 }

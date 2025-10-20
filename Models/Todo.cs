@@ -34,11 +34,9 @@ namespace Models {
 			return $"TodoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
 		}
 
-		// seeding data
+		// Seeding data
 		public static List<ToDo> SeedingData() {
-			List<ToDo> list = new();
-
-			list.AddRange(list = new() {
+			return new() {
 				// Voeg een dummy ToDo toe
 				Dummy,
 
@@ -49,9 +47,7 @@ namespace Models {
 				new ToDo { Title = "Eerste ToDo", Ready = false, AppointmentId = 2},
 				new ToDo { Title = "Tweede ToDo", Ready = true, AppointmentId = 2},
 				new ToDo { Title = "Derde ToDo", Ready = false , AppointmentId = 2 }
-			});
-
-			return list;
+			};
 		}
 	}
 }
