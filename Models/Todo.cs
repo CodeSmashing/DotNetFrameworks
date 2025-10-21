@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models {
 	public class ToDo {
@@ -14,7 +9,8 @@ namespace Models {
 			get; set;
 		}
 
-		[Required]
+        // Eigenschappen
+        [Required]
 		[Display(Name = "Title")]
 		public string Title { get; set; } = string.Empty;
 
@@ -29,8 +25,9 @@ namespace Models {
 		public int AppointmentId {
 			get; set;
 		}
-
-		public override string ToString() {
+		
+        // Override ToString methode
+        public override string ToString() {
 			return $"TodoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
 		}
 

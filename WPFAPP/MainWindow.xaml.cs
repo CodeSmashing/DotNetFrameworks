@@ -1,24 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
-using System.Numerics;
-using System.Text;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WPFAPP {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
@@ -58,6 +45,9 @@ namespace WPFAPP {
 
 			// Load appointments data
 			UpdateDgAppointments();
+
+            // Subscribe to double-click event on DataGrid rows
+            dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
 
 			// Load appointment types into combobox
 			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
@@ -115,18 +105,26 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-		private void btnAdd_Click(object sender, RoutedEventArgs e) {
-			btnSave.Visibility = Visibility.Hidden;
+        // Add, Edit, Delete, Save button handlers
+        private void btnAdd_Click(object sender, RoutedEventArgs e) {
+			btnSave.Visibility = Visibility.Visible;
 			grDetails.Visibility = Visibility.Visible;
 			grDetails.DataContext = new Appointment();
 		}
-
 		private void btnEdit_Click(object sender, RoutedEventArgs e) {
+			if (btnEdit.Content.ToString() == "Wijzigen")
+			{
+				btnEdit.Content = "Opslaan";
+			}
+			else if (btnEdit.Content.ToString() == "Opslaan")
+			{
+				btnEdit.Content = "Wijzigen";
+			}
+
 			btnSave.Visibility = Visibility.Hidden;
 			grDetails.Visibility = Visibility.Visible;
 			grDetails.DataContext = dgAppointments.SelectedItem;
 		}
-
 		private void btnDelete_Click(object sender, RoutedEventArgs e) {
 			try {
 				Appointment appointment = (Appointment) dgAppointments.SelectedItem;
@@ -153,42 +151,42 @@ namespace WPFAPP {
 				appointment.To = contextAppointment.To;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
-				//appointment.AppointmentType = _context.AppointmentTypes
-				//							.FirstOrDefault(apt => apt.Id == contextAppointment.AppointmentType.Id)
-				//							?? AppointmentType.Dummy;
-
 				appointment.AppointmentType = contextAppointment.AppointmentType;
+                appointment.AppointmentTypeId = contextAppointment.AppointmentType.Id;
 
-				if (appointment.AppointmentType == AppointmentType.Dummy) {
+                if (appointment.AppointmentType == AppointmentType.Dummy) {
 					throw new Exception("Ongeldig afspraaktype geselecteerd.");
 				}
 
-				appointment.AppointmentTypeId = appointment.AppointmentType.Id;
-
-				_context.Appointments.Add(appointment);
+                // Save to database
+                _context.Appointments.Add(appointment);
 				_context.SaveChanges();
 				btnSave.Visibility = Visibility.Hidden;
+				grDetails.Visibility = Visibility.Hidden;
 
-				UpdateDgAppointments();
+                // Refresh appointments DataGrid
+                UpdateDgAppointments();
 
 			} catch (Exception erorrInfo) {
 				Console.WriteLine("Fout bij opslaan afspraak; " + erorrInfo.Message);
 			}
 		}
 
-		private void SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
-			btnSave.Visibility = Visibility.Visible;
+        // Handlers to show Save button when details are changed
+        private void SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
+			//btnSave.Visibility = Visibility.Visible;
 		}
 
 		private void TextChanged(object sender, TextChangedEventArgs e) {
-			btnSave.Visibility = Visibility.Visible;
+			//btnSave.Visibility = Visibility.Visible;
 		}
 
-		private void UpdateDgAppointments() {
+        // Refresh the appointments DataGrid with current data from the database
+        private void UpdateDgAppointments() {
 			dgAppointments.ItemsSource = _context.Appointments
 										.Where(app => app.Deleted >= DateTime.Now
-											&& app.From > DateTime.Now
-											&& app.UserId == App.User.Id)
+													  && app.From > DateTime.Now
+													  && app.UserId == App.User.Id)
 										.OrderBy(app => app.From)
 										.Select(app => app)
 										//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
@@ -212,15 +210,8 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-		/// <summary>
-		/// Show/hide/enable/disable add/edit/delete buttons based on the currently selected row in the appointments datagrid
-		/// Rules:
-		/// - If no selection: hide/disable edit & delete
-		/// - If selected appointment is dummy or deleted in the past: hide/disable edit & delete
-		/// - Otherwise show/enable edit & delete only if current user owns the appointment
-		/// - btnAdd is visible only when a real user is logged in
-		/// </summary>
-		private void UpdateButtonsVisibilityForSelectedRow() {
+        // Helper to update button visibility based on selected appointment and user state
+        private void UpdateButtonsVisibilityForSelectedRow() {
 			// Default states
 			btnEdit.Visibility = Visibility.Hidden;
 			btnDelete.Visibility = Visibility.Hidden;

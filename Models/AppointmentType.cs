@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Models {
 	public class AppointmentType {
@@ -27,7 +21,7 @@ namespace Models {
 		[Required]
 		public DateTime Deleted { get; set; } = DateTime.MaxValue;
 
-		public override string ToString() {
+        public override string ToString() {
 			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
 		}
 

@@ -7,9 +7,6 @@ using System.ComponentModel;
 using System.Windows;
 
 namespace WPFAPP {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
 	public partial class App : Application {
 		static public event PropertyChangedEventHandler UserChanged = delegate { };
 		static private AgendaUser _user = null!;
@@ -41,7 +38,8 @@ namespace WPFAPP {
 			UserChanged?.Invoke(typeof(App), new PropertyChangedEventArgs(role));
 		}
 
-		protected override async void OnStartup(StartupEventArgs e) {
+        // Application startup event
+        protected override async void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
 			// Set the initial or "default" user

@@ -5,8 +5,12 @@
 	<Style x:Key="CustomDataGridRowStyle" TargetType="DataGridRow">
 		<!-- Removed EventSetter for MouseDoubleClick -->
 		<Style.Triggers>
+			<Trigger Property="IsSelected" Value="True">
+				<Setter Property="Background" Value="#ff66ccff" />
+				<Setter Property="Foreground" Value="Black" />
+			</Trigger>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Background" Value="LightCyan" />
+				<Setter Property="Background" Value="LightGreen" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -16,7 +20,7 @@
 		<!-- Reference the row style using the RowStyle property -->
 		<Setter Property="RowStyle" Value="{StaticResource CustomDataGridRowStyle}" />
 
-		<!-- Make the border and grid lines a little less imposing -->
+		<!-- Border and grid lines -->
 		<Setter Property="BorderBrush" Value="#DDDDDD" />
 		<Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
 		<Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
@@ -39,7 +43,7 @@
 						</Trigger>
 					</Style.Triggers>
 
-					<!-- Add some padding around the contents of a cell -->
+					<!-- Padding -->
 					<Setter Property="Padding" Value="4,3,4,3" />
 					<Setter Property="BorderBrush" Value="Transparent"/>
 					<Setter Property="BorderThickness" Value="1"/>
@@ -71,11 +75,11 @@
 
 	<!-- Implicit style targeting all TextBlocks using resources -->
 	<Style TargetType="TextBlock">
-		<Setter Property="Background" Value="Yellow"/>
-		<Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Foreground" Value="DarkSlateGray" />
 		<Setter Property="Padding" Value="{DynamicResource StandardPadding}"/>
 		<Setter Property="FontFamily" Value="{DynamicResource PrimaryFont}"/>
-		<Setter Property="FontSize" Value="{DynamicResource PrimaryFontSize}"/>
+		<Setter Property="FontSize" Value="18"/>
 	</Style>
 
 	<!-- Implicit style targeting all Controls using resources -->
@@ -87,11 +91,9 @@
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 	</Style>
 
-
-
 	<!-- Base style for Button -->
 	<Style TargetType="Button">
-		<Setter Property="Background" Value="Orange"/>
+		<Setter Property="Background" Value="WhiteSmoke"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 	</Style>
 
@@ -105,11 +107,9 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 	</Style>
 
-
-
 	<!-- Base style for Label -->
 	<Style TargetType="Label">
-		<Setter Property="Background" Value="Red"/>
+		<Setter Property="Background" Value="WhiteSmoke"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="HorizontalContentAlignment" Value="Right"/>
 	</Style>
@@ -136,11 +136,9 @@
 		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
 
-
-
 	<!-- Base style for TextBox -->
 	<Style TargetType="TextBox">
-		<Setter Property="Background" Value="DarkOliveGreen"/>
+		<Setter Property="Background" Value="WhiteSmoke"/>
 	</Style>
 
 	<!-- Wider TextBox style, inherits -->

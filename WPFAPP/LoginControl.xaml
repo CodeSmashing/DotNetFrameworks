@@ -6,67 +6,69 @@
 				 xmlns:local="clr-namespace:WPFAPP"
 				 mc:Ignorable="d" 
 				 d:DesignHeight="450" d:DesignWidth="800">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="2*"/>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="2*"/>
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-		<TextBlock
+        <TextBlock
 			Style="{StaticResource TitleH5}"
 			Text="Login"
 			Grid.Row="0"
 			Grid.Column="1" 
+            Background="Transparent"
 			Grid.ColumnSpan="2"/>
 
-		<Label
+        <Label
 			Content="Username:"
 			Grid.Row="1"
 			Grid.Column="1"/>
-		<TextBox
+        <TextBox
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbUsername"
 			Grid.Row="1"
 			Grid.Column="2"/>
 
-		<Label
+        <Label
 			Content="Password"
 			Grid.Row="2"
 			Grid.Column="1"/>
-		<PasswordBox
+        <PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
 			x:Name="pbPassword"
+            Background="WhiteSmoke"
 			Grid.Row="2"
 			Grid.Column="2"/>
 
-		<Button
+        <Button
 			x:Name="btnLogin"
 			Content="Login"
 			Grid.Row="3"
 			Grid.Column="1"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnLogin_Click"/>
-		<Button
+			Click="btnLogin_Click" Margin="0,10,0,5" Width="113"/>
+        <Button
 			x:Name="btnSwap"
-			Content="Don't have an account?"
+			Content="Don't have &#xD;&#xA;an account?"
 			Grid.Row="3"
 			Grid.Column="2"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnSwap_Click" />
+			Click="btnSwap_Click" Margin="0,10,0,5" />
 
-		<StackPanel
+        <StackPanel
 			x:Name="tbError"
 			Grid.Row="4"
 			Grid.Column="1"
 			Grid.ColumnSpan="2"/>
-	</Grid>
+    </Grid>
 </UserControl>

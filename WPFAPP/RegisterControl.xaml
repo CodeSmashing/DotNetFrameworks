@@ -5,13 +5,12 @@
 				 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				 xmlns:local="clr-namespace:WPFAPP"
 				 mc:Ignorable="d" 
-				 d:DesignHeight="450" d:DesignWidth="800">
+				 Height="Auto" Width="Auto"
+				 HorizontalAlignment="Center">
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="2*"/>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="2*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -28,68 +27,80 @@
 
 		<TextBlock
 			Style="{StaticResource TitleH5}"
-			Text="Registering"
-			Grid.Row="0"
-			Grid.Column="1" 
-			Grid.ColumnSpan="2"/>
+			Text="Register"
+			Grid.Row="0" 
+            Background="Transparent"
+			Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="135,20,0,20"/>
 
 		<Label
 			Content="Username:"
 			Grid.Row="1"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<TextBox
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbUsername"
 			Grid.Row="1"
+			Width="Auto"
+            Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
 			Content="First name"
 			Grid.Row="2"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<TextBox
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbFirstName"
 			Grid.Row="2"
+			Width="Auto"
+            Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
 			Content="Last name"
 			Grid.Row="3"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<TextBox
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbLastName"
 			Grid.Row="3"
+			Width="Auto"
+            Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
 			Content="Email:"
 			Grid.Row="4"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<TextBox
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbEmail"
 			Grid.Row="4"
+			Width="Auto"
+            Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
 			Content="Password"
 			Grid.Row="5"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
 			x:Name="pbPassword"
+            Background="LightGray"
+			Width="Auto"
 			Grid.Row="5"
 			Grid.Column="2"/>
 
 		<Label
 			Content="Confirm password"
 			Grid.Row="6"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
 			x:Name="pbConfirmPassword"
+            Background="LightGray"
+			Width="Auto"
 			Grid.Row="6"
 			Grid.Column="2"/>
 
@@ -99,14 +110,12 @@
 			Grid.Row="7"
 			Grid.Column="1"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnRegister_Click"/>
+			Click="btnRegister_Click" Margin="0,7,0,7" Width="154"/>
 		<Button
 			x:Name="btnSwap"
-			Content="Already have an account?"
-			Grid.Row="7"
-			Grid.Column="2"
+			Content="Already registered?"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnSwap_Click" />
+			Click="btnSwap_Click" Margin="0,7,0,7" Width="180" RenderTransformOrigin="0.463,0.547" Grid.Row="7" />
 
 		<StackPanel
 			x:Name="tbError"

@@ -1,8 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-						  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-						  xmlns:system="clr-namespace:System;assembly=System.Runtime">
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- Define named resources (variables) -->
+	<!-- Define variables -->
 	<SolidColorBrush x:Key="PrimaryTextColor" Color="DarkSlateGray"/>
 	<Thickness x:Key="StandardPadding">10,8,10,8</Thickness>
 	<Thickness x:Key="StandardMargin">7,5,7,5</Thickness>
