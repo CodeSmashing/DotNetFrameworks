@@ -12,15 +12,15 @@ namespace WPFAPP {
 	public partial class App : Application {
 		static public ServiceProvider ServiceProvider {
 			get; private set;
-		}
+		} = null!;
 
 		static public AgendaUser User {
 			get; set;
 		} = AgendaUser.Dummy;
 
-		static public MainWindow MainWindow {
+		static public new MainWindow MainWindow {
 			get; private set;
-		}
+		} = null!;
 
 		protected override async void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
@@ -29,6 +29,7 @@ namespace WPFAPP {
 			var serviceSet = new ServiceCollection();
 
 			// Setup DbContext as service
+			serviceSet.AddLogging();
 			serviceSet.AddDbContext<AgendaDbContext>();
 			serviceSet.AddIdentityCore<AgendaUser>(options => {
 				options.Password.RequireDigit = false;
@@ -41,17 +42,15 @@ namespace WPFAPP {
 				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<AgendaDbContext>();
 
-			serviceSet.AddLogging();
-
 			// Create the service provider which wil be accessible throughout the app
 			ServiceProvider = serviceSet.BuildServiceProvider();
 
-			AgendaDbContext context = new();
-			await AgendaDbContext.Seeder(context);
+			// Seed the database
+			await AgendaDbContext.Seeder(ServiceProvider);
 
 			MainWindow = new(
-				App.ServiceProvider.GetRequiredService<AgendaDbContext>(),
-				App.ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
+				ServiceProvider.GetRequiredService<AgendaDbContext>(),
+				ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
 			MainWindow.Show();
 		}
 	}

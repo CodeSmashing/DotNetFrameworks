@@ -1,7 +1,7 @@
 ﻿using Models;
 
-using (var context = new AgendaDbContext())
-{
+using (var context = new AgendaDbContext()) {
+	/* Before we set the AgendaDbContext.Seeder() to use IServiceProvider:
 	await AgendaDbContext.Seeder(context);
 
 	// Haal alle appointments op en toon deze
@@ -15,6 +15,7 @@ using (var context = new AgendaDbContext())
 				Console.WriteLine("   * " + todo);
 		}
 	}
+	*/
 
 
 	// Haal de appointments op die niet verwijderd zijn

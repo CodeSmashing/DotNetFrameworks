@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Models {
 	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
@@ -22,13 +23,9 @@ namespace Models {
 			optionsBuilder.UseSqlServer(connectionString);
 		}
 
-		public static async Task Seeder(AgendaDbContext context) {
-			UserManager<AgendaUser> userManager = new(
-				new UserStore<AgendaUser>(context),
-				null,
-				new PasswordHasher<AgendaUser>(),
-				null, null, null, null, null, null
-			);
+		public static async Task Seeder(IServiceProvider serviceProvider) {
+			var context = serviceProvider.GetRequiredService<AgendaDbContext>();
+			var userManager = serviceProvider.GetRequiredService<UserManager<AgendaUser>>();
 
 			if (!context.Roles.Any()) {
 				context.Roles.AddRange(new List<IdentityRole> {
