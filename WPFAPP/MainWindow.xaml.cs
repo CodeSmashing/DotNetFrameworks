@@ -38,7 +38,7 @@ namespace WPFAPP {
 			FormContainer.Children.Add(registerControl);
 			UserRoleInfoContainer.Children.Add(roleControl);
 
-			// Subscribe to swap events
+			// Subscribe to login and register swap events
 			loginControl.SwapRequested += SwapControlsHandler;
 			registerControl.SwapRequested += SwapControlsHandler;
 
@@ -86,7 +86,7 @@ namespace WPFAPP {
 			tcNavigation.SelectedItem = tciAppointmentRequest;
 		}
 
-		private void SwapControlsHandler(object sender, EventArgs e) {
+		private void SwapControlsHandler(object? sender, EventArgs e) {
 			// Swap between login and register controls
 			if (FormContainer.Children.Contains(registerControl)) {
 				// Switch to login form
@@ -190,7 +190,7 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-		private void SuccessfulLoginRegisterHandler(object sender, AgendaUser user) {
+		private void SuccessfulLoginRegisterHandler(object? sender, AgendaUser user) {
 			// Set the current user of the app
 			App.User = user;
 

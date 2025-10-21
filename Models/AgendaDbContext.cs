@@ -47,7 +47,11 @@ namespace Models {
 					new() {
 						Id = "User",
 						Name = "User",
-						NormalizedName = "USER" }
+						NormalizedName = "USER" },
+					new() {
+						Id = "Guest",
+						Name = "Guest",
+						NormalizedName = "GUEST" }
 				});
 				context.SaveChanges();
 			}
@@ -56,10 +60,12 @@ namespace Models {
 				context.Add(AgendaUser.Dummy);
 				context.SaveChanges();
 
+				await userManager.AddToRoleAsync(AgendaUser.Dummy, "Guest");
+
 				List<AgendaUser> userList = AgendaUser.SeedingData();
 				foreach (var user in userList) {
 					await userManager.CreateAsync(user, "P@ssword1");
-					await userManager.AddToRoleAsync(user, user.UserName.ElementAt(0) + user.UserName.Substring(1));
+					await userManager.AddToRoleAsync(user, user.UserName?.ElementAt(0) + user.UserName?.Substring(1));
 				}
 				context.SaveChanges();
 			}
