@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System.Configuration;
 using System.Data;
+using System.ComponentModel;
 using System.Windows;
 
 namespace WPFAPP {
@@ -10,20 +11,41 @@ namespace WPFAPP {
 	/// Interaction logic for App.xaml
 	/// </summary>
 	public partial class App : Application {
+		static public event PropertyChangedEventHandler UserChanged = delegate { };
+		static private AgendaUser _user = null!;
+
 		static public ServiceProvider ServiceProvider {
 			get; private set;
 		} = null!;
 
 		static public AgendaUser User {
-			get; set;
-		} = AgendaUser.Dummy;
+			get => _user;
+			set {
+				if (_user != value) {
+					_user = value;
+
+					// Assumes every user has a role to it
+					string currentRole = ServiceProvider
+						.GetRequiredService<AgendaDbContext>().UserRoles
+						.First(role => role.UserId == User.Id).RoleId;
+					OnUserChanged(currentRole);
+				}
+			}
+		}
 
 		static public new MainWindow MainWindow {
 			get; private set;
 		} = null!;
 
+		static void OnUserChanged(string role) {
+			UserChanged?.Invoke(typeof(App), new PropertyChangedEventArgs(role));
+		}
+
 		protected override async void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
+
+			// Set the initial or "default" user
+			_user = AgendaUser.Dummy;
 
 			// Setup dependency injection
 			var serviceSet = new ServiceCollection();

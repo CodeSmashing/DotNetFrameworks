@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System.Numerics;
 using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -46,16 +47,24 @@ namespace WPFAPP {
 			loginControl.LoginSuccess += SuccessfulLoginRegisterHandler;
 			registerControl.RegisterSuccess += SuccessfulLoginRegisterHandler;
 
-			// Show/hide relevant elements
+			// Subscribe to app user change event
+			App.UserChanged += HandleUserChanged;
+
+			// Subscribe to other events
+			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
+
+			// Initially show the guest UI
 			DisplayUI("guest");
 
 			// Load appointments data
 			UpdateDgAppointments();
 
-			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
-
 			// Load appointment types into combobox
 			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
+		}
+
+		public void HandleUserChanged(object? sender, PropertyChangedEventArgs e) {
+			DisplayUI(e.PropertyName);
 		}
 
 		private void dgAppointments_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -77,7 +86,6 @@ namespace WPFAPP {
 		private void btnLogout_Click(object sender, RoutedEventArgs e) {
 			// Show/hide relevant elements
 			App.User = AgendaUser.Dummy;
-			DisplayUI("guest");
 
 			// Ensure buttons are updated for logged out state
 			UpdateButtonsVisibilityForSelectedRow();
@@ -200,12 +208,6 @@ namespace WPFAPP {
 			// Return to appointments tab
 			tcNavigation.SelectedItem = tciAppointmentRequest;
 
-			// Show/hide relevant elements
-			// Normal user or userAdmin otherwise
-			string? currentRole = _context.UserRoles.FirstOrDefault(role =>
-					role.UserId == App.User.Id)?.RoleId.ToLower();
-			DisplayUI(currentRole != null ? currentRole : "user");
-
 			// Ensure button visibility is correct after successful login
 			UpdateButtonsVisibilityForSelectedRow();
 		}
@@ -250,9 +252,9 @@ namespace WPFAPP {
 			}
 		}
 
-		private void DisplayUI(string role = "") {
+		public void DisplayUI(string? role = "") {
 			switch (role) {
-				case "user":
+				case "User":
 					dgAppointments.Visibility = Visibility.Visible;
 					tciRegisterLogin.Visibility = Visibility.Hidden;
 					tciGeneral.Visibility = Visibility.Visible;
@@ -260,9 +262,9 @@ namespace WPFAPP {
 					tciUsers.Visibility = Visibility.Hidden;
 					tbUsernameInfo.Text = App.User.UserName?.ToString();
 					break;
-				case "admin":
-				case "useradmin":
-				case "employee":
+				case "Admin":
+				case "Useradmin":
+				case "Employee":
 					dgAppointments.Visibility = Visibility.Visible;
 					tciRegisterLogin.Visibility = Visibility.Hidden;
 					tciGeneral.Visibility = Visibility.Visible;
@@ -270,7 +272,7 @@ namespace WPFAPP {
 					tciUsers.Visibility = Visibility.Visible;
 					tbUsernameInfo.Text = App.User.UserName?.ToString();
 					break;
-				case "guest":
+				case "Guest":
 				default:
 					dgAppointments.Visibility = Visibility.Hidden;
 					tciRegisterLogin.Visibility = Visibility.Visible;
