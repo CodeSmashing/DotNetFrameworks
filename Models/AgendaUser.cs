@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class AgendaUser : IdentityUser {
-		public string FirstName { get; set; } = "-";
-
-		public string LastName { get; set; } = "-";
-
 		public static readonly AgendaUser Dummy = new() {
 			Id = "-",
 			FirstName = "-",
@@ -16,6 +13,26 @@ namespace Models {
 			Email = "dummy@gardenDb.org",
 			EmailConfirmed = true
 		};
+
+		[Required(ErrorMessage = "{0} is vereist")]
+		[StringLength(20, MinimumLength = 2, ErrorMessage = "De voornaam moet minstens 2 characters en mag maximum 50 characters bevatten")]
+		[Display(Name = "Voornaam")]
+		public string FirstName {
+			get; set;
+		} = "-";
+
+		[Required(ErrorMessage = "{0} is vereist")]
+		[StringLength(20, MinimumLength = 2, ErrorMessage = "De achternaam moet minstens 2 characters en mag maximum 50 characters bevatten")]
+		[Display(Name = "Achternaam")]
+		public string LastName {
+			get; set;
+		} = "-";
+
+		[Display(Name = "Voertuig ID")]
+		[ForeignKey("Vehicle")]
+		public int? VehicleId {
+			get; set;
+		}
 
 		override public string ToString() {
 			return $"{FirstName} {LastName} ({UserName})";

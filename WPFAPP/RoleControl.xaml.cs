@@ -3,7 +3,6 @@ using Models;
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace WPFAPP {
 	public partial class RoleControl : UserControl {
 		private readonly AgendaDbContext _context;

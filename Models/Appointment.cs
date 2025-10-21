@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class Appointment {
-		// Dummy instantie voor referentie
+		// Dummy/default appointment
 		static public readonly Appointment Dummy = new() { Title = "-", Deleted = DateTime.Now };
 
 		private DateTime now = DateTime.Now + new TimeSpan(0, 1, 0);
@@ -14,14 +14,20 @@ namespace Models {
 			get; set;
 		}
 
-		[Required]
+		[Required(ErrorMessage = "{0} is vereist")]
 		[ForeignKey("AgendaUser")]
-		public string UserId { get; set; } = AgendaUser.Dummy.Id;
-		public AgendaUser? AgendaUser {
+		[Display(Name = "User ID")]
+		public string UserId {
 			get; set;
-		}
+		} = AgendaUser.Dummy.Id;
 
-		[Required]
+		[Required(ErrorMessage = "{0} is vereist")]
+		[Display(Name = "User")]
+		public AgendaUser AgendaUser {
+			get; set;
+		} = null!;
+
+		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Vanaf")]
 		[DataType(DataType.DateTime)]
 		public DateTime From {
@@ -34,42 +40,61 @@ namespace Models {
 			}
 		}
 
-		[Required]
-		[DataType(DataType.DateTime)]
+		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Tot")]
-		public DateTime To { get; set; } = DateTime.Now + new TimeSpan(1, 1, 30, 0);
+		[DataType(DataType.DateTime)]
+		public DateTime To {
+			get; set;
+		} = DateTime.Now + new TimeSpan(1, 1, 30, 0);
 
-		[Required]
+		[Required(ErrorMessage = "{0} is vereist")]
+		[StringLength(50, MinimumLength = 3, ErrorMessage = "De titel moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Titel")]
-		public string Title { get; set; } = string.Empty;
+		public string Title {
+			get; set;
+		} = string.Empty;
 
-		[Required]
+		[Required(ErrorMessage = "{0} is vereist")]
+		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
 		[Display(Name = "Omschrijving")]
 		[DataType(DataType.MultilineText)]
-		public string Description { get; set; } = string.Empty;
+		public string Description {
+			get; set;
+		} = string.Empty;
 
-		[Required]
+		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Aangemaakt")]
-		public DateTime Created { get; set; } = DateTime.Now;
+		[DataType(DataType.DateTime)]
+		public DateTime Created {
+			get; set;
+		} = DateTime.Now;
 
-		[Required]
+		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Verwijderd")]
-		public DateTime Deleted { get; set; } = DateTime.MaxValue;
+		[DataType(DataType.DateTime)]
+		public DateTime Deleted {
+			get; set;
+		} = DateTime.MaxValue;
 
 		// Foreign key naar AppointmentType:  Zorg voor de juiste één-op-veel relatie
-		[Required]
-		[Display(Name = "Type")]
+		[Required(ErrorMessage = "{0} is vereist")]
+		[Display(Name = "Afspraak type ID")]
 		[ForeignKey("AppointmentType")]
-		public int AppointmentTypeId { get; set; } = AppointmentType.Dummy.Id;
+		public int AppointmentTypeId {
+			get; set;
+		} = AppointmentType.Dummy.Id;
 
-		// Navigatie-eigenschap
+		[Required(ErrorMessage = "{0} is vereist")]
+		[Display(Name = "Afspraak type")]
 		public AppointmentType AppointmentType {
 			get; set;
 		} = AppointmentType.Dummy;
 
-		[Required]
-		[Display(Name = "IsApproved")]
-		public bool IsApproved { get; set; } = false;
+		[Required(ErrorMessage = "{0} is vereist")]
+		[Display(Name = "Is goedgekeurd")]
+		public bool IsApproved {
+			get; set;
+		} = false;
 
 		public override string ToString() {
 			return Id + "  Afspraak op " + From + " betreffende " + Title;

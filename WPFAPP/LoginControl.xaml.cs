@@ -1,15 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace WPFAPP {
@@ -26,8 +18,8 @@ namespace WPFAPP {
 			new("pbPassword", "Password")
 		];
 
-        // Constructor with dependency injection
-        public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		// Constructor with dependency injection
+		public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

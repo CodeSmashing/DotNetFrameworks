@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using System.Configuration;
-using System.Data;
 using System.ComponentModel;
 using System.Windows;
 
@@ -38,8 +36,8 @@ namespace WPFAPP {
 			UserChanged?.Invoke(typeof(App), new PropertyChangedEventArgs(role));
 		}
 
-        // Application startup event
-        protected override async void OnStartup(StartupEventArgs e) {
+		// Application startup event
+		protected override async void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
 			// Set the initial or "default" user

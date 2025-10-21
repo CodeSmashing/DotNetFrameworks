@@ -2,26 +2,40 @@
 
 namespace Models {
 	public class AppointmentType {
-		// Dummy default user
+		// Dummy/default appointment type
 		static public readonly AppointmentType Dummy = new() { Name = "-", Description = "-", Deleted = DateTime.MaxValue };
 
-		// [Key]
 		public int Id {
 			get; set;
 		}
 
-		[Required]
-		public string Name { get; set; } = string.Empty;
+		[Required(ErrorMessage = "{0} is vereist")]
+		[StringLength(25, MinimumLength = 3, ErrorMessage = "De afspraak type naam moet minstens 3 characters en mag maximum 25 characters bevatten")]
+		[Display(Name = "Afspraak type naam")]
+		public string Name {
+			get; set;
+		} = string.Empty;
 
-		[Required]
-		public string Description { get; set; } = string.Empty;
+		[Required(ErrorMessage = "{0} is vereist")]
+		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
+		[Display(Name = "Omschrijving")]
+		public string Description {
+			get; set;
+		} = string.Empty;
 
-		public string Color { get; set; } = "#FF000000"; // Color in which the appointment wil be shown, default is black
+		// Likely to be removed
+		public string Color {
+			get; set;
+		} = "#FF000000"; // Color in which the appointment wil be shown, default is black
 
-		[Required]
-		public DateTime Deleted { get; set; } = DateTime.MaxValue;
+		[Required(ErrorMessage = "{0} is vereist")]
+		[Display(Name = "Verwijderd")]
+		[DataType(DataType.DateTime)]
+		public DateTime Deleted {
+			get; set;
+		} = DateTime.MaxValue;
 
-        public override string ToString() {
+		public override string ToString() {
 			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
 		}
 

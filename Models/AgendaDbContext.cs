@@ -3,20 +3,27 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Models {	
+namespace Models {
 	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
 		public DbSet<AppointmentType> AppointmentTypes {
 			get; set;
 		}
+
 		public DbSet<Appointment> Appointments {
 			get; set;
 		}
+
+		public DbSet<Vehicle> Vehicles {
+			get; set;
+		}
+
 		public DbSet<ToDo> ToDos {
 			get; set;
 		}
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            // Define the connection string to the database
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
+			// Define the connection string to the database
+			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
 			optionsBuilder.UseSqlServer(connectionString);
 		}
 
@@ -71,6 +78,11 @@ namespace Models {
 
 			if (!context.Appointments.Any()) {
 				context.Appointments.AddRange(Appointment.SeedingData());
+				context.SaveChanges();
+			}
+
+			if (!context.Vehicles.Any()) {
+				context.Vehicles.AddRange(Vehicle.SeedingData());
 				context.SaveChanges();
 			}
 

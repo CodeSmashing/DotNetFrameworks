@@ -46,8 +46,8 @@ namespace WPFAPP {
 			// Load appointments data
 			UpdateDgAppointments();
 
-            // Subscribe to double-click event on DataGrid rows
-            dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
+			// Subscribe to double-click event on DataGrid rows
+			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
 
 			// Load appointment types into combobox
 			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
@@ -105,19 +105,16 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-        // Add, Edit, Delete, Save button handlers
-        private void btnAdd_Click(object sender, RoutedEventArgs e) {
+		// Add, Edit, Delete, Save button handlers
+		private void btnAdd_Click(object sender, RoutedEventArgs e) {
 			btnSave.Visibility = Visibility.Visible;
 			grDetails.Visibility = Visibility.Visible;
 			grDetails.DataContext = new Appointment();
 		}
 		private void btnEdit_Click(object sender, RoutedEventArgs e) {
-			if (btnEdit.Content.ToString() == "Wijzigen")
-			{
+			if (btnEdit.Content.ToString() == "Wijzigen") {
 				btnEdit.Content = "Opslaan";
-			}
-			else if (btnEdit.Content.ToString() == "Opslaan")
-			{
+			} else if (btnEdit.Content.ToString() == "Opslaan") {
 				btnEdit.Content = "Wijzigen";
 			}
 
@@ -152,28 +149,28 @@ namespace WPFAPP {
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
 				appointment.AppointmentType = contextAppointment.AppointmentType;
-                appointment.AppointmentTypeId = contextAppointment.AppointmentType.Id;
+				appointment.AppointmentTypeId = contextAppointment.AppointmentType.Id;
 
-                if (appointment.AppointmentType == AppointmentType.Dummy) {
+				if (appointment.AppointmentType == AppointmentType.Dummy) {
 					throw new Exception("Ongeldig afspraaktype geselecteerd.");
 				}
 
-                // Save to database
-                _context.Appointments.Add(appointment);
+				// Save to database
+				_context.Appointments.Add(appointment);
 				_context.SaveChanges();
 				btnSave.Visibility = Visibility.Hidden;
 				grDetails.Visibility = Visibility.Hidden;
 
-                // Refresh appointments DataGrid
-                UpdateDgAppointments();
+				// Refresh appointments DataGrid
+				UpdateDgAppointments();
 
 			} catch (Exception erorrInfo) {
 				Console.WriteLine("Fout bij opslaan afspraak; " + erorrInfo.Message);
 			}
 		}
 
-        // Handlers to show Save button when details are changed
-        private void SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
+		// Handlers to show Save button when details are changed
+		private void SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
 			//btnSave.Visibility = Visibility.Visible;
 		}
 
@@ -181,8 +178,8 @@ namespace WPFAPP {
 			//btnSave.Visibility = Visibility.Visible;
 		}
 
-        // Refresh the appointments DataGrid with current data from the database
-        private void UpdateDgAppointments() {
+		// Refresh the appointments DataGrid with current data from the database
+		private void UpdateDgAppointments() {
 			dgAppointments.ItemsSource = _context.Appointments
 										.Where(app => app.Deleted >= DateTime.Now
 													  && app.From > DateTime.Now
@@ -210,8 +207,8 @@ namespace WPFAPP {
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
-        // Helper to update button visibility based on selected appointment and user state
-        private void UpdateButtonsVisibilityForSelectedRow() {
+		// Helper to update button visibility based on selected appointment and user state
+		private void UpdateButtonsVisibilityForSelectedRow() {
 			// Default states
 			btnEdit.Visibility = Visibility.Hidden;
 			btnDelete.Visibility = Visibility.Hidden;
