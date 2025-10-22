@@ -11,10 +11,9 @@ namespace WPFAPP {
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly LoginControl loginControl;
 		private readonly RegisterControl registerControl;
-		private readonly RoleControl roleControl;
-		private readonly AdminControl adminControl;
 		private readonly UserInfoControl userControl;
 		private readonly AppointmentControl appointmentControl;
+		private readonly AdminPanelControl adminPanelControl;
 
 		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
@@ -24,19 +23,16 @@ namespace WPFAPP {
 			// Instantiate controls and their containers
 			loginControl = new(_context, _userManager);
 			registerControl = new(_context, _userManager);
-			roleControl = new(_context, _userManager);
-			adminControl = new(_context, _userManager);
-
-			UserRoleInfoContainer.Children.Add(roleControl);
-			AdminPanelContainer.Children.Add(adminControl);
 			userControl = new();
 			appointmentControl = new(_context, _userManager);
+			adminPanelControl = new(_context, _userManager);
 			AuthenticationContainer.Children.Clear();
 			UserInfoContainer.Children.Clear();
 			AppointmentContainer.Children.Clear();
 			AuthenticationContainer.Children.Add(registerControl);
 			UserInfoContainer.Children.Add(userControl);
 			AppointmentContainer.Children.Add(appointmentControl);
+			AdminPanelContainer.Children.Add(adminPanelControl);
 
 			// Subscribe to login and register swap events
 			loginControl.SwapRequested += SwapControlsHandler;
@@ -81,26 +77,26 @@ namespace WPFAPP {
 		public void DisplayUI(string? role = "") {
 			switch (role) {
 				case "User":
-					tciUsers.Visibility = Visibility.Hidden;
 					tciAppointmentTab.Visibility = Visibility.Visible;
 					tciAuthenticationTab.Visibility = Visibility.Hidden;
 					tciUserInfoTab.Visibility = Visibility.Visible;
+					tciAdminPanelTab.Visibility = Visibility.Hidden;
 					break;
 				case "Admin":
 				case "Useradmin":
 				case "Employee":
-					tciUsers.Visibility = Visibility.Visible;
 					tciAppointmentTab.Visibility = Visibility.Visible;
 					tciAuthenticationTab.Visibility = Visibility.Hidden;
 					tciUserInfoTab.Visibility = Visibility.Visible;
+					tciAdminPanelTab.Visibility = Visibility.Visible;
 					break;
 				case "Guest":
 				default:
-					tciUsers.Visibility = Visibility.Hidden;
 					tcNavigation.SelectedItem = tciAuthenticationTab;
 					tciAppointmentTab.Visibility = Visibility.Hidden;
 					tciAuthenticationTab.Visibility = Visibility.Visible;
 					tciUserInfoTab.Visibility = Visibility.Hidden;
+					tciAdminPanelTab.Visibility = Visibility.Hidden;
 					break;
 			}
 		}

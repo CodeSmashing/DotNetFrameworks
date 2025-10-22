@@ -14,12 +14,10 @@
 			<TabItem x:Name="tciAuthenticationTab" Header="Registreren/login">
 				<Grid x:Name="AuthenticationContainer"/>
 			</TabItem>
-			<TabItem x:Name="tciUsers" Header="Users" Visibility="Visible">
-				<StackPanel x:Name="UserRoleInfoContainer" />
 			<TabItem x:Name="tciUserInfoTab" Header="Algemeen">
 				<StackPanel x:Name="UserInfoContainer" />
 			</TabItem>
-			<TabItem x:Name="tciAdmin" Header="Admin Panel" Visibility="Visible">
+			<TabItem x:Name="tciAdminPanelTab" Header="Admin Paneel">
 				<StackPanel x:Name="AdminPanelContainer" />
 			</TabItem>
 		</TabControl>

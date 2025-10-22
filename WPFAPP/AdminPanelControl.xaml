@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="WPFAPP.AdminPanelControl"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+				xmlns:local="clr-namespace:WPFAPP"
+				mc:Ignorable="d">
+	<StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+		<TabControl x:Name="tcAdminNavigation">
+			<TabItem x:Name="tciVehicleAssignmentTab" Header="Voertuigtoewijzing">
+				<Grid>
+					<Label
+						Content="Add Employee To Vehicle"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Top"
+						FontSize="24"
+						Margin="0,10,0,0"/>
+					<StackPanel
+						Orientation="Vertical"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Margin="0,50,0,0">
+						<StackPanel
+							Orientation="Horizontal"
+							Margin="0,10,0,0">
+							<Label
+								Content="Employee ID:"
+								Width="100"
+								VerticalAlignment="Center"/>
+							<ComboBox
+								x:Name="cmbEmployees"
+								Width="200"
+								Margin="10,0,0,0"/>
+						</StackPanel>
+
+						<StackPanel
+							Orientation="Horizontal"
+							Margin="0,10,0,0" >
+							<Label
+								Content="Vehicle:"
+								Width="100"
+								VerticalAlignment="Center"/>
+							<ComboBox
+								x:Name="cmbVehicles"
+								Width="200"
+								Margin="10,0,0,0"
+								SelectionChanged="grVehicleDetails_SelectionChanged"/>
+						</StackPanel>
+
+						<StackPanel>
+							<DataGrid
+								x:Name="grVehicleDetails"
+								Visibility="Hidden"
+								Margin="15" >
+								<DataGridTextColumn
+									Header="LicencePlate"
+									Binding="{Binding LicencePlate}"
+									Width="150"
+									IsReadOnly="True"/>
+
+								<DataGridTextColumn
+									Header="Brand"
+									Binding="{Binding Brand}"
+									Width="150"
+									IsReadOnly="True"/>
+
+								<DataGridTextColumn
+									Header="Model"
+									Binding="{Binding Model}"
+									Width="200"
+									IsReadOnly="True"/>
+							</DataGrid>
+						</StackPanel>
+						<!--<Button x:Name="btnAssign" Content="Assign Vehicle" Width="150" Margin="0,20,0,0" Click="btnAssign_Click"/>-->
+					</StackPanel>
+				</Grid>
+			</TabItem>
+			<TabItem x:Name="tciUsersTab" Header="Gebruikers">
+				<StackPanel x:Name="UsersContainer" />
+			</TabItem>
+		</TabControl>
+	</StackPanel>
+</UserControl>
