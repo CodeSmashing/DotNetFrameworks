@@ -128,6 +128,8 @@
 							AcceptsReturn="True"
 							TextChanged="TextChanged" Margin="0,0,0,-1" />
 					</Grid>
+					<local:VehicleSelector/>
+
 				</StackPanel>
 			</TabItem>
 			<TabItem x:Name="tciRegisterLogin" Header="Register/login">
@@ -135,6 +137,9 @@
 			</TabItem>
 			<TabItem x:Name="tciUsers" Header="Users" Visibility="Visible">
 				<StackPanel x:Name="UserRoleInfoContainer" />
+			</TabItem>
+			<TabItem x:Name="tciAdmin" Header="Admin Panel" Visibility="Visible">
+				<StackPanel x:Name="AdminPanelContainer" />
 			</TabItem>
 			<TabItem x:Name="tciGeneral" Header="General" Visibility="Visible">
 				<StackPanel Orientation="Vertical" Margin="10px">

@@ -50,9 +50,25 @@ namespace Models {
 					EmailConfirmed = true
 				},
 				new() {
-					FirstName = "-",
-					LastName = "-",
-					UserName = "employee",
+					FirstName = "Bart",
+					LastName = "De Smet",
+					UserName = "Bartje",
+					NormalizedUserName = "EMPLOYEE",
+					Email = "employee@gardenDb.org",
+					EmailConfirmed = true
+				},
+				new() {
+					FirstName = "Jeff",
+					LastName = "Janssens",
+					UserName = "Jefke",
+					NormalizedUserName = "EMPLOYEE",
+					Email = "employee@gardenDb.org",
+					EmailConfirmed = true
+				},
+				new() {
+					FirstName = "Dirk",
+					LastName = "De Bakker",
+					UserName = "Dirkske",
 					NormalizedUserName = "EMPLOYEE",
 					Email = "employee@gardenDb.org",
 					EmailConfirmed = true

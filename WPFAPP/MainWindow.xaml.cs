@@ -12,6 +12,7 @@ namespace WPFAPP {
 		private readonly LoginControl loginControl;
 		private readonly RegisterControl registerControl;
 		private readonly RoleControl roleControl;
+		private readonly AdminControl adminControl;
 
 		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
@@ -22,9 +23,12 @@ namespace WPFAPP {
 			loginControl = new(_context, _userManager);
 			registerControl = new(_context, _userManager);
 			roleControl = new(_context, _userManager);
+			adminControl = new(_context, _userManager);
+
 			FormContainer.Children.Clear();
 			FormContainer.Children.Add(registerControl);
 			UserRoleInfoContainer.Children.Add(roleControl);
+			AdminPanelContainer.Children.Add(adminControl);
 
 			// Subscribe to login and register swap events
 			loginControl.SwapRequested += SwapControlsHandler;

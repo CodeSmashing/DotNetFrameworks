@@ -63,11 +63,24 @@ namespace Models {
 
 				await userManager.AddToRoleAsync(AgendaUser.Dummy, "Guest");
 
+				// Default employees
 				List<AgendaUser> userList = AgendaUser.SeedingData();
 				foreach (var user in userList) {
 					await userManager.CreateAsync(user, "P@ssword1");
-					await userManager.AddToRoleAsync(user, user.UserName?.ElementAt(0) + user.UserName?.Substring(1));
 				}
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.UserName == "admin"),
+					"Admin");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.UserName == "Bartje"),
+					"Employee");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.UserName == "Jefke"),
+					"Employee");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.UserName == "Dirkske"),
+					"Employee");
+
 				context.SaveChanges();
 			}
 

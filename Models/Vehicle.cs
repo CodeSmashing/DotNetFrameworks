@@ -60,6 +60,13 @@ namespace Models {
 		}
 
 		[Required(ErrorMessage = "{0} is vereist")]
+		[Display(Name = "Afbeelding")]
+		public string? ImageUrl
+		{
+			get; set;
+		}
+
+		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Is manueel")]
 		public bool IsManuel {
 			get; set;
@@ -92,6 +99,7 @@ namespace Models {
 				new() {
 					LicencePlate = "0-ABC-123",
 					VehicleType = VehicleType.Truck,
+					ImageUrl = "https://assets.volvo.com/is/image/VolvoInformationTechnologyAB/volvo-fh16-cgi-exterior-1?qlt=82&wid=1024&ts=1705310176284&dpr=off&fit=constrain&fmt=png-alpha",
 					Brand = "Volvo",
 					Model = "FH16",
 					LoadCapacity = 26000.0,  // in liters
@@ -103,6 +111,7 @@ namespace Models {
 				new() {
 					LicencePlate = "3-XYZ-987",
 					VehicleType = VehicleType.Pickup,
+					ImageUrl = "https://www.ford.ca/cmslibs/content/dam/na/ford/en_ca/images/f-150/2025/jellybeans/F150_Jelly_Tremor1.png",
 					Brand = "Ford",
 					Model = "F-150",
 					LoadCapacity = 13600.0,
@@ -115,6 +124,7 @@ namespace Models {
 				new() {
 					LicencePlate = "5-JKL-456",
 					VehicleType = VehicleType.Personal,
+					ImageUrl = "https://kong-proxy-intranet.toyota-europe.com/c1-images/resize/ccis/680x680/zip/be/product-token/3b274324-851e-4d09-a5c2-9ef6d3f63538/vehicle/34c30a2d-010f-4707-a494-77106a004661/padding/50,50,50,50/image-quality/70/day-exterior-04_040.png",
 					Brand = "Toyota",
 					Model = "Corolla",
 					LoadCapacity = 5000.0,
@@ -127,6 +137,7 @@ namespace Models {
 				new() {
 					LicencePlate = "7-GHI-789",
 					VehicleType = VehicleType.Truck,
+					ImageUrl = "https://www.basworld.com/_next/image?url=https%3A%2F%2Fstatic.basworld.com%2Fphotos%2Fvehicle%2Fworld%2F1080%2Fused-Trekker-MAN-TGS-18.510-4X4-2020_336024_B9bQ6mgo6rZmI4xk69I7g6rF4HoGRxrUNPQL.jpg&w=1080&q=75",
 					Brand = "MAN",
 					Model = "TGS",
 					LoadCapacity = 28000.0,
@@ -139,6 +150,7 @@ namespace Models {
 				new() {
 					LicencePlate = "9-MNO-321",
 					VehicleType = VehicleType.Personal,
+					ImageUrl = "https://images.hgmsites.net/med/2025-honda-civic-sport-cvt-angular-front-exterior-view_100939989_m.webp",
 					Brand = "Honda",
 					Model = "Civic",
 					LoadCapacity = 4500.0,
