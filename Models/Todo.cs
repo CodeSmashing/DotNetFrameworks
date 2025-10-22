@@ -9,8 +9,8 @@ namespace Models {
 			get; set;
 		}
 
-        // Eigenschappen
-        [Required]
+		// Eigenschappen
+		[Required]
 		[Display(Name = "Title")]
 		public string Title { get; set; } = string.Empty;
 
@@ -25,10 +25,10 @@ namespace Models {
 		public int AppointmentId {
 			get; set;
 		}
-		
-        // Override ToString methode
-        public override string ToString() {
-			return $"TodoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
+
+		// Override ToString methode
+		public override string ToString() {
+			return $"ToDoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
 		}
 
 		// Seeding data

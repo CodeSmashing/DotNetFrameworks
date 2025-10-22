@@ -87,7 +87,7 @@ namespace Models.Migrations
                     b.ToTable("AppointmentTypes");
                 });
 
-            modelBuilder.Entity("Models.Todo", b =>
+            modelBuilder.Entity("Models.ToDo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,7 +107,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Todos");
+                    b.ToTable("ToDos");
                 });
 
             modelBuilder.Entity("Models.Appointment", b =>

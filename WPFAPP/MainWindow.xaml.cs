@@ -101,7 +101,7 @@ namespace WPFAPP {
 			grDetails.Visibility = Visibility.Hidden;
 			btnSave.Visibility = Visibility.Hidden;
 
-			// Existing index-based logic removed in favor of clearer helper
+			// Existing index-based logic removed in favour of clearer helper
 			UpdateButtonsVisibilityForSelectedRow();
 		}
 
@@ -152,7 +152,7 @@ namespace WPFAPP {
 				appointment.AppointmentTypeId = contextAppointment.AppointmentType.Id;
 
 				if (appointment.AppointmentType == AppointmentType.Dummy) {
-					throw new Exception("Ongeldig afspraaktype geselecteerd.");
+					throw new Exception("Ongeldig type afspraak geselecteerd.");
 				}
 
 				// Save to database

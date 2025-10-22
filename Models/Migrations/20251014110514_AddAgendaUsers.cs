@@ -11,19 +11,6 @@ namespace Models.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Todos",
-                table: "Todos");
-
-            migrationBuilder.RenameTable(
-                name: "Todos",
-                newName: "ToDos");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_ToDos",
-                table: "ToDos",
-                column: "Id");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -234,19 +221,6 @@ namespace Models.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_ToDos",
-                table: "ToDos");
-
-            migrationBuilder.RenameTable(
-                name: "ToDos",
-                newName: "Todos");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Todos",
-                table: "Todos",
-                column: "Id");
         }
     }
 }

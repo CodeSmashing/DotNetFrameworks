@@ -27,7 +27,7 @@ namespace Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Todos",
+                name: "ToDos",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -38,7 +38,7 @@ namespace Models.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Todos", x => x.Id);
+                    table.PrimaryKey("PK_ToDos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,7 +79,7 @@ namespace Models.Migrations
                 name: "Appointments");
 
             migrationBuilder.DropTable(
-                name: "Todos");
+                name: "ToDos");
 
             migrationBuilder.DropTable(
                 name: "AppointmentTypes");

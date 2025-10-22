@@ -6,11 +6,11 @@ using (var context = new AgendaDbContext()) {
 
 	// Haal alle appointments op en toon deze
 	var alleAppointments = context.Appointments;
-	var alleTodos = context.ToDos;
+	var alleToDos = context.ToDos;
 	Console.WriteLine("Alle afspraken: ");
 	foreach (var appointment in alleAppointments) {
 		Console.WriteLine("- " + appointment);
-		foreach (var todo in alleTodos) {
+		foreach (var todo in alleToDos) {
 			if (todo.AppointmentId == appointment.Id)
 				Console.WriteLine("   * " + todo);
 		}
@@ -25,7 +25,7 @@ using (var context = new AgendaDbContext()) {
 	// Toevoegen van een afspraak
 	//Appointment nieuweAfspraak = new Appointment()
 	//{
-	//    Title = "Tandardsbezoek",
+	//    Title = "Tandartsbezoek",
 	//    Description = "Dat gaat pijn doen",
 	//    From = DateTime.Now.AddDays(7)
 	//};

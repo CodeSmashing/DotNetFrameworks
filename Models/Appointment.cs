@@ -109,7 +109,7 @@ namespace Models {
 				// Voeg enkele test-appointments toe
 				new() {
 					Title = "Afspraak met Jan",
-					Description = "Bespreking van het tuinontwerp",
+					Description = "Bespreking van het tuin ontwerp",
 					From = DateTime.Now.AddDays(2).AddHours(10),
 					To = DateTime.Now.AddDays(2).AddHours(11),
 					AppointmentTypeId = 2 },
@@ -123,7 +123,7 @@ namespace Models {
 
 				new() {
 					Title = "Kennismaking met Klaas",
-					Description = "Eerste gesprek over mogelijke tuinprojecten",
+					Description = "Eerste gesprek over mogelijke tuin projecten",
 					From = DateTime.Now.AddDays(7).AddHours(14),
 					To = DateTime.Now.AddDays(7).AddHours(15),
 					AppointmentTypeId = 3 }
