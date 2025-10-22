@@ -13,6 +13,7 @@ namespace WPFAPP {
 		private readonly RegisterControl registerControl;
 		private readonly RoleControl roleControl;
 		private readonly AdminControl adminControl;
+		private readonly UserInfoControl userControl;
 		private readonly AppointmentControl appointmentControl;
 
 		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
@@ -26,12 +27,15 @@ namespace WPFAPP {
 			roleControl = new(_context, _userManager);
 			adminControl = new(_context, _userManager);
 
-			FormContainer.Children.Clear();
-			FormContainer.Children.Add(registerControl);
 			UserRoleInfoContainer.Children.Add(roleControl);
 			AdminPanelContainer.Children.Add(adminControl);
+			userControl = new();
 			appointmentControl = new(_context, _userManager);
+			AuthenticationContainer.Children.Clear();
+			UserInfoContainer.Children.Clear();
 			AppointmentContainer.Children.Clear();
+			AuthenticationContainer.Children.Add(registerControl);
+			UserInfoContainer.Children.Add(userControl);
 			AppointmentContainer.Children.Add(appointmentControl);
 
 			// Subscribe to login and register swap events
@@ -53,27 +57,16 @@ namespace WPFAPP {
 			DisplayUI(e.PropertyName);
 		}
 
-		private void btnLogout_Click(object sender, RoutedEventArgs e) {
-			// Show/hide relevant elements
-			App.User = AgendaUser.Dummy;
-
-			// Ensure buttons are updated for logged out state
-			UpdateButtonsVisibilityForSelectedRow();
-
-			// Return to appointments tab
-			tcNavigation.SelectedItem = tciAppointmentRequest;
-		}
-
 		private void SwapControlsHandler(object? sender, EventArgs e) {
 			// Swap between login and register controls
-			if (FormContainer.Children.Contains(registerControl)) {
+			if (AuthenticationContainer.Children.Contains(registerControl)) {
 				// Switch to login form
-				FormContainer.Children.Clear();
-				FormContainer.Children.Add(loginControl);
+				AuthenticationContainer.Children.Clear();
+				AuthenticationContainer.Children.Add(loginControl);
 			} else {
 				// Switch to register form
-				FormContainer.Children.Clear();
-				FormContainer.Children.Add(registerControl);
+				AuthenticationContainer.Children.Clear();
+				AuthenticationContainer.Children.Add(registerControl);
 			}
 		}
 
@@ -88,32 +81,26 @@ namespace WPFAPP {
 		public void DisplayUI(string? role = "") {
 			switch (role) {
 				case "User":
-					tciRegisterLogin.Visibility = Visibility.Hidden;
-					tciGeneral.Visibility = Visibility.Visible;
-					btnLogout.Visibility = Visibility.Visible;
 					tciUsers.Visibility = Visibility.Hidden;
-					tbUsernameInfo.Text = App.User.UserName?.ToString();
 					tciAppointmentTab.Visibility = Visibility.Visible;
+					tciAuthenticationTab.Visibility = Visibility.Hidden;
+					tciUserInfoTab.Visibility = Visibility.Visible;
 					break;
 				case "Admin":
 				case "Useradmin":
 				case "Employee":
-					tciRegisterLogin.Visibility = Visibility.Hidden;
-					tciGeneral.Visibility = Visibility.Visible;
-					btnLogout.Visibility = Visibility.Visible;
 					tciUsers.Visibility = Visibility.Visible;
-					tbUsernameInfo.Text = App.User.UserName?.ToString();
 					tciAppointmentTab.Visibility = Visibility.Visible;
+					tciAuthenticationTab.Visibility = Visibility.Hidden;
+					tciUserInfoTab.Visibility = Visibility.Visible;
 					break;
 				case "Guest":
 				default:
-					tciRegisterLogin.Visibility = Visibility.Visible;
-					tciGeneral.Visibility = Visibility.Hidden;
-					btnLogout.Visibility = Visibility.Hidden;
 					tciUsers.Visibility = Visibility.Hidden;
-					tbUsernameInfo.Text = string.Empty;
 					tcNavigation.SelectedItem = tciAuthenticationTab;
 					tciAppointmentTab.Visibility = Visibility.Hidden;
+					tciAuthenticationTab.Visibility = Visibility.Visible;
+					tciUserInfoTab.Visibility = Visibility.Hidden;
 					break;
 			}
 		}
