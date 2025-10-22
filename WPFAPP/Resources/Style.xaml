@@ -82,6 +82,21 @@
 		<Setter Property="FontSize" Value="18"/>
 	</Style>
 
+	<!-- Explicit named style targeting TextBlock to help with nested resource dictionaries -->
+	<Style x:Key="BaseTextBlock" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"/>
+
+	<!-- Implicit style targeting all TextBox's using resources -->
+	<Style TargetType="TextBox">
+		<Setter Property="Background" Value="WhiteSmoke"/>
+		<Setter Property="Foreground" Value="DarkSlateGray" />
+		<Setter Property="Padding" Value="{DynamicResource StandardPadding}"/>
+		<Setter Property="FontFamily" Value="{DynamicResource PrimaryFont}"/>
+		<Setter Property="FontSize" Value="18"/>
+	</Style>
+
+	<!-- Explicit named style targeting TextBox to help with nested resource dictionaries -->
+	<Style x:Key="BaseTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}"/>
+
 	<!-- Implicit style targeting all Controls using resources -->
 	<Style TargetType="Control">
 		<Setter Property="Margin" Value="{StaticResource StandardMargin}"/>
@@ -89,15 +104,42 @@
 		<Setter Property="Height" Value="{StaticResource PrimaryInteractiveHeight}"/>
 		<Setter Property="Height" Value="{StaticResource PrimaryInteractiveHeight}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 
-	<!-- Base style for Button -->
+	<!-- Explicit named style targeting Control to help with nested resource dictionaries -->
+	<Style x:Key="BaseControl" TargetType="Control" BasedOn="{StaticResource {x:Type Control}}"/>
+
+	<!-- Implicit style targeting all Buttons using resources -->
 	<Style TargetType="Button">
 		<Setter Property="Background" Value="WhiteSmoke"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Grid Background="{TemplateBinding Background}">
+						<ContentPresenter x:Name="MyContentPresenter"
+												Content="{TemplateBinding Content}"
+												HorizontalAlignment="Center"
+												VerticalAlignment="Center" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Opacity" Value="1"/>
+				<Setter Property="Foreground" Value="Black"/>
+				<Setter Property="Background" Value="LightGray"/>
+			</Trigger>
+		</Style.Triggers>
 	</Style>
 
-	<!-- Centred style for Button, inherits -->
+	<!-- Explicit named style targeting Button to help with nested resource dictionaries -->
+	<Style x:Key="BaseButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"/>
+
+	<!-- Centred style for Buttons, inherits -->
 	<Style
 		x:Key="ButtonCentered"
 		TargetType="Button"
@@ -107,12 +149,15 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 	</Style>
 
-	<!-- Base style for Label -->
+	<!-- Implicit style targeting all Labels using resources -->
 	<Style TargetType="Label">
 		<Setter Property="Background" Value="WhiteSmoke"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="HorizontalContentAlignment" Value="Right"/>
 	</Style>
+
+	<!-- Explicit named style targeting Label to help with nested resource dictionaries -->
+	<Style x:Key="BaseLabel" TargetType="Label" BasedOn="{StaticResource {x:Type Label}}"/>
 
 	<!-- Base style for title, inherits -->
 	<Style x:Key="BaseTitle" TargetType="TextBlock">
@@ -136,11 +181,6 @@
 		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
 
-	<!-- Base style for TextBox -->
-	<Style TargetType="TextBox">
-		<Setter Property="Background" Value="WhiteSmoke"/>
-	</Style>
-
 	<!-- Wider TextBox style, inherits -->
 	<Style x:Key="TextBoxWide" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" >
 		<Setter Property="Width" Value="200"/>
@@ -154,5 +194,29 @@
 	<!-- Wider PasswordBox style, inherits -->
 	<Style x:Key="PasswordBoxWide" TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}" >
 		<Setter Property="Width" Value="200"/>
+	</Style>
+
+	<!-- Style for search input field with placeholder text -->
+	<Style x:Key="SearchFilterPanel" TargetType="Grid">
+		<Style.Resources>
+			<Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}">
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="BorderThickness" Value="2"/>
+				<Setter Property="Margin" Value="5"/>
+
+				<Style.Resources>
+					<Style TargetType="{x:Type Border}">
+						<Setter Property="CornerRadius" Value="4"/>
+					</Style>
+				</Style.Resources>
+			</Style>
+			<Style TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="Opacity" Value="0.1"/>
+				<Setter Property="VerticalAlignment" Value="Stretch"/>
+				<Setter Property="HorizontalContentAlignment" Value="Left"/>
+				<Setter Property="Margin" Value="5"/>
+			</Style>
+		</Style.Resources>
 	</Style>
 </ResourceDictionary>
