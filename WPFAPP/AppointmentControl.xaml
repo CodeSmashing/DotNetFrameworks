@@ -143,7 +143,25 @@
 				HorizontalAlignment="Left"
 				SelectionChanged="grDetails_InfoChanged"
 				Margin="0,0,0,50"
-				Grid.RowSpan="2" />
+				Grid.RowSpan="2">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel>
+							<TextBlock
+								Text="{Binding Name}"
+								FontWeight="Bold"
+								Margin="0"
+								Padding="0" />
+							<TextBlock
+								Text="{Binding Description}"
+								FontStyle="Italic"
+								FontSize="18"
+								Margin="0,0,0,10"
+								Padding="0" />
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
 
 			<Label
 				Content="Extra Informatie:" 
