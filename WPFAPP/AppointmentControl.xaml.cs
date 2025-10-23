@@ -99,12 +99,7 @@ namespace WPFAPP {
 				appointment.To = contextAppointment.To;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
-				appointment.AppointmentType = contextAppointment.AppointmentType;
 				appointment.AppointmentTypeId = contextAppointment.AppointmentType.Id;
-
-				if (appointment.AppointmentType == AppointmentType.Dummy) {
-					throw new Exception("Ongeldig type afspraak geselecteerd.");
-				}
 
 				// Save to database
 				_context.Appointments.Add(appointment);
@@ -136,6 +131,17 @@ namespace WPFAPP {
 				tbFilterPlaceholder.Visibility = Visibility.Hidden;
 			} else {
 				tbFilterPlaceholder.Visibility = Visibility.Visible;
+				dgAppointments.ItemsSource = _context.Appointments
+														.Where(app => app.Deleted >= DateTime.Now
+															&& app.From > DateTime.Now
+															&& app.AgendaUserId == App.User.Id
+															&& (tbFilter.Text.Length == 0
+																|| (app.Title.Contains(tbFilter.Text)
+																	|| app.Description.Contains(tbFilter.Text))))
+														.OrderBy(app => app.From)
+														.Select(app => app)
+														//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
+														.ToList();
 			}
 		}
 
