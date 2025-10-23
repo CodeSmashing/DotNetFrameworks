@@ -14,12 +14,12 @@ namespace WPFAPP {
 		// Define registration requirements
 		// Key: Field name, Value: Human-readable name
 		public KeyValuePair<string, string>[] registerRequirements = [
-			new("tbUsername", "Username"),
-			new("tbFirstName", "First name"),
-			new("tbLastName", "Last name"),
+			new("tbDisplayname", "Gebruikersnaam"),
+			new("tbFirstName", "Voornaam"),
+			new("tbLastName", "Achternaam"),
 			new("tbEmail", "Email"),
-			new("pbPassword", "Password"),
-			new("pbConfirmPassword", "Password confirmation"),
+			new("pbPassword", "Wachtwoord"),
+			new("pbConfirmPassword", "Wachtwoord bevestiging"),
 		];
 
 		public RegisterControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
@@ -33,7 +33,7 @@ namespace WPFAPP {
 			tbError.Children.Clear();
 
 			// Validate inputs
-			foreach (var field in new Control[] { tbUsername, tbFirstName, tbLastName, tbEmail, pbPassword, pbConfirmPassword }) {
+			foreach (var field in new Control[] { tbDisplayname, tbFirstName, tbLastName, tbEmail, pbPassword, pbConfirmPassword }) {
 				// If field is required
 				KeyValuePair<string, string> fieldRequirement = registerRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
 				if (fieldRequirement.Value == null) {
@@ -48,14 +48,14 @@ namespace WPFAPP {
 				// If empty, add error
 				if (isEmpty) {
 					field.BorderBrush = Brushes.Red;
-					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is required" });
+					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is vereist" });
 				}
 
 				// Special case: Check if passwords match
 				if (field is PasswordBox passwordBox && !passwordBox.Equals(pbConfirmPassword)) {
 					if (!pbConfirmPassword.Password.Equals(passwordBox.Password)) {
 						field.BorderBrush = Brushes.Red;
-						tbError.Children.Add(new TextBlock { Text = "Passwords aren't the same" });
+						tbError.Children.Add(new TextBlock { Text = "Wachtwoord bevestiging is niet gelijk aan het paswoord" });
 					}
 				}
 			}
@@ -67,7 +67,7 @@ namespace WPFAPP {
 
 			// Attempt to create user
 			AgendaUser newUser = new() {
-				UserName = tbUsername.Text,
+				DisplayName = tbDisplayname.Text,
 				FirstName = tbFirstName.Text,
 				LastName = tbLastName.Text,
 				Email = tbEmail.Text,
@@ -75,6 +75,8 @@ namespace WPFAPP {
 				LockoutEnabled = false,
 				TwoFactorEnabled = false
 			};
+			newUser.UserName = newUser.Id;
+
 			var result = _userManager.CreateAsync(newUser, pbPassword.Password).Result;
 			if (!result.Succeeded) {
 				tbError.Children.Add(new TextBlock { Text = string.Join("\n", result.Errors.Select(err => err.Description)) });
@@ -83,7 +85,7 @@ namespace WPFAPP {
 
 			// Clear previous errors and show success message
 			tbError.Children.Clear();
-			MessageBox.Show("Account created successfully. You can now log in.");
+			MessageBox.Show("Account succesvol aangemaakt. U kunt nu inloggen.");
 			_context.Add(new IdentityUserRole<string>() { RoleId = "User", UserId = newUser.Id });
 			_context.SaveChanges();
 

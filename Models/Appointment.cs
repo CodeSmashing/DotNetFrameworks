@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class Appointment {
-		// Dummy/default appointment
-		static public readonly Appointment Dummy = new() { Title = "-", Deleted = DateTime.Now };
-
 		private DateTime now = DateTime.Now + new TimeSpan(0, 1, 0);
 
 		private DateTime _from = DateTime.Now + new TimeSpan(1, 0, 0, 0);
@@ -16,13 +14,13 @@ namespace Models {
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[ForeignKey("AgendaUser")]
-		[Display(Name = "User ID")]
-		public string UserId {
+		[Display(Name = "Gebruiker ID")]
+		public string AgendaUserId {
 			get; set;
-		} = AgendaUser.Dummy.Id;
+		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
-		[Display(Name = "User")]
+		[Display(Name = "Gebruiker")]
 		public AgendaUser AgendaUser {
 			get; set;
 		} = null!;
@@ -69,26 +67,24 @@ namespace Models {
 			get; set;
 		} = DateTime.Now;
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
 		public DateTime Deleted {
 			get; set;
 		} = DateTime.MaxValue;
 
-		// Foreign key naar AppointmentType:  Zorg voor de juiste één-op-veel relatie
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Afspraak type ID")]
 		[ForeignKey("AppointmentType")]
 		public int AppointmentTypeId {
 			get; set;
-		} = AppointmentType.Dummy.Id;
+		}
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Afspraak type")]
 		public AppointmentType AppointmentType {
 			get; set;
-		} = AppointmentType.Dummy;
+		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Is goedgekeurd")]
@@ -101,13 +97,11 @@ namespace Models {
 		}
 
 		// Seeding data
-		public static List<Appointment> SeedingData() {
+		public static List<Appointment> SeedingData(List<AgendaUser> listUsers) {
+			Random rnd = new();
 			return new() {
-				// Voeg een default-appointment toe
-				Dummy,
-
-				// Voeg enkele test-appointments toe
 				new() {
+					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Afspraak met Jan",
 					Description = "Bespreking van het tuin ontwerp",
 					From = DateTime.Now.AddDays(2).AddHours(10),
@@ -115,6 +109,7 @@ namespace Models {
 					AppointmentTypeId = 2 },
 
 				new() {
+					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Onderhoud tuin bij Piet",
 					Description = "Jaarlijks onderhoud van de tuin",
 					From = DateTime.Now.AddDays(5).AddHours(9),
@@ -122,6 +117,7 @@ namespace Models {
 					AppointmentTypeId = 1 },
 
 				new() {
+					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Kennismaking met Klaas",
 					Description = "Eerste gesprek over mogelijke tuin projecten",
 					From = DateTime.Now.AddDays(7).AddHours(14),

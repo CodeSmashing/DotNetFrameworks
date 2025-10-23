@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace Models {
 	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
@@ -42,8 +43,8 @@ namespace Models {
 						Name = "Employee",
 						NormalizedName = "EMPLOYEE" },
 					new() {
-						Id = "Useradmin",
-						Name = "Useradmin",
+						Id = "UserAdmin",
+						Name = "UserAdmin",
 						NormalizedName = "USERADMIN" },
 					new() {
 						Id = "User",
@@ -69,17 +70,23 @@ namespace Models {
 					await userManager.CreateAsync(user, "P@ssword1");
 				}
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.UserName == "admin"),
+					context.Users.First(ur => ur.DisplayName == "BobbySmurda"),
 					"Admin");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.UserName == "Bartje"),
+					context.Users.First(ur => ur.DisplayName == "Bartje"),
 					"Employee");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.UserName == "Jefke"),
+					context.Users.First(ur => ur.DisplayName == "Jefke"),
 					"Employee");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.UserName == "Dirkske"),
+					context.Users.First(ur => ur.DisplayName == "Dirkske"),
 					"Employee");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.DisplayName == "Wim"),
+					"UserAdmin");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.DisplayName == "Alexander"),
+				"User");
 
 				context.SaveChanges();
 			}
@@ -90,7 +97,7 @@ namespace Models {
 			}
 
 			if (!context.Appointments.Any()) {
-				context.Appointments.AddRange(Appointment.SeedingData());
+				context.Appointments.AddRange(Appointment.SeedingData(context.Users.ToList()));
 				context.SaveChanges();
 			}
 

@@ -33,11 +33,11 @@ namespace WPFAPP {
 				case "Admin":
 				case "Useradmin":
 				case "Employee":
-					tbUsernameInfo.Text = App.User.UserName?.ToString();
+					tbDisplayname.Text = App.User.DisplayName?.ToString();
 					break;
 				case "Guest":
 				default:
-					tbUsernameInfo.Text = string.Empty;
+					tbDisplayname.Text = string.Empty;
 					break;
 			}
 		}

@@ -94,7 +94,7 @@ namespace WPFAPP {
 				Appointment appointment = new();
 				Appointment contextAppointment = (Appointment) grDetails.DataContext;
 
-				appointment.UserId = App.User.Id;
+				appointment.AgendaUserId = App.User.Id;
 				appointment.From = contextAppointment.From;
 				appointment.To = contextAppointment.To;
 				appointment.Title = contextAppointment.Title;
@@ -142,13 +142,14 @@ namespace WPFAPP {
 		// Refresh the appointments DataGrid with current data from the database
 		public void UpdateDgAppointments() {
 			dgAppointments.ItemsSource = _context.Appointments
-										.Where(app => app.Deleted >= DateTime.Now
-													  && app.From > DateTime.Now
-													  && app.UserId == App.User.Id)
-										.OrderBy(app => app.From)
-										.Select(app => app)
-										//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
-										.ToList();
+													.Where(app => app.Deleted >= DateTime.Now
+																  && app.From > DateTime.Now
+																  && app.AgendaUserId == App.User.Id
+																  && App.User.Id != AgendaUser.Dummy.Id)
+													.OrderBy(app => app.From)
+													.Select(app => app)
+													//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
+													.ToList();
 
 			// After reloading the items, update the button visibility
 			UpdateUIButtons();
@@ -170,13 +171,13 @@ namespace WPFAPP {
 
 			// If the selected item is an Appointment, evaluate ownership and validity
 			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
-				// If dummy or deleted already -> keep hidden/disabled
-				if (selectedAppointment == Appointment.Dummy || selectedAppointment.Deleted <= DateTime.Now) {
+				// If deleted already -> keep hidden/disabled
+				if (selectedAppointment.Deleted <= DateTime.Now) {
 					return;
 				}
 
 				// Only allow edit/delete for appointments belonging to the logged-in user
-				if (App.User != null && App.User != AgendaUser.Dummy && selectedAppointment.UserId == App.User.Id) {
+				if (App.User != null && App.User != AgendaUser.Dummy && selectedAppointment.AgendaUserId == App.User.Id) {
 					btnEdit.IsEnabled = true;
 					btnDelete.IsEnabled = true;
 				} else {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,8 +15,8 @@ namespace WPFAPP {
 		// Define login requirements
 		// Key: Field name, Value: Human-readable name
 		public KeyValuePair<string, string>[] loginRequirements = [
-			new("tbUsername", "Username"),
-			new("pbPassword", "Password")
+			new("tbDisplayname", "Gebruikersnaam"),
+			new("pbPassword", "Wachtwoord")
 		];
 
 		// Constructor with dependency injection
@@ -30,7 +31,7 @@ namespace WPFAPP {
 			tbError.Children.Clear();
 
 			// Validate inputs
-			foreach (var field in new Control[] { tbUsername, pbPassword }) {
+			foreach (var field in new Control[] { tbDisplayname, pbPassword }) {
 				// If field is required
 				KeyValuePair<string, string> fieldRequirement = loginRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
 				if (fieldRequirement.Value == null) {
@@ -45,7 +46,7 @@ namespace WPFAPP {
 				// If empty, add error
 				if (isEmpty) {
 					field.BorderBrush = Brushes.Red;
-					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is required" });
+					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is vereist" });
 				}
 			}
 
@@ -55,15 +56,15 @@ namespace WPFAPP {
 			}
 
 			// Check if user exists and password is correct
-			AgendaUser? user = await _userManager.FindByNameAsync(tbUsername.Text);
+			AgendaUser? user = await _context.Users.FirstOrDefaultAsync(u => u.DisplayName == tbDisplayname.Text);
 			if (user == null) {
-				tbError.Children.Add(new TextBlock { Text = "User not found" });
+				tbError.Children.Add(new TextBlock { Text = "Gebruiker niet gevonden" });
 				return;
 			}
 
 			bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
 			if (!loginSuccess) {
-				tbError.Children.Add(new TextBlock { Text = "Invalid username or password" });
+				tbError.Children.Add(new TextBlock { Text = "Ongeldige gebruikersnaam of wachtwoord" });
 				return;
 			}
 
