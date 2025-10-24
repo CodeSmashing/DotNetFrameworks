@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 
 namespace Models {
 	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
@@ -25,7 +24,13 @@ namespace Models {
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			// Define the connection string to the database
 			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
-			optionsBuilder.UseSqlServer(connectionString);
+			optionsBuilder.UseSqlServer(connectionString, options => {
+				options.EnableRetryOnFailure(
+					 maxRetryCount: 3,
+					 maxRetryDelay: TimeSpan.FromSeconds(5),
+					 errorNumbersToAdd: [4060]
+				);
+			});
 		}
 
 		public static async Task Seeder(IServiceProvider serviceProvider) {

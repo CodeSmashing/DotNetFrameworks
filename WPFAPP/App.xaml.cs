@@ -37,7 +37,7 @@ namespace WPFAPP {
 		}
 
 		// Application startup event
-		protected override async void OnStartup(StartupEventArgs e) {
+		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
 			// Set the initial or "default" user
@@ -46,30 +46,58 @@ namespace WPFAPP {
 			// Setup dependency injection
 			var serviceSet = new ServiceCollection();
 
-			// Setup DbContext as service
-			serviceSet.AddLogging();
-			serviceSet.AddDbContext<AgendaDbContext>();
-			serviceSet.AddIdentityCore<AgendaUser>(options => {
-				options.Password.RequireDigit = false;
-				options.Password.RequireLowercase = false;
-				options.Password.RequireNonAlphanumeric = false;
-				options.Password.RequireUppercase = false;
-				options.Password.RequiredLength = 3;
-				options.Password.RequiredUniqueChars = 1;
-			})
-				.AddRoles<IdentityRole>()
-				.AddEntityFrameworkStores<AgendaDbContext>();
+			// Attempt to set the services
+			SetupServiceSet(serviceSet);
+		}
 
-			// Create the service provider which wil be accessible throughout the app
-			ServiceProvider = serviceSet.BuildServiceProvider();
+		protected private static async void SetupServiceSet(ServiceCollection serviceSet) {
+			// Clear added services of previous attempts
+			if (serviceSet.Count > 0) {
+				serviceSet.Clear();
+			}
 
-			// Seed the database
-			await AgendaDbContext.Seeder(ServiceProvider);
+			try {
+				// Setup DbContext as service
+				serviceSet	.AddLogging()
+								.AddDbContext<AgendaDbContext>()
+								.AddIdentityCore<AgendaUser>(options => {
+									options.Password.RequireDigit = false;
+									options.Password.RequireLowercase = false;
+									options.Password.RequireNonAlphanumeric = false;
+									options.Password.RequireUppercase = false;
+									options.Password.RequiredLength = 3;
+									options.Password.RequiredUniqueChars = 1;
+								})
+								.AddRoles<IdentityRole>()
+								.AddEntityFrameworkStores<AgendaDbContext>();
 
-			MainWindow = new(
-				ServiceProvider.GetRequiredService<AgendaDbContext>(),
-				ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
-			MainWindow.Show();
+				// Create the service provider which wil be accessible throughout the app
+				ServiceProvider = serviceSet.BuildServiceProvider();
+
+				// Seed the database
+				await AgendaDbContext.Seeder(ServiceProvider);
+
+				MainWindow = new(
+					ServiceProvider.GetRequiredService<AgendaDbContext>(),
+					ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
+				MainWindow.Show();
+			} catch (Exception ex) {
+				// Show the error message(s) to tell the user what went wrong
+				MessageBoxResult result = MessageBox.Show(
+					 $"Error: {ex.Message}\n" +
+					"Do you want to close the application?",
+					 "Database Connection Details",
+					 MessageBoxButton.YesNo,
+					 MessageBoxImage.Error
+				);
+
+				if (result == MessageBoxResult.Yes) {
+					Current.Shutdown();
+				} else {
+					// EF Core delays this through their retry attempt time
+					SetupServiceSet(serviceSet);
+				}
+			}
 		}
 	}
 }
