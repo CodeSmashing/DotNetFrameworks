@@ -18,14 +18,14 @@ namespace Models {
 		[Display(Name = "Voornaam")]
 		public string FirstName {
 			get; set;
-		} = "-";
+		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(20, MinimumLength = 2, ErrorMessage = "De achternaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Achternaam")]
 		public string LastName {
 			get; set;
-		} = "-";
+		} = null!;
 
 		[StringLength(20, MinimumLength = 5, ErrorMessage = "De gebruikersnaam moet minstens 5 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Gebruikersnaam")]
@@ -37,6 +37,14 @@ namespace Models {
 		[ForeignKey("Vehicle")]
 		public int? VehicleId {
 			get; set;
+		}
+
+		[Required(ErrorMessage = "{0} is vereist")]
+		[EmailAddress]
+		[Display(Name = "Email")]
+		public override string? Email {
+			get => base.Email;
+			set => base.Email = value;
 		}
 
 		public AgendaUser() {
@@ -55,42 +63,54 @@ namespace Models {
 					FirstName = "Bob",
 					LastName = "Dylan",
 					DisplayName = "BobbySmurda",
-					Email = "admin@gardenDb.org",
+					Email = "admin.bob@gardenDb.org",
 					EmailConfirmed = true
 				},
 				new() {
 					FirstName = "Bart",
 					LastName = "De Smet",
 					DisplayName = "Bartje",
-					Email = "employee@gardenDb.org",
+					Email = "employee.bart@gardenDb.org",
 					EmailConfirmed = true
 				},
 				new() {
 					FirstName = "Jeff",
 					LastName = "Janssens",
 					DisplayName = "Jefke",
-					Email = "employee@gardenDb.org",
+					Email = "employee.jeff@gardenDb.org",
 					EmailConfirmed = true
 				},
 				new() {
 					FirstName = "Dirk",
 					LastName = "De Bakker",
 					DisplayName = "Dirkske",
-					Email = "employee@gardenDb.org",
+					Email = "employee.dirk@gardenDb.org",
 					EmailConfirmed = true
 				},
 				new() {
 					FirstName = "Wim",
 					LastName = "De Molenaar",
 					DisplayName = "Wim",
-					Email = "useradmin@gardenDb.org",
+					Email = "useradmin.wim@gardenDb.org",
 					EmailConfirmed = true
 				},
 				new() {
 					FirstName = "Jeff",
 					LastName = "Broek",
 					DisplayName = "Alexander",
-					Email = "user@gardenDb.org",
+					Email = "jeff.broek@gmail.com",
+					EmailConfirmed = true
+				},
+				new() {
+					FirstName = "Emanuel",
+					LastName = "Ross",
+					Email = "rosse.emanuel@hotmail.com",
+					EmailConfirmed = true
+				},
+				new() {
+					FirstName = "Bart",
+					LastName = "Somers",
+					Email = "bartbartbart@gmail.com",
 					EmailConfirmed = true
 				}
 			};

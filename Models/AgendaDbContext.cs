@@ -21,6 +21,18 @@ namespace Models {
 			get; set;
 		}
 
+		protected override void OnModelCreating(ModelBuilder modelBuilder) {
+			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<AgendaUser>()
+				.HasIndex(u => u.Email)
+				.IsUnique();
+
+			modelBuilder.Entity<AgendaUser>()
+				.HasIndex(u => u.DisplayName)
+				.IsUnique();
+		}
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			// Define the connection string to the database
 			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
@@ -75,24 +87,29 @@ namespace Models {
 					await userManager.CreateAsync(user, "P@ssword1");
 				}
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.DisplayName == "BobbySmurda"),
+					context.Users.First(ur => ur.Email == "admin.bob@gardenDb.org"),
 					"Admin");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.DisplayName == "Bartje"),
+					context.Users.First(ur => ur.Email == "employee.bart@gardenDb.org"),
 					"Employee");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.DisplayName == "Jefke"),
+					context.Users.First(ur => ur.Email == "employee.jeff@gardenDb.org"),
 					"Employee");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.DisplayName == "Dirkske"),
+					context.Users.First(ur => ur.Email == "employee.dirk@gardenDb.org"),
 					"Employee");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.DisplayName == "Wim"),
+					context.Users.First(ur => ur.Email == "useradmin.wim@gardenDb.org"),
 					"UserAdmin");
 				await userManager.AddToRoleAsync(
-					context.Users.First(ur => ur.DisplayName == "Alexander"),
-				"User");
-
+					context.Users.First(ur => ur.Email == "jeff.broek@gmail.com"),
+					"User");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.Email == "rosse.emanuel@hotmail.com"),
+					"User");
+				await userManager.AddToRoleAsync(
+					context.Users.First(ur => ur.Email == "bartbartbart@gmail.com"),
+					"User");
 				context.SaveChanges();
 			}
 
@@ -102,7 +119,13 @@ namespace Models {
 			}
 
 			if (!context.Appointments.Any()) {
-				context.Appointments.AddRange(Appointment.SeedingData(context.Users.ToList()));
+				// Only use regular users
+				context.Appointments.AddRange(Appointment.SeedingData(
+					context.Users
+						.Where(u => context.UserRoles
+							.Any(ur => ur.UserId == u.Id && ur.RoleId == "User"))
+						.ToList()
+				));
 				context.SaveChanges();
 			}
 

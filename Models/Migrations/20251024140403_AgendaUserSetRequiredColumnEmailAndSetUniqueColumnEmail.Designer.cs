@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
@@ -11,9 +12,11 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(AgendaDbContext))]
-    partial class AgendaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024140403_AgendaUserSetRequiredColumnEmailAndSetUniqueColumnEmail")]
+    partial class AgendaUserSetRequiredColumnEmailAndSetUniqueColumnEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,10 +230,6 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DisplayName")
-                        .IsUnique()
-                        .HasFilter("[DisplayName] IS NOT NULL");
-
                     b.HasIndex("Email")
                         .IsUnique();
 
@@ -298,7 +297,7 @@ namespace Models.Migrations
 
                     b.HasIndex("AppointmentTypeId");
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Models.AppointmentType", b =>
@@ -326,7 +325,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypes", (string)null);
+                    b.ToTable("AppointmentTypes");
                 });
 
             modelBuilder.Entity("Models.ToDo", b =>
@@ -349,7 +348,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ToDos", (string)null);
+                    b.ToTable("ToDos");
                 });
 
             modelBuilder.Entity("Models.Vehicle", b =>
@@ -402,7 +401,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicles", (string)null);
+                    b.ToTable("Vehicles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
