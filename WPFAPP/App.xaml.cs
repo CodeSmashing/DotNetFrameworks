@@ -58,18 +58,18 @@ namespace WPFAPP {
 
 			try {
 				// Setup DbContext as service
-				serviceSet	.AddLogging()
-								.AddDbContext<AgendaDbContext>()
-								.AddIdentityCore<AgendaUser>(options => {
-									options.Password.RequireDigit = false;
-									options.Password.RequireLowercase = false;
-									options.Password.RequireNonAlphanumeric = false;
-									options.Password.RequireUppercase = false;
-									options.Password.RequiredLength = 3;
-									options.Password.RequiredUniqueChars = 1;
-								})
-								.AddRoles<IdentityRole>()
-								.AddEntityFrameworkStores<AgendaDbContext>();
+				serviceSet.AddLogging()
+					.AddDbContext<AgendaDbContext>()
+					.AddIdentityCore<AgendaUser>(options => {
+						options.Password.RequireDigit = false;
+						options.Password.RequireLowercase = false;
+						options.Password.RequireNonAlphanumeric = false;
+						options.Password.RequireUppercase = false;
+						options.Password.RequiredLength = 3;
+						options.Password.RequiredUniqueChars = 1;
+					})
+					.AddRoles<IdentityRole>()
+					.AddEntityFrameworkStores<AgendaDbContext>();
 
 				// Create the service provider which wil be accessible throughout the app
 				ServiceProvider = serviceSet.BuildServiceProvider();

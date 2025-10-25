@@ -149,7 +149,7 @@ namespace WPFAPP {
 		public void UpdateDgAppointments() {
 			dgAppointments.ItemsSource = _context.Appointments
 													.Where(app => app.Deleted >= DateTime.Now
-																  && app.From > DateTime.Now
+																  && !app.IsCompleted
 																  && app.AgendaUserId == App.User.Id
 																  && App.User.Id != AgendaUser.Dummy.Id)
 													.OrderBy(app => app.From)

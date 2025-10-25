@@ -60,11 +60,10 @@ namespace Models {
 			get; set;
 		} = string.Empty;
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Aangemaakt")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
-			get; set;
+			get; private set;
 		} = DateTime.Now;
 
 		[Display(Name = "Verwijderd")]
@@ -91,6 +90,11 @@ namespace Models {
 		public bool IsApproved {
 			get; set;
 		} = false;
+
+		[Display(Name = "Is afgerond")]
+		public bool IsCompleted {
+			get; set;
+		}
 
 		public override string ToString() {
 			return Id + "  Afspraak op " + From + " betreffende " + Title;
