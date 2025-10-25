@@ -30,12 +30,12 @@
 			Grid.ColumnSpan="2"/>
 
 		<Label
-			Content="Gebruikersnaam:"
+			Content="Email:"
 			Grid.Row="1"
 			Grid.Column="1"/>
 		<TextBox
 			Style="{StaticResource TextBoxWide}"
-			x:Name="tbDisplayname"
+			x:Name="tbEmail"
 			Grid.Row="1"
 			Grid.Column="2"/>
 

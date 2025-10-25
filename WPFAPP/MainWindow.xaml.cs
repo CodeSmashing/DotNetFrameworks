@@ -2,8 +2,6 @@
 using Models;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace WPFAPP {
 	public partial class MainWindow : Window {

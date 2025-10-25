@@ -15,7 +15,7 @@ namespace WPFAPP {
 		// Define login requirements
 		// Key: Field name, Value: Human-readable name
 		public KeyValuePair<string, string>[] loginRequirements = [
-			new("tbDisplayname", "Gebruikersnaam"),
+			new("tbEmail", "Email"),
 			new("pbPassword", "Wachtwoord")
 		];
 
@@ -31,7 +31,7 @@ namespace WPFAPP {
 			tbError.Children.Clear();
 
 			// Validate inputs
-			foreach (var field in new Control[] { tbDisplayname, pbPassword }) {
+			foreach (var field in new Control[] { tbEmail, pbPassword }) {
 				// If field is required
 				KeyValuePair<string, string> fieldRequirement = loginRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
 				if (fieldRequirement.Value == null) {
@@ -56,7 +56,7 @@ namespace WPFAPP {
 			}
 
 			// Check if user exists and password is correct
-			AgendaUser? user = await _context.Users.FirstOrDefaultAsync(u => u.DisplayName == tbDisplayname.Text);
+			AgendaUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == tbEmail.Text);
 			if (user == null) {
 				tbError.Children.Add(new TextBlock { Text = "Gebruiker niet gevonden" });
 				return;
@@ -64,7 +64,7 @@ namespace WPFAPP {
 
 			bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
 			if (!loginSuccess) {
-				tbError.Children.Add(new TextBlock { Text = "Ongeldige gebruikersnaam of wachtwoord" });
+				tbError.Children.Add(new TextBlock { Text = "Ongeldige email of wachtwoord" });
 				return;
 			}
 
