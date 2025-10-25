@@ -85,8 +85,8 @@ namespace WPFAPP {
 				// Show the error message(s) to tell the user what went wrong
 				MessageBoxResult result = MessageBox.Show(
 					 $"Error: {ex.Message}\n" +
-					"Do you want to close the application?",
-					 "Database Connection Details",
+					"Wilt u de applicatie sluiten?",
+					 "Fout details-scherm applicatie",
 					 MessageBoxButton.YesNo,
 					 MessageBoxImage.Error
 				);

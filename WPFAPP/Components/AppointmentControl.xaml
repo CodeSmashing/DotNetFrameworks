@@ -18,15 +18,16 @@
 
 		<DataGrid
 			x:Name="dgAppointments"
-			Height="Auto"
-			Width="Auto"
 			MaxHeight="300"
 			VerticalAlignment="Top"
 			HorizontalAlignment="Center"
 			SelectionMode="Single"
 			SelectionChanged="dgAppointments_SelectionChanged"
 			Margin="10px"
-			AutoGenerateColumns="False">
+			AutoGenerateColumns="False"
+			CanUserAddRows="False"
+			CanUserResizeRows="False"
+			CanUserDeleteRows="False">
 
 			<DataGrid.Columns>
 				<DataGridTextColumn
@@ -112,11 +113,13 @@
 				x:Name="dpFrom"
 				Grid.Row="0"
 				Grid.Column="1"
-				Text="{Binding From, Mode=TwoWay}"
 				Width="541"
+				SelectedDate="{Binding From, Mode=TwoWay}"
 				HorizontalAlignment="Left"
 				SelectedDateChanged="grDetails_InfoChanged"
 				Margin="0,0,0,50" Grid.RowSpan="2" />
+				Margin="0,0,0,50"
+				Grid.RowSpan="2" />
 
 			<Label
 				Content="Titel:" 
@@ -176,6 +179,7 @@
 				VerticalScrollBarVisibility="Auto"
 				HorizontalAlignment="Left"
 				Text="{Binding Description, Mode=TwoWay}"
+				TextChanged="grDetails_InfoChanged"
 				AcceptsReturn="True"
 				Margin="0,0,0,-1" />
 		</Grid>

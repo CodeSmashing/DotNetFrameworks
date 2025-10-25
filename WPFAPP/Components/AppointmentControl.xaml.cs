@@ -3,6 +3,7 @@ using Models;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace WPFAPP {
@@ -26,6 +27,9 @@ namespace WPFAPP {
 
 			// Load appointments data
 			UpdateDgAppointments();
+
+			// After reloading the items, update the button visibility
+			UpdateUIButtons();
 		}
 
 		public void HandleUserChanged(object? sender, PropertyChangedEventArgs e) {
@@ -82,6 +86,8 @@ namespace WPFAPP {
 					contextAppointment.Deleted = DateTime.Now;
 					_context.SaveChanges();
 
+					// Reset the selected appointment and refresh the DataGrid
+					dgAppointments.SelectedItem = CollectionView.NewItemPlaceholder;
 					UpdateDgAppointments();
 				}
 			} catch (Exception errorInfo) {
@@ -99,27 +105,33 @@ namespace WPFAPP {
 				appointment.To = contextAppointment.To;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
-				appointment.AppointmentTypeId = contextAppointment.AppointmentType.Id;
+				appointment.AppointmentTypeId = contextAppointment.AppointmentTypeId;
 
 				// Save to database
 				_context.Appointments.Add(appointment);
 				_context.SaveChanges();
-				btnSave.IsEnabled = false;
-				dpFrom.SelectedDate = DateTime.Now;
-				tbTitle.Text = string.Empty;
-				tbDescription.Text = string.Empty;
 				grDetails.Visibility = Visibility.Hidden;
 
-				// Refresh appointments DataGrid
+				// Select the newly created appointment and refresh the DataGrid
+				dgAppointments.SelectedItem = appointment;
 				UpdateDgAppointments();
-			} catch (Exception erorrInfo) {
-				Console.WriteLine("Fout bij opslaan afspraak; " + erorrInfo.Message);
+			} catch (Exception ex) {
+				MessageBox.Show(
+					 $"Error: {ex.Message}\n" +
+					"U zult andere waarden moeten proberen of contact opnemen met de support.",
+					 "Fout details-scherm afspraak aanmaak",
+					 MessageBoxButton.OK,
+					 MessageBoxImage.Error
+				);
 			}
 		}
 
 		// Handler to show save button when all details are changed
 		private void grDetails_InfoChanged(object sender, EventArgs e) {
-			if (dpFrom.SelectedDate > DateTime.Now && tbTitle.Text.Length > 0 && tbDescription.Text.Length > 0) {
+			if (dpFrom.SelectedDate > DateTime.Now &&
+				tbTitle.Text.Length > 0 &&
+				tbDescription.Text.Length > 0 &&
+				cbTypes.SelectedItem != null) {
 				btnSave.IsEnabled = true;
 			} else {
 				btnSave.IsEnabled = false;
@@ -167,7 +179,7 @@ namespace WPFAPP {
 			btnAdd.IsEnabled = (App.User != null && App.User != AgendaUser.Dummy);
 
 			// If no selection, nothing more to do
-			if (dgAppointments.SelectedItem == null || dgAppointments.SelectedIndex < 0) {
+			if (dgAppointments.SelectedItem == CollectionView.NewItemPlaceholder || dgAppointments.SelectedIndex < 0) {
 				// Default states
 				btnEdit.IsEnabled = false;
 				btnDelete.IsEnabled = false;
@@ -193,13 +205,9 @@ namespace WPFAPP {
 				btnSave.IsEnabled = false;
 
 				// Update the grDetails grid to use the currently selected appointment data
-				dpFrom.SelectedDate = selectedAppointment.From;
-				tbTitle.Text = selectedAppointment.Title;
-				tbDescription.Text = selectedAppointment.Description;
+				grDetails.DataContext = selectedAppointment;
 			} else {
-				dpFrom.SelectedDate = DateTime.Now;
-				tbTitle.Text = string.Empty;
-				tbDescription.Text = string.Empty;
+				grDetails.DataContext = CollectionView.NewItemPlaceholder;
 			}
 		}
 	}
