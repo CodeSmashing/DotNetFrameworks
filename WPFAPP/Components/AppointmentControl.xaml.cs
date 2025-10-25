@@ -41,8 +41,7 @@ namespace WPFAPP {
 			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
 				// Show appointment details in a popup
 				MessageBox.Show(
-					 $"From: {selectedAppointment.From}\n" +
-					 $"To: {selectedAppointment.To}\n" +
+					 $"To: {selectedAppointment.Date}\n" +
 					 $"Title: {selectedAppointment.Title}\n" +
 					 $"Description: {selectedAppointment.Description}\n" +
 					 $"Type: {selectedAppointment.AppointmentType}",
@@ -101,8 +100,7 @@ namespace WPFAPP {
 				Appointment contextAppointment = (Appointment) grDetails.DataContext;
 
 				appointment.AgendaUserId = App.User.Id;
-				appointment.From = contextAppointment.From;
-				appointment.To = contextAppointment.To;
+				appointment.Date = contextAppointment.Date;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
 				appointment.AppointmentTypeId = contextAppointment.AppointmentTypeId;
@@ -128,7 +126,7 @@ namespace WPFAPP {
 
 		// Handler to show save button when all details are changed
 		private void grDetails_InfoChanged(object sender, EventArgs e) {
-			if (dpFrom.SelectedDate > DateTime.Now &&
+			if (dpDate.SelectedDate > DateTime.Now &&
 				tbTitle.Text.Length > 0 &&
 				tbDescription.Text.Length > 0 &&
 				cbTypes.SelectedItem != null) {
@@ -144,30 +142,28 @@ namespace WPFAPP {
 			} else {
 				tbFilterPlaceholder.Visibility = Visibility.Visible;
 				dgAppointments.ItemsSource = _context.Appointments
-														.Where(app => app.Deleted >= DateTime.Now
-															&& app.From > DateTime.Now
-															&& app.AgendaUserId == App.User.Id
-															&& (tbFilter.Text.Length == 0
-																|| (app.Title.Contains(tbFilter.Text)
-																	|| app.Description.Contains(tbFilter.Text))))
-														.OrderBy(app => app.From)
-														.Select(app => app)
-														//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
-														.ToList();
+					.Where(app => app.Deleted >= DateTime.Now
+						&& app.AgendaUserId == App.User.Id
+						&& (tbFilter.Text.Length == 0
+							|| (app.Title.Contains(tbFilter.Text)
+								|| app.Description.Contains(tbFilter.Text))))
+					.OrderBy(app => app.Date)
+					.Select(app => app)
+					//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
+					.ToList();
 			}
 		}
 
 		// Refresh the appointments DataGrid with current data from the database
 		public void UpdateDgAppointments() {
 			dgAppointments.ItemsSource = _context.Appointments
-													.Where(app => app.Deleted >= DateTime.Now
-																  && !app.IsCompleted
-																  && app.AgendaUserId == App.User.Id
-																  && App.User.Id != AgendaUser.Dummy.Id)
-													.OrderBy(app => app.From)
-													.Select(app => app)
-													//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
-													.ToList();
+				.Where(app => app.Deleted >= DateTime.Now
+					&& !app.IsCompleted
+					&& app.AgendaUserId == App.User.Id
+					&& App.User.Id != AgendaUser.Dummy.Id)
+				.OrderBy(app => app.Date)
+				//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
+				.ToList();
 
 			// After reloading the items, update the button visibility
 			UpdateUIButtons();

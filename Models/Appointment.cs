@@ -1,13 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class Appointment {
-		private DateTime now = DateTime.Now + new TimeSpan(0, 1, 0);
-
-		private DateTime _from = DateTime.Now + new TimeSpan(1, 0, 0, 0);
-
 		public long Id {
 			get; set;
 		}
@@ -26,31 +21,18 @@ namespace Models {
 		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
-		[Display(Name = "Vanaf")]
+		[Display(Name = "Datum")]
 		[DataType(DataType.DateTime)]
-		public DateTime From {
-			get => _from;
-			set {
-				if (value < now)
-					_from = now;
-				else
-					_from = value;
-			}
-		}
-
-		[Required(ErrorMessage = "{0} is vereist")]
-		[Display(Name = "Tot")]
-		[DataType(DataType.DateTime)]
-		public DateTime To {
+		public DateTime Date {
 			get; set;
-		} = DateTime.Now + new TimeSpan(1, 1, 30, 0);
+		} = DateTime.Now;
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(50, MinimumLength = 3, ErrorMessage = "De titel moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Titel")]
 		public string Title {
 			get; set;
-		} = string.Empty;
+		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
@@ -58,7 +40,7 @@ namespace Models {
 		[DataType(DataType.MultilineText)]
 		public string Description {
 			get; set;
-		} = string.Empty;
+		} = null!;
 
 		[Display(Name = "Aangemaakt")]
 		[DataType(DataType.DateTime)]
@@ -94,10 +76,10 @@ namespace Models {
 		[Display(Name = "Is afgerond")]
 		public bool IsCompleted {
 			get; set;
-		}
+		} = false;
 
 		public override string ToString() {
-			return Id + "  Afspraak op " + From + " betreffende " + Title;
+			return Id + "  Afspraak op " + Date + " betreffende " + Title;
 		}
 
 		// Seeding data
@@ -108,24 +90,21 @@ namespace Models {
 					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Afspraak met Jan",
 					Description = "Bespreking van het tuin ontwerp",
-					From = DateTime.Now.AddDays(2).AddHours(10),
-					To = DateTime.Now.AddDays(2).AddHours(11),
+					Date = DateTime.Now.AddDays(2).AddHours(11),
 					AppointmentTypeId = 2 },
 
 				new() {
 					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Onderhoud tuin bij Piet",
 					Description = "Jaarlijks onderhoud van de tuin",
-					From = DateTime.Now.AddDays(5).AddHours(9),
-					To = DateTime.Now.AddDays(5).AddHours(10),
+					Date = DateTime.Now.AddDays(5).AddHours(10),
 					AppointmentTypeId = 1 },
 
 				new() {
 					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Kennismaking met Klaas",
 					Description = "Eerste gesprek over mogelijke tuin projecten",
-					From = DateTime.Now.AddDays(7).AddHours(14),
-					To = DateTime.Now.AddDays(7).AddHours(15),
+					Date = DateTime.Now.AddDays(7).AddHours(15),
 					AppointmentTypeId = 3 }
 			};
 		}

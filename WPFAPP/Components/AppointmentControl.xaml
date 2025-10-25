@@ -31,14 +31,8 @@
 
 			<DataGrid.Columns>
 				<DataGridTextColumn
-					Header="From"
-					Binding="{Binding From}"
-					Width="150"
-					IsReadOnly="True"/>
-
-				<DataGridTextColumn
-					Header="To"
-					Binding="{Binding To}"
+					Header="Date"
+					Binding="{Binding Date}"
 					Width="150"
 					IsReadOnly="True"/>
 
@@ -110,14 +104,13 @@
 				Grid.Row="0"
 				Grid.Column="0"/>
 			<DatePicker
-				x:Name="dpFrom"
+				x:Name="dpDate"
 				Grid.Row="0"
 				Grid.Column="1"
 				Width="541"
-				SelectedDate="{Binding From, Mode=TwoWay}"
+				SelectedDate="{Binding Date, Mode=TwoWay}"
 				HorizontalAlignment="Left"
 				SelectedDateChanged="grDetails_InfoChanged"
-				Margin="0,0,0,50" Grid.RowSpan="2" />
 				Margin="0,0,0,50"
 				Grid.RowSpan="2" />
 
