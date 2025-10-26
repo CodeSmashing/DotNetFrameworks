@@ -219,4 +219,9 @@
 			</Style>
 		</Style.Resources>
 	</Style>
+
+	<!-- Checked style for ListBoxItems -->
+	<Style x:Key="CheckedListBoxItem" TargetType="ListBoxItem">
+		<Setter Property="Background" Value="LightGreen"/>
+	</Style>
 </ResourceDictionary>

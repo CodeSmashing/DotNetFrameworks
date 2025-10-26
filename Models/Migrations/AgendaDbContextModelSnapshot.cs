@@ -295,7 +295,7 @@ namespace Models.Migrations
 
                     b.HasIndex("AppointmentTypeId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Models.AppointmentType", b =>
@@ -323,7 +323,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypes");
+                    b.ToTable("AppointmentTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.ToDo", b =>
@@ -346,7 +346,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ToDos");
+                    b.ToTable("ToDos", (string)null);
                 });
 
             modelBuilder.Entity("Models.Vehicle", b =>
@@ -402,7 +402,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Vehicles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
