@@ -14,6 +14,9 @@ namespace WPFAPP {
 		private readonly AdminPanelControl adminPanelControl;
 
 		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+
+			Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

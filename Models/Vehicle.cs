@@ -8,6 +8,13 @@ namespace Models {
 			get; set;
 		}
 
+		[Display(Name = "Verwijderd")]
+		[DataType(DataType.DateTime)]
+		public DateTime Deleted
+		{
+			get; set;
+		} = DateTime.MaxValue;
+
 		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(9, MinimumLength = 9, ErrorMessage = "De nummer plaat moet en mag enkel 9 characters bevatten")]
 		[Display(Name = "Nummer plaat")]
@@ -106,7 +113,8 @@ namespace Models {
 					WeightCapacity = 18000.0, // in kilograms
 					FuelType = FuelType.Diesel,
 					IsManuel = false,
-					IsInUse = false
+					IsInUse = false,
+					Deleted = DateTime.MaxValue
 				},
 				new() {
 					LicencePlate = "3-XYZ-987",
@@ -119,7 +127,8 @@ namespace Models {
 					FuelType = FuelType.Benzine,
 					IsManuel = false,
 					IsInUse = true,
-					EmployeeId = 2
+					EmployeeId = 2,
+					Deleted = DateTime.MaxValue
 				},
 				new() {
 					LicencePlate = "5-JKL-456",
@@ -132,7 +141,8 @@ namespace Models {
 					FuelType = FuelType.Benzine,
 					IsManuel = true,
 					IsInUse = true,
-					EmployeeId = 3
+					EmployeeId = 3,
+					Deleted = DateTime.MaxValue
 				},
 				new() {
 					LicencePlate = "7-GHI-789",
@@ -145,7 +155,8 @@ namespace Models {
 					FuelType = FuelType.Diesel,
 					IsManuel = true,
 					IsInUse = true,
-					EmployeeId = 4
+					EmployeeId = 4,
+					Deleted = DateTime.MaxValue
 				},
 				new() {
 					LicencePlate = "9-MNO-321",
@@ -157,7 +168,8 @@ namespace Models {
 					WeightCapacity = 1400.0,
 					FuelType = FuelType.Benzine,
 					IsManuel = false,
-					IsInUse = false
+					IsInUse = false,
+					Deleted = DateTime.MaxValue
 				}
 			};
 		}
