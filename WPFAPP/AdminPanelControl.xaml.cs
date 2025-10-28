@@ -17,10 +17,8 @@ namespace WPFAPP {
 			// Instantiate controls and their containers
 			roleControl = new(_context, _userManager);
 			vehicleControl = new(_context, _userManager);
-			UsersContainer.Children.Clear();
-			UsersContainer.Children.Add(roleControl);
-			VehicleAssignmentContainer.Children.Clear();
-			VehicleAssignmentContainer.Children.Add(vehicleControl);
+			tciUsersTab.Content = roleControl;
+			tciVehicleAssignmentTab.Content = vehicleControl;
 		}
 
 		private void grDetails_InfoChanged(object sender, SelectionChangedEventArgs e) {

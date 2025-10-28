@@ -9,11 +9,9 @@ using System.Windows.Input;
 namespace WPFAPP {
 	public partial class AppointmentControl : UserControl {
 		private readonly AgendaDbContext _context;
-		private readonly UserManager<AgendaUser> _userManager;
 
-		public AppointmentControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public AppointmentControl(AgendaDbContext context) {
 			_context = context;
-			_userManager = userManager;
 			InitializeComponent();
 
 			// Subscribe to app user change event

@@ -9,12 +9,11 @@ namespace WPFAPP {
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly LoginControl loginControl;
 		private readonly RegisterControl registerControl;
-		private readonly UserInfoControl userControl;
+		private readonly UserInfoControl userInfoControl;
 		private readonly AppointmentControl appointmentControl;
 		private readonly AdminPanelControl adminPanelControl;
 
 		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
-
 			Application.Current.MainWindow.WindowState = WindowState.Maximized;
 
 			_context = context;
@@ -24,16 +23,13 @@ namespace WPFAPP {
 			// Instantiate controls and their containers
 			loginControl = new(_context, _userManager);
 			registerControl = new(_context, _userManager);
-			userControl = new();
-			appointmentControl = new(_context, _userManager);
+			userInfoControl = new();
+			appointmentControl = new(_context);
 			adminPanelControl = new(_context, _userManager);
-			AuthenticationContainer.Children.Clear();
-			UserInfoContainer.Children.Clear();
-			AppointmentContainer.Children.Clear();
-			AuthenticationContainer.Children.Add(registerControl);
-			UserInfoContainer.Children.Add(userControl);
-			AppointmentContainer.Children.Add(appointmentControl);
-			AdminPanelContainer.Children.Add(adminPanelControl);
+			tciAuthenticationTab.Content = registerControl;
+			tciUserInfoTab.Content = userInfoControl;
+			tciAppointmentTab.Content = appointmentControl;
+			tciAdminPanelTab.Content = adminPanelControl;
 
 			// Subscribe to login and register swap events
 			loginControl.SwapRequested += SwapControlsHandler;
@@ -44,26 +40,20 @@ namespace WPFAPP {
 			registerControl.RegisterSuccess += SuccessfulLoginRegisterHandler;
 
 			// Subscribe to app user change event
-			App.UserChanged += HandleUserChanged;
+			App.UserChanged += DisplayUI;
 
 			// Initially show the guest UI
-			DisplayUI("guest");
-		}
-
-		public void HandleUserChanged(object? sender, PropertyChangedEventArgs e) {
-			DisplayUI(e.PropertyName);
+			DisplayUI(this, new PropertyChangedEventArgs(string.Empty));
 		}
 
 		private void SwapControlsHandler(object? sender, EventArgs e) {
 			// Swap between login and register controls
-			if (AuthenticationContainer.Children.Contains(registerControl)) {
+			if (tciAuthenticationTab.Content == registerControl) {
 				// Switch to login form
-				AuthenticationContainer.Children.Clear();
-				AuthenticationContainer.Children.Add(loginControl);
+				tciAuthenticationTab.Content = loginControl;
 			} else {
 				// Switch to register form
-				AuthenticationContainer.Children.Clear();
-				AuthenticationContainer.Children.Add(registerControl);
+				tciAuthenticationTab.Content = registerControl;
 			}
 		}
 
@@ -75,7 +65,8 @@ namespace WPFAPP {
 			tcNavigation.SelectedItem = tciAppointmentTab;
 		}
 
-		public void DisplayUI(string? role = "") {
+		public void DisplayUI(object? sender, PropertyChangedEventArgs e) {
+			string? role = e.PropertyName;
 			switch (role) {
 				case "User":
 					tciAppointmentTab.Visibility = Visibility.Visible;

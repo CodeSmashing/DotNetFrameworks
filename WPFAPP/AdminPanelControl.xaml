@@ -10,14 +10,9 @@
 			x:Name="tcAdminNavigation">
 			<TabItem
 				x:Name="tciVehicleAssignmentTab"
-				Header="Voertuigtoewijzing">
-				<Grid x:Name="VehicleAssignmentContainer"/>
-			</TabItem>
+				Header="Voertuigtoewijzing"/>
 			<TabItem
 				x:Name="tciUsersTab"
-				Header="Gebruikers">
-				<StackPanel x:Name="UsersContainer" />
-			</TabItem>
 		</TabControl>
 	</StackPanel>
 </UserControl>
