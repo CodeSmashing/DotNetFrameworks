@@ -71,8 +71,6 @@
 		</Setter>
 	</Style>
 
-
-
 	<!-- Implicit style targeting all TextBlocks using resources -->
 	<Style TargetType="TextBlock">
 		<Setter Property="Background" Value="Transparent"/>
@@ -223,5 +221,40 @@
 	<!-- Checked style for ListBoxItems -->
 	<Style x:Key="CheckedListBoxItem" TargetType="ListBoxItem">
 		<Setter Property="Background" Value="LightGreen"/>
+	</Style>
+
+	<!-- Explicit named style targeting the Window container -->
+	<Style x:Key="WindowContainer" TargetType="Border">
+		<Setter Property="Padding" Value="50, 0"/>
+		<!--<Setter Property="Background" Value="DarkSlateGray"/>-->
+	</Style>
+
+	<!-- Implicit style targeting all UserControls -->
+	<Style TargetType="UserControl">
+		<Setter Property="Padding" Value="10, 0, 10, 10"/>
+		<Setter Property="Background" Value="WhiteSmoke"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+		<Setter Property="MinHeight" Value="600"/>
+	</Style>
+
+	<!-- Explicit named style targeting UserControl to help with nested resource dictionaries -->
+	<Style x:Key="BaseUserControl" TargetType="UserControl" BasedOn="{StaticResource {x:Type UserControl}}"/>
+
+	<!-- Implicit style targeting all TabControls -->
+	<Style TargetType="TabControl">
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="Background" Value="WhiteSmoke"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
+
+	<!-- Explicit named style targeting Borders with a shadow effect -->
+	<Style x:Key="BorderWithBoxShadow" TargetType="Border">
+		<Setter Property="Effect">
+			<Setter.Value>
+				<DropShadowEffect Color="Black" Direction="270" ShadowDepth="5" BlurRadius="10" Opacity="0.4"/>
+			</Setter.Value>
+		</Setter>
 	</Style>
 </ResourceDictionary>

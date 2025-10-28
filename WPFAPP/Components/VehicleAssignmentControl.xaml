@@ -4,7 +4,8 @@
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				xmlns:local="clr-namespace:WPFAPP"
-				mc:Ignorable="d">
+				mc:Ignorable="d"
+				Style="{StaticResource BaseUserControl}">
 	<Grid>
 		<Label
 			Content="Werknemer toevoegen aan voertuig"
@@ -206,7 +207,7 @@
 						Grid.Row="4"
 						Grid.Column="1"
 						SelectedItem="{Binding VehicleType, Mode=TwoWay}"
-						Height="AUto"
+						Height="Auto"
 						Width="557"
 						HorizontalAlignment="Left"
 						SelectionChanged="grDetails_InfoChanged"

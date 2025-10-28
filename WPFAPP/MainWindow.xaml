@@ -6,21 +6,24 @@
 			xmlns:local="clr-namespace:WPFAPP"
 			mc:Ignorable="d"
 			Title="MainWindow">
-	<StackPanel>
-		<TabControl
-			x:Name="tcNavigation">
-			<TabItem
-				x:Name="tciAppointmentTab"
-				Header="Afspraak aanvragen"/>
-			<TabItem
-				x:Name="tciAuthenticationTab"
-				Header="Registreren/login"/>
-			<TabItem
-				x:Name="tciUserInfoTab"
-				Header="Algemeen"/>
-			<TabItem
-				x:Name="tciAdminPanelTab"
-				Header="Admin Paneel"/>
-		</TabControl>
-	</StackPanel>
+	<ScrollViewer>
+		<Border
+			Style="{StaticResource WindowContainer}">
+			<TabControl
+				x:Name="tcNavigation">
+				<TabItem
+					x:Name="tciAppointmentTab"
+					Header="Afspraak aanvragen"/>
+				<TabItem
+					x:Name="tciAuthenticationTab"
+					Header="Registreren/login"/>
+				<TabItem
+					x:Name="tciUserInfoTab"
+					Header="Algemeen"/>
+				<TabItem
+					x:Name="tciAdminPanelTab"
+					Header="Admin Paneel"/>
+			</TabControl>
+		</Border>
+	</ScrollViewer>
 </Window>
