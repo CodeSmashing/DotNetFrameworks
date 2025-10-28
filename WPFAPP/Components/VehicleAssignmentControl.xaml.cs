@@ -13,15 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPFAPP
-{
-	/// <summary>
-	/// Interaction logic for VehicleAssignment.xaml
-	/// </summary>
-	public partial class VehicleAssignment
-	{
-		public VehicleAssignment()
-		{
+namespace WPFAPP {
+	public partial class VehicleAssignmentControl : UserControl {
+		public VehicleAssignmentControl() {
 			InitializeComponent();
 		}
 	}
