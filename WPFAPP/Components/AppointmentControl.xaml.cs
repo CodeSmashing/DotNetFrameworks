@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Models;
+﻿using Models;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -101,7 +100,7 @@ namespace WPFAPP {
 				appointment.Date = contextAppointment.Date;
 				appointment.Title = contextAppointment.Title;
 				appointment.Description = contextAppointment.Description;
-				appointment.AppointmentTypeId = contextAppointment.AppointmentTypeId;
+				appointment.AppointmentType = contextAppointment.AppointmentType;
 
 				// Save to database
 				_context.Appointments.Add(appointment);
