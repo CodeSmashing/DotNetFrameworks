@@ -9,6 +9,13 @@ namespace Models {
 			get; set;
 		}
 
+		[Display(Name = "Verwijderd")]
+		[DataType(DataType.DateTime)]
+		public DateTime Deleted
+		{
+			get; set;
+		} = DateTime.MaxValue;
+
 		// Eigenschappen
 		[Required]
 		[Display(Name = "Title")]
