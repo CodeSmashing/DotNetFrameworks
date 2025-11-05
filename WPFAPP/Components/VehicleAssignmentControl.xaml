@@ -152,6 +152,7 @@
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 
 					<Label
@@ -252,6 +253,12 @@
 						Unchecked="grDetails_InfoChanged"
 						Margin="10,16,53,-16"
 						Grid.Column="1"/>
+
+					<StackPanel
+						x:Name="spError"
+						Grid.Row="8"
+						Grid.Column="0"
+						Grid.ColumnSpan="2"/>
 				</Grid>
 			</StackPanel>
 			<!--<Button x:Name="btnAssign" Content="Assign Vehicle" Width="150" Margin="0,20,0,0" Click="btnAssign_Click"/>-->

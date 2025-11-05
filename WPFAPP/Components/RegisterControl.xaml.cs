@@ -13,55 +13,59 @@ namespace WPFAPP {
 
 		// Define registration requirements
 		// Key: Field name, Value: Human-readable name
-		public KeyValuePair<string, string>[] registerRequirements = [
-			new("tbDisplayname", "Gebruikersnaam"),
-			new("tbFirstName", "Voornaam"),
-			new("tbLastName", "Achternaam"),
-			new("tbEmail", "Email"),
-			new("pbPassword", "Wachtwoord"),
-			new("pbConfirmPassword", "Wachtwoord bevestiging"),
-		];
+		public Dictionary<Control, string> registerRequirements = new();
 
 		public RegisterControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();
+
+			registerRequirements[tbDisplayname] = "Gebruikersnaam";
+			registerRequirements[tbFirstName] = "Voornaam";
+			registerRequirements[tbLastName] = "Achternaam";
+			registerRequirements[tbEmail] = "Email";
+			registerRequirements[pbPassword] = "Wachtwoord";
+			registerRequirements[pbConfirmPassword] = "Wachtwoord bevestiging";
 		}
 
 		private void btnRegister_Click(object sender, RoutedEventArgs e) {
 			// Clear previous errors
-			tbError.Children.Clear();
+			spError.Children.Clear();
 
 			// Validate inputs
-			foreach (var field in new Control[] { tbDisplayname, tbFirstName, tbLastName, tbEmail, pbPassword, pbConfirmPassword }) {
-				// If field is required
-				KeyValuePair<string, string> fieldRequirement = registerRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
-				if (fieldRequirement.Value == null) {
-					continue;
+			foreach (Control field in registerRequirements.Keys) {
+				// Check if the value is empty
+				bool isEmpty = true;
+				switch (field) {
+					case TextBox textBox:
+						isEmpty = textBox.Text.Length == 0;
+						break;
+					case PasswordBox passwordBox:
+						isEmpty = passwordBox.Password.Length == 0;
+
+						// Special case: Check if passwords match
+						if (!passwordBox.Equals(pbConfirmPassword)) {
+							if (!pbConfirmPassword.Password.Equals(passwordBox.Password)) {
+								field.BorderBrush = Brushes.Red;
+								spError.Children.Add(new TextBlock { Text = "Wachtwoord bevestiging is niet gelijk aan het paswoord" });
+							}
+						}
+						break;
+					default:
+						break;
 				}
 
-				// Get value and check if empty
-				string? value = (string?) field.GetType().GetProperty(field is TextBox ? "Text" : "Password")?.GetValue(field);
-				bool isEmpty = string.IsNullOrEmpty(value);
 				field.ClearValue(Border.BorderBrushProperty);
 
 				// If empty, add error
 				if (isEmpty) {
 					field.BorderBrush = Brushes.Red;
-					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is vereist" });
-				}
-
-				// Special case: Check if passwords match
-				if (field is PasswordBox passwordBox && !passwordBox.Equals(pbConfirmPassword)) {
-					if (!pbConfirmPassword.Password.Equals(passwordBox.Password)) {
-						field.BorderBrush = Brushes.Red;
-						tbError.Children.Add(new TextBlock { Text = "Wachtwoord bevestiging is niet gelijk aan het paswoord" });
-					}
+					spError.Children.Add(new TextBlock { Text = $"{registerRequirements[field]} is vereist" });
 				}
 			}
 
 			// If there are errors, return early
-			if (tbError.Children.Count > 0) {
+			if (spError.Children.Count > 0) {
 				return;
 			}
 
@@ -79,12 +83,12 @@ namespace WPFAPP {
 
 			var result = _userManager.CreateAsync(newUser, pbPassword.Password).Result;
 			if (!result.Succeeded) {
-				tbError.Children.Add(new TextBlock { Text = string.Join("\n", result.Errors.Select(err => err.Description)) });
+				spError.Children.Add(new TextBlock { Text = string.Join("\n", result.Errors.Select(err => err.Description)) });
 				return;
 			}
 
 			// Clear previous errors and show success message
-			tbError.Children.Clear();
+			spError.Children.Clear();
 			MessageBox.Show("Account succesvol aangemaakt. U kunt nu inloggen.");
 			_context.Add(new IdentityUserRole<string>() { RoleId = "User", UserId = newUser.Id });
 			_context.SaveChanges();
