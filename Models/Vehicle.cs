@@ -20,7 +20,7 @@ namespace Models {
 		[Display(Name = "Nummer plaat")]
 		public string LicencePlate {
 			get; set;
-		} = string.Empty; // Specifically Belgian plates (e.g. format of 1-ABC-111)
+		} = null!; // Specifically Belgian plates (e.g. format of 1-ABC-111)
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Type voertuig")]
@@ -34,14 +34,14 @@ namespace Models {
 		[Display(Name = "Merk")]
 		public string Brand {
 			get; set;
-		} = string.Empty;
+		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(50, MinimumLength = 3, ErrorMessage = "Het model moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Model")]
 		public string Model {
 			get; set;
-		} = string.Empty;
+		} = null!;
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Laad capaciteit")]
@@ -66,10 +66,8 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Afbeelding")]
-		public string? ImageUrl
-		{
+		public string? ImageUrl {
 			get; set;
 		}
 
@@ -83,7 +81,7 @@ namespace Models {
 		[Display(Name = "Is in gebruik")]
 		public bool IsInUse {
 			get; set;
-		}
+		} = false;
 
 		[ForeignKey("AgendaUser")]
 		[Display(Name = "Werknemer ID")]
