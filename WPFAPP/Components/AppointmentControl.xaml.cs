@@ -50,7 +50,7 @@ namespace WPFAPP {
 		}
 
 		private void dgAppointments_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			grDetails.Visibility = Visibility.Hidden;
+			grDetails.Visibility = Visibility.Collapsed;
 
 			// Existing index-based logic removed in favour of clearer helper
 			UpdateUIButtons();
@@ -105,7 +105,7 @@ namespace WPFAPP {
 				// Save to database
 				_context.Appointments.Add(appointment);
 				_context.SaveChanges();
-				grDetails.Visibility = Visibility.Hidden;
+				grDetails.Visibility = Visibility.Collapsed;
 
 				// Select the newly created appointment and refresh the DataGrid
 				dgAppointments.SelectedItem = appointment;

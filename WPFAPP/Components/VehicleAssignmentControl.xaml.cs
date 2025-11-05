@@ -150,7 +150,7 @@ namespace WPFAPP {
 				// Save to database
 				_context.Vehicles.Add(vehicle);
 				_context.SaveChanges();
-				grDetails.Visibility = Visibility.Hidden;
+				grDetails.Visibility = Visibility.Collapsed;
 
 				// Show success message
 				MessageBox.Show("Voertuig succesvol aangemaakt.");

@@ -85,7 +85,7 @@
 
 		<Grid
 			x:Name="grDetails"
-			Visibility="Hidden"
+			Visibility="Collapsed"
 			HorizontalAlignment="Center"
 			Width="700"
 			Margin="5">
