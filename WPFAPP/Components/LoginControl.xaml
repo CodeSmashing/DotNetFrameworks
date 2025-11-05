@@ -8,67 +8,63 @@
 				Style="{StaticResource BaseUserControl}">
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="2*"/>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="2*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<TextBlock
-			Style="{StaticResource TitleH5}"
+			Style="{StaticResource TitleH1}"
 			Text="Login"
 			Grid.Row="0"
-			Grid.Column="1" 
-			Background="Transparent"
+			Grid.Column="0"
 			Grid.ColumnSpan="2"/>
 
 		<Label
 			Content="Email:"
 			Grid.Row="1"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<TextBox
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbEmail"
 			Grid.Row="1"
-			Grid.Column="2"/>
+			Grid.Column="1"/>
 
 		<Label
 			Content="Wachtwoord"
 			Grid.Row="2"
-			Grid.Column="1"/>
+			Grid.Column="0"/>
 		<PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
 			x:Name="pbPassword"
-			Background="WhiteSmoke"
 			Grid.Row="2"
-			Grid.Column="2"/>
+			Grid.Column="1"/>
 
 		<Button
 			x:Name="btnLogin"
 			Content="Login"
 			Grid.Row="3"
-			Grid.Column="1"
+			Grid.Column="0"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnLogin_Click" Margin="0,10,0,5" Width="113"/>
+			Click="btnLogin_Click"/>
 		<Button
 			x:Name="btnSwap"
 			Content="Heeft u nog &#xD;&#xA;geen account?"
 			Grid.Row="3"
-			Grid.Column="2"
+			Grid.Column="1"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnSwap_Click" Margin="0,10,0,5" />
+			Click="btnSwap_Click"/>
 
 		<StackPanel
 			x:Name="spError"
 			Grid.Row="4"
-			Grid.Column="1"
+			Grid.Column="0"
 			Grid.ColumnSpan="2"/>
 	 </Grid>
 </UserControl>

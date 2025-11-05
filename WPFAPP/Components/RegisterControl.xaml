@@ -12,26 +12,24 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<TextBlock
-			Style="{StaticResource TitleH5}"
+			Style="{StaticResource TitleH1}"
 			Text="Register"
 			Grid.Row="0" 
-			Background="Transparent"
-			Grid.ColumnSpan="2"
-			HorizontalAlignment="Left"
-			Margin="135,20,0,20"/>
+			Grid.Column="0" 
+			Grid.ColumnSpan="2"/>
 
 		<Label
 			Content="Gebruikersnaam:"
@@ -41,8 +39,6 @@
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbDisplayname"
 			Grid.Row="1"
-			Width="Auto"
-			Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
@@ -53,8 +49,6 @@
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbFirstName"
 			Grid.Row="2"
-			Width="Auto"
-			Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
@@ -65,8 +59,6 @@
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbLastName"
 			Grid.Row="3"
-			Width="Auto"
-			Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
@@ -77,8 +69,6 @@
 			Style="{StaticResource TextBoxWide}"
 			x:Name="tbEmail"
 			Grid.Row="4"
-			Width="Auto"
-			Background="WhiteSmoke"
 			Grid.Column="2"/>
 
 		<Label
@@ -88,8 +78,6 @@
 		<PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
 			x:Name="pbPassword"
-			Background="LightGray"
-			Width="Auto"
 			Grid.Row="5"
 			Grid.Column="2"/>
 
@@ -100,8 +88,6 @@
 		<PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
 			x:Name="pbConfirmPassword"
-			Background="LightGray"
-			Width="Auto"
 			Grid.Row="6"
 			Grid.Column="2"/>
 
@@ -111,15 +97,12 @@
 			Grid.Row="7"
 			Grid.Column="1"
 			Style="{StaticResource ButtonCentered}"
-			Click="btnRegister_Click" Margin="0,7,0,7" Width="154"/>
+			Click="btnRegister_Click"/>
 		<Button
 			x:Name="btnSwap"
 			Content="Al geregistreerd?"
 			Style="{StaticResource ButtonCentered}"
 			Click="btnSwap_Click"
-			Margin="0,7,0,7"
-			Width="180"
-			RenderTransformOrigin="0.463,0.547"
 			Grid.Row="7" />
 
 		<StackPanel

@@ -5,10 +5,11 @@
 
 	<!-- Define variables -->
 	<SolidColorBrush x:Key="PrimaryTextColor" Color="DarkSlateGray"/>
-	<Thickness x:Key="StandardPadding">10,8,10,8</Thickness>
+	<Thickness x:Key="StandardPadding">5,3,5,3</Thickness>
 	<Thickness x:Key="StandardMargin">7,5,7,5</Thickness>
 	<FontFamily x:Key="PrimaryFont">Segoe UI</FontFamily>
-	<system:Double x:Key="PrimaryFontSize">14</system:Double>
-	<system:Double x:Key="PrimaryInteractiveWidth">120</system:Double>
-	<system:Double x:Key="PrimaryInteractiveHeight">32</system:Double>
+	<system:Double x:Key="PrimaryFontSize">12</system:Double>
+	<system:Double x:Key="InteractiveWidthMedium">120</system:Double>
+	<system:Double x:Key="InteractiveHeightMedium">28</system:Double>
+	<system:Double x:Key="InteractiveHeightLarge">42</system:Double>
 </ResourceDictionary>
