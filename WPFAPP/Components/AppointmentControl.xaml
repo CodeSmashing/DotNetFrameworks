@@ -6,7 +6,14 @@
 				xmlns:local="clr-namespace:WPFAPP"
 				mc:Ignorable="d"
 				Style="{StaticResource BaseUserControl}">
-	<StackPanel Width="auto">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
 		<Grid Style="{StaticResource SearchFilterPanel}">
 			<TextBox
 				x:Name="tbFilter"
@@ -19,48 +26,34 @@
 
 		<DataGrid
 			x:Name="dgAppointments"
-			MaxHeight="300"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Center"
 			SelectionMode="Single"
 			SelectionChanged="dgAppointments_SelectionChanged"
-			Margin="10px"
-			AutoGenerateColumns="False"
-			CanUserAddRows="False"
-			CanUserResizeRows="False"
-			CanUserDeleteRows="False">
-
+			Grid.Row="1">
 			<DataGrid.Columns>
 				<DataGridTextColumn
 					Header="Date"
-					Binding="{Binding Date}"
-					Width="150"
-					IsReadOnly="True"/>
+					Binding="{Binding Date}"/>
 
 				<DataGridTextColumn
 					Header="Appointment"
 					Binding="{Binding Title}"
-					Width="200"
-					IsReadOnly="True"/>
+					Width="200"/>
 
 				<DataGridTextColumn
 					Header="Description"
 					Binding="{Binding Description}"
-					Width="300"
-					IsReadOnly="True"/>
+					Width="300"/>
 
 				<DataGridTextColumn
 					Header="Type"
-					Binding="{Binding AppointmentType.Name}"
-					Width="150"
-					IsReadOnly="True"/>
+					Binding="{Binding AppointmentType.Name}"/>
 			</DataGrid.Columns>
 		</DataGrid>
 
 		<StackPanel
-			Orientation="Horizontal"
-			HorizontalAlignment="Center"
-			Margin="5">
+			Style="{StaticResource ControlContainer}"
+			CanHorizontallyScroll="True"
+			Grid.Row="2">
 			<Button
 				x:Name="btnAdd"
 				Content="Toevoegen"
@@ -75,7 +68,7 @@
 				x:Name="btnDelete"
 				Content="Verwijderen"
 				IsEnabled="False"
-				Click="btnDelete_Click" />
+				Click="btnDelete_Click"/>
 			<Button
 				x:Name="btnSave"
 				Content="Opslaan"
@@ -85,10 +78,8 @@
 
 		<Grid
 			x:Name="grDetails"
-			Visibility="Hidden"
-			HorizontalAlignment="Center"
-			Width="700"
-			Margin="5">
+			Visibility="Collapsed"
+			Grid.Row="3">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="Auto"/>
@@ -108,12 +99,8 @@
 				x:Name="dpDate"
 				Grid.Row="0"
 				Grid.Column="1"
-				Width="541"
 				SelectedDate="{Binding Date, Mode=TwoWay}"
-				HorizontalAlignment="Left"
-				SelectedDateChanged="grDetails_InfoChanged"
-				Margin="0,0,0,50"
-				Grid.RowSpan="2" />
+				SelectedDateChanged="grDetails_InfoChanged"/>
 
 			<Label
 				Content="Titel:" 
@@ -135,24 +122,19 @@
 				Grid.Row="2"
 				Grid.Column="1"
 				SelectedItem="{Binding AppointmentType, Mode=TwoWay}"
-				Height="AUto"
-				Width="557"
-				HorizontalAlignment="Left"
-				SelectionChanged="grDetails_InfoChanged"
-				Margin="0,0,0,50"
-				Grid.RowSpan="2">
+				SelectionChanged="grDetails_InfoChanged">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel>
 							<TextBlock
 								Text="{Binding Name}"
 								FontWeight="Bold"
+								HorizontalAlignment="Left"
 								Margin="0"
 								Padding="0" />
 							<TextBlock
 								Text="{Binding Description}"
 								FontStyle="Italic"
-								FontSize="18"
 								Margin="0,0,0,10"
 								Padding="0" />
 						</StackPanel>
@@ -162,21 +144,18 @@
 
 			<Label
 				Content="Extra Informatie:" 
-				VerticalAlignment="Top"
 				Grid.Row="3"
 				Grid.Column="0" />
 			<TextBox
 				x:Name="tbDescription"
 				Grid.Row="3"
 				Grid.Column="1"
-				Width="541"
 				VerticalScrollBarVisibility="Auto"
-				HorizontalAlignment="Left"
+				Height="Auto"
 				Text="{Binding Description, Mode=TwoWay}"
 				TextChanged="grDetails_InfoChanged"
-				AcceptsReturn="True"
-				Margin="0,0,0,-1" />
+				AcceptsReturn="True" />
 		</Grid>
 		<local:VehicleSelector/>
-	</StackPanel>
+	</Grid>
 </UserControl>

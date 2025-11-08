@@ -14,57 +14,61 @@ namespace WPFAPP {
 
 		// Define login requirements
 		// Key: Field name, Value: Human-readable name
-		public KeyValuePair<string, string>[] loginRequirements = [
-			new("tbEmail", "Email"),
-			new("pbPassword", "Wachtwoord")
-		];
+		public Dictionary<Control, string> loginRequirements = new();
 
 		// Constructor with dependency injection
 		public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();
+
+			loginRequirements[tbEmail] = "Email";
+			loginRequirements[pbPassword] = "Wachtwoord";
 		}
 
 		private async void btnLogin_Click(object sender, RoutedEventArgs e) {
 			// Clear previous errors
-			tbError.Children.Clear();
+			spError.Children.Clear();
 
 			// Validate inputs
-			foreach (var field in new Control[] { tbEmail, pbPassword }) {
-				// If field is required
-				KeyValuePair<string, string> fieldRequirement = loginRequirements.FirstOrDefault(kvp => kvp.Key == field.Name);
-				if (fieldRequirement.Value == null) {
-					continue;
+			foreach (Control field in loginRequirements.Keys) {
+				// Check if the value is empty
+				bool isEmpty = true;
+				switch (field) {
+					case TextBox textBox:
+						isEmpty = textBox.Text.Length == 0;
+						break;
+					case PasswordBox passwordBox:
+						isEmpty = passwordBox.Password.Length == 0;
+						break;
+					default:
+						break;
 				}
 
-				// Get value and check if empty
-				string? value = (string?) field.GetType().GetProperty(field is TextBox ? "Text" : "Password")?.GetValue(field);
-				bool isEmpty = string.IsNullOrEmpty(value);
 				field.ClearValue(Border.BorderBrushProperty);
 
 				// If empty, add error
 				if (isEmpty) {
 					field.BorderBrush = Brushes.Red;
-					tbError.Children.Add(new TextBlock { Text = $"{fieldRequirement.Value} is vereist" });
+					spError.Children.Add(new TextBlock { Text = $"{loginRequirements[field]} is vereist" });
 				}
 			}
 
 			// If there are errors, return early
-			if (tbError.Children.Count > 0) {
+			if (spError.Children.Count > 0) {
 				return;
 			}
 
 			// Check if user exists and password is correct
 			AgendaUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == tbEmail.Text);
 			if (user == null) {
-				tbError.Children.Add(new TextBlock { Text = "Gebruiker niet gevonden" });
+				spError.Children.Add(new TextBlock { Text = "Gebruiker niet gevonden" });
 				return;
 			}
 
 			bool loginSuccess = await _userManager.CheckPasswordAsync(user, pbPassword.Password);
 			if (!loginSuccess) {
-				tbError.Children.Add(new TextBlock { Text = "Ongeldige email of wachtwoord" });
+				spError.Children.Add(new TextBlock { Text = "Ongeldige email of wachtwoord" });
 				return;
 			}
 

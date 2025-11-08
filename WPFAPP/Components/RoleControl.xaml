@@ -6,45 +6,59 @@
 				xmlns:local="clr-namespace:WPFAPP"
 				mc:Ignorable="d"
 				Style="{StaticResource BaseUserControl}">
-	<StackPanel Orientation="Vertical" Margin="10px">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="20"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 		<TextBlock
 			Text="Role Management"
-			Style="{StaticResource TitleH4}"/>
+			Style="{StaticResource TitleH3}"
+			Grid.Row="0"
+			Grid.ColumnSpan="4"/>
 
-		<StackPanel Orientation="Horizontal" Margin="10">
-			<!-- Pick the user to edit the roles of -->
-			<Label
-				Content="Gebruiker:"
-				VerticalAlignment="Top"
-				Margin="0,10"/>
-			<ComboBox
-				x:Name="cbUsers"
-				VerticalAlignment="Top"
-				Width="200"
-				Height="50"
-				Margin="10"
-				SelectionChanged="cbUsers_SelectionChanged"/>
+		<!-- Pick the user to edit the roles of -->
+		<Label
+			Content="Gebruiker:"
+			Grid.Row="1"
+			Grid.Column="0"
+			HorizontalAlignment="Right"
+			Margin="0,0,35,0"/>
+		<ComboBox
+			x:Name="cbUsers"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Right"
+			SelectionChanged="cbUsers_SelectionChanged"
+			Grid.Row="2"
+			Grid.Column="0"/>
 
-			<!-- ListBox to load the current roles of the user -->
-			<Label
-				Content="Huidige Rollen:"
-				Margin="40,10,0,0"
-				VerticalAlignment="Top"/>
-			<ListBox
-				x:Name="lbRoles"
-				Width="200"
-				Margin="10"
-				SelectionMode="Multiple"
-				SelectionChanged="lbRoles_SelectionChanged">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel>
-							<ListBoxItem
+		<!-- ListBox to load the current roles of the user -->
+		<Label
+			Content="Huidige Rollen:"
+			Grid.Row="1"
+			Grid.Column="2"
+			HorizontalAlignment="Left"/>
+		<ListBox
+			x:Name="lbRoles"
+			SelectionMode="Multiple"
+			SelectionChanged="lbRoles_SelectionChanged"
+			HorizontalAlignment="Stretch"
+			Grid.Row="2"
+			Grid.Column="2">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel>
+						<ListBoxItem
 								Content="{Binding Id}"/>
-						</StackPanel>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
-		</StackPanel>
-	</StackPanel>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
 </UserControl>

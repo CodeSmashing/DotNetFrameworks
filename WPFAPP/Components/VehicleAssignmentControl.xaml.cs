@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Migrations;
 using System;
@@ -10,8 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -24,10 +21,22 @@ namespace WPFAPP {
 		private readonly UserManager<AgendaUser> _userManager;
 		public List<Tuple<Vehicle, ComboBoxItem>> selectedVehicles = new List<Tuple<Vehicle, ComboBoxItem>>();
 
+		// Define vehicle requirements
+		// Key: Field name, Value: Human-readable name
+		public Dictionary<Control, string> vehicleRequirements = new();
+
 		public VehicleAssignmentControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();
+
+			vehicleRequirements[tbLicencePlate] = "Nummer plaat";
+			vehicleRequirements[cbVehicleTypes] = "Type voertuig";
+			vehicleRequirements[tbBrand] = "Merk";
+			vehicleRequirements[tbModel] = "Model";
+			vehicleRequirements[tbLoadCapacity] = "Laad capaciteit";
+			vehicleRequirements[tbWeightCapacity] = "Gewicht capaciteit";
+			vehicleRequirements[cbFuelTypes] = "Brandstof type";
 
 			cbVehicleTypes.ItemsSource = Enum.GetValues(typeof(VehicleType)).Cast<VehicleType>();
 			cbFuelTypes.ItemsSource = Enum.GetValues(typeof(FuelType)).Cast<FuelType>();
@@ -36,10 +45,12 @@ namespace WPFAPP {
 
 			UpdateDgVehicles();
 		}
+
 		private void grVehicleDetails_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			// Existing index-based logic removed in favour of clearer helper
 			UpdateUIButtons();
 		}
+
 		public void UpdateUIButtons() {
 			btnAdd.IsEnabled = true;
 
@@ -66,9 +77,10 @@ namespace WPFAPP {
 				grDetails.DataContext = CollectionView.NewItemPlaceholder;
 			}
 		}
+
 		private void btnAdd_Click(object sender, RoutedEventArgs e) {
 			grDetails.Visibility = Visibility.Visible;
-			grDetails.DataContext = new Vehicle();
+			grDetails.DataContext = CollectionView.NewItemPlaceholder;
 			btnSave.IsEnabled = true;
 			btnEdit.IsEnabled = false;
 		}
@@ -91,7 +103,6 @@ namespace WPFAPP {
 					_context.SaveChanges();
 					// Reset the selected Vehicle and refresh the DataGrid
 					grVehicleDetails.SelectedItem = CollectionView.NewItemPlaceholder;
-					UpdateDgVehicles();
 				}
 				UpdateDgVehicles();
 			} catch (Exception errorInfo) {
@@ -101,29 +112,57 @@ namespace WPFAPP {
 		}
 
 		private void btnSave_Click(object sender, RoutedEventArgs e) {
+			// Clear previous errors
+			spError.Children.Clear();
+
+			// Validate inputs
+			foreach (Control field in vehicleRequirements.Keys) {
+				// Check if the value is empty
+				bool isEmpty = true;
+				switch (field) {
+					case TextBox textBox:
+						isEmpty = textBox.Text.Length == 0;
+						break;
+					case ComboBox comboBox:
+						isEmpty = comboBox.SelectedIndex == -1;
+						break;
+					default:
+						break;
+				}
+
+				field.ClearValue(Border.BorderBrushProperty);
+
+				// If empty, add error
+				if (isEmpty) {
+					field.BorderBrush = Brushes.Red;
+					spError.Children.Add(new TextBlock { Text = $"{vehicleRequirements[field]} is vereist" });
+				}
+			}
+
+			// If there are errors, return early
+			if (spError.Children.Count > 0) {
+				return;
+			}
+
 			try {
-				Vehicle vehicle = new();
-				Vehicle contextvehicle = (Vehicle) grDetails.DataContext;
-
-				vehicle.Model = contextvehicle.Model;
-				vehicle.Brand = contextvehicle.Brand;
-				vehicle.FuelType = contextvehicle.FuelType;
-				vehicle.WeightCapacity = contextvehicle.WeightCapacity;
-				vehicle.LoadCapacity = contextvehicle.LoadCapacity;
-				vehicle.IsManuel = contextvehicle.IsManuel;
-				vehicle.LicencePlate = contextvehicle.LicencePlate;
-				vehicle.VehicleType = contextvehicle.VehicleType;
-				vehicle.Deleted = DateTime.MaxValue;
-				vehicle.ImageUrl = "https://teja9.kuikr.com/images/car/default-cars.jpeg";
-				vehicle.IsInUse = false;
-				vehicle.EmployeeId = null;
-
-
+				// Attempt to create a new vehicle
+				Vehicle vehicle = new() {
+					LicencePlate = tbLicencePlate.Text,
+					VehicleType = (VehicleType) cbVehicleTypes.SelectedItem,
+					Brand = tbBrand.Text,
+					Model = tbModel.Text,
+					LoadCapacity = double.Parse(tbLoadCapacity.Text),
+					WeightCapacity = double.Parse(tbWeightCapacity.Text),
+					FuelType = (FuelType) cbFuelTypes.SelectedItem,
+				};
 
 				// Save to database
 				_context.Vehicles.Add(vehicle);
 				_context.SaveChanges();
-				grDetails.Visibility = Visibility.Hidden;
+				grDetails.Visibility = Visibility.Collapsed;
+
+				// Show success message
+				MessageBox.Show("Voertuig succesvol aangemaakt.");
 
 				// Select the newly created vehicle and refresh the DataGrid
 				grVehicleDetails.SelectedItem = vehicle;
