@@ -76,6 +76,7 @@ namespace WPFAPP {
 			SetDataContextWithoutTriggeringEvent(dgAppointments.SelectedItem);
 			btnSave.IsEnabled = false;
 			btnEdit.IsEnabled = false;
+			btnAdd.IsEnabled = false;
 			_isEditing = true;
 		}
 
@@ -103,7 +104,7 @@ namespace WPFAPP {
 			spError.Children.Clear();
 
 			// Validate inputs and show errors
-			ValidateInputs(out List<Control> errors);
+			MainWindow.ValidateInputs(out List<Control> errors, in inputRequirements);
 
 			foreach (Control field in inputRequirements.Keys) {
 				field.ClearValue(Border.BorderBrushProperty);
@@ -148,6 +149,9 @@ namespace WPFAPP {
 				_context.SaveChanges();
 				grDetailsInputs.Visibility = Visibility.Collapsed;
 
+				// Show success message
+				MessageBox.Show("Afspraak succesvol aangemaakt.");
+
 				// Select the appointment and refresh the DataGrid
 				UpdateDataGrid();
 				dgAppointments.SelectedItem = appointment;
@@ -167,7 +171,7 @@ namespace WPFAPP {
 			if (_isSettingDataContext) {
 				return;
 			}
-			btnSave.IsEnabled = ValidateInputs(out _);
+			btnSave.IsEnabled = MainWindow.ValidateInputs(out _, in inputRequirements);
 		}
 
 		private void tbFilter_TextChanged(object sender, TextChangedEventArgs e) {
@@ -240,30 +244,6 @@ namespace WPFAPP {
 			_isSettingDataContext = true;
 			grDetailsInputs.DataContext = item;
 			_isSettingDataContext = false;
-		}
-
-		private bool ValidateInputs(out List<Control> errors) {
-			errors = new();
-			bool isValid = true;
-			foreach (Control field in inputRequirements.Keys) {
-				bool isInValid = false;
-				switch (field) {
-					case TextBox textBox:
-						isInValid = textBox.Text.Length == 0;
-						break;
-					case ComboBox comboBox:
-						isInValid = comboBox.SelectedIndex == -1;
-						break;
-					case DatePicker datePicker:
-						isInValid = datePicker.SelectedDate <= DateTime.Now || !datePicker.SelectedDate.HasValue;
-						break;
-				}
-				if (isInValid) {
-					isValid = false;
-					errors.Add(field);
-				}
-			}
-			return isValid;
 		}
 	}
 }

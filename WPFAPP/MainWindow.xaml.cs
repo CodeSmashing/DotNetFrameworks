@@ -2,6 +2,7 @@
 using Models;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WPFAPP {
 	public partial class MainWindow : Window {
@@ -96,6 +97,30 @@ namespace WPFAPP {
 					tciAdminPanelTab.Visibility = Visibility.Hidden;
 					break;
 			}
+		}
+
+		public static bool ValidateInputs(out List<Control> errors, in Dictionary<Control, string> inputRequirements) {
+			errors = new();
+			bool isValid = true;
+			foreach (Control field in inputRequirements.Keys) {
+				bool isInValid = false;
+				switch (field) {
+					case TextBox textBox:
+						isInValid = textBox.Text.Length == 0;
+						break;
+					case ComboBox comboBox:
+						isInValid = comboBox.SelectedIndex == -1;
+						break;
+					case DatePicker datePicker:
+						isInValid = datePicker.SelectedDate <= DateTime.Now || !datePicker.SelectedDate.HasValue;
+						break;
+				}
+				if (isInValid) {
+					isValid = false;
+					errors.Add(field);
+				}
+			}
+			return isValid;
 		}
 	}
 }
