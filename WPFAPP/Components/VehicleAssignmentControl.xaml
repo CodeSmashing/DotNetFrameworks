@@ -13,6 +13,7 @@
 			<RowDefinition Height="50px"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="50px"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
@@ -20,6 +21,7 @@
 			Style="{StaticResource TitleH3}"
 			Text="Werknemer toevoegen aan voertuig"
 			Grid.Row="0"/>
+
 		<StackPanel
 			Orientation="Vertical"
 			HorizontalAlignment="Center"
@@ -104,70 +106,80 @@
 			Style="{StaticResource TitleH3}"
 			Text="Voertuigen overzicht"
 			Grid.Row="3"/>
-		<StackPanel
+
+		<DataGrid
+			x:Name="dgVehicleDetails"
+			Height="Auto"
+			Width="Auto"
+			MaxHeight="300"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Center"
+			SelectionMode="Single"
+			SelectionChanged="dgVehicleDetails_SelectionChanged"
+			MouseDoubleClick="dgVehicleDetails_MouseDoubleClick"
+			Margin="10px"
+			AutoGenerateColumns="False"
 			Grid.Row="4">
-			<DataGrid
-				x:Name="grVehicleDetails"
-				Height="Auto"
-				Width="Auto"
-				MaxHeight="300"
-				VerticalAlignment="Top"
-				HorizontalAlignment="Center"
-				SelectionMode="Single"
-				SelectionChanged="grVehicleDetails_SelectionChanged"
-				MouseDoubleClick="grVehicleDetails_MouseDoubleClick"
-				Margin="10px"
-				AutoGenerateColumns="False">
 
-				<DataGrid.Columns>
-					<DataGridTextColumn
-						Header="Type"
-						Binding="{Binding FuelType}"
-						Width="150"
-						IsReadOnly="True"/>
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Header="Type"
+					Binding="{Binding FuelType}"
+					Width="150"
+					IsReadOnly="True"/>
 
-					<DataGridTextColumn
-						Header="Merk"
-						Binding="{Binding Brand}"
-						Width="150"
-						IsReadOnly="True"/>
+				<DataGridTextColumn
+					Header="Merk"
+					Binding="{Binding Brand}"
+					Width="150"
+					IsReadOnly="True"/>
 
-					<DataGridTextColumn
-						Header="Model"
-						Binding="{Binding Model}"
-						Width="200"
-						IsReadOnly="True"/>
+				<DataGridTextColumn
+					Header="Model"
+					Binding="{Binding Model}"
+					Width="200"
+					IsReadOnly="True"/>
 
-					<DataGridTextColumn
-						Header="Gewicht capaciteit (KG)"
-						Binding="{Binding WeightCapacity}"
-						Width="200"
-						IsReadOnly="True"/>
+				<DataGridTextColumn
+					Header="Gewicht capaciteit (KG)"
+					Binding="{Binding WeightCapacity}"
+					Width="200"
+					IsReadOnly="True"/>
 
-					<DataGridTextColumn
-						Header="Laadvolume (L)?"
-						Binding="{Binding LoadCapacity}"
-						Width="200"
-						IsReadOnly="True"/>
+				<DataGridTextColumn
+					Header="Laadvolume (L)?"
+					Binding="{Binding LoadCapacity}"
+					Width="200"
+					IsReadOnly="True"/>
 
-					<DataGridTextColumn
-						Header="Manueel?"
-						Binding="{Binding IsManuel}"
-						Width="200"
-						IsReadOnly="True"/>
+				<DataGridTextColumn
+					Header="Manueel?"
+					Binding="{Binding IsManuel}"
+					Width="200"
+					IsReadOnly="True"/>
 
-					<DataGridTextColumn
-						Header="Nummerplaat"
-						Binding="{Binding LicencePlate}"
-						Width="200"
-						IsReadOnly="True"/>
-				</DataGrid.Columns>
-			</DataGrid>
+				<DataGridTextColumn
+					Header="Nummerplaat"
+					Binding="{Binding LicencePlate}"
+					Width="200"
+					IsReadOnly="True"/>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<Grid
+			x:Name="grDetails"
+			Grid.Row="6">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
 
 			<StackPanel
-				Orientation="Horizontal"
+				x:Name="spDetailsControls"
 				HorizontalAlignment="Center"
-				Margin="5">
+				Orientation="Horizontal"
+				Margin="5"
+				Grid.Row="0">
 				<Button
 					x:Name="btnAdd"
 					Content="Toevoegen"
@@ -189,132 +201,138 @@
 					IsEnabled="False"
 					Click="btnSave_Click"/>
 			</StackPanel>
-		</StackPanel>
 
-		<Grid
-			x:Name="grDetails"
-			Margin="5"
-			Visibility="Collapsed"
-			Grid.Row="5">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
-
-			<Label
-				Content="Merk:"
-				Grid.Row="0"
-				Grid.Column="0"/>
-			<TextBox
-				Style="{StaticResource TextBoxWide}"
-				x:Name="tbBrand"
-				Grid.Row="0"
-				Grid.Column="1"
-				Text="{Binding Brand, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged" />
-
-			<Label
-				Content="Model:" 
+			<Grid
+				x:Name="grDetailsInputs"
+				Margin="0"
 				Grid.Row="1"
-				Grid.Column="0" />
-			<TextBox
-				Style="{StaticResource TextBoxWide}"
-				x:Name="tbModel"
-				Grid.Row="1"
-				Grid.Column="1"
-				Text="{Binding Model, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged" />
+				HorizontalAlignment="Center"
+				Visibility="Collapsed">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
 
-			<Label
-				Content="Gewichtcapaciteit(KG):" 
-				Grid.Row="2"
-				Grid.Column="0" />
-			<TextBox
-				Style="{StaticResource TextBoxWide}"
-				x:Name="tbWeightCapacity"
-				Grid.Row="2"
-				Grid.Column="1"
-				Text="{Binding WeightCapacity, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged" />
+				<Label
+					x:Name="lbBrand"
+					Content="Merk:"
+					Grid.Row="0"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbBrand"
+					Grid.Row="0"
+					Grid.Column="1"
+					Text="{Binding Brand, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"/>
 
-			<Label
-				Content="Laadcapaciteit(LITER):" 
-				Grid.Row="3"
-				Grid.Column="0" />
-			<TextBox
-				Style="{StaticResource TextBoxWide}"
-				x:Name="tbLoadCapacity"
-				Grid.Row="3"
-				Grid.Column="1"
-				Text="{Binding LoadCapacity, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged" />
+				<Label
+					x:Name="lbModel"
+					Content="Model:" 
+					Grid.Row="1"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbModel"
+					Grid.Row="1"
+					Grid.Column="1"
+					Text="{Binding Model, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"/>
 
-			<Label
-				Content="Type voertuig:" 
-				Grid.Row="4"
-				Grid.Column="0"/>
-			<ComboBox
-				Style="{StaticResource ComboBoxWide}"
-				x:Name="cbVehicleTypes"
-				Grid.Row="4"
-				Grid.Column="1"
-				SelectedItem="{Binding VehicleType, Mode=TwoWay}"
-				SelectionChanged="grDetails_InfoChanged">
-			</ComboBox>
+				<Label
+					x:Name="lbWeightCapacity"
+					Content="Gewichtcapaciteit(KG):" 
+					Grid.Row="2"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbWeightCapacity"
+					Grid.Row="2"
+					Grid.Column="1"
+					Text="{Binding WeightCapacity, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"/>
 
-			<Label
-				Content="Type brandstof:" 
-				Grid.Row="5"
-				Grid.Column="0"/>
-			<ComboBox
-				Style="{StaticResource ComboBoxWide}"
-				x:Name="cbFuelTypes"
-				Grid.Row="5"
-				Grid.Column="1"
-				SelectedItem="{Binding FuelType, Mode=TwoWay}"
-				SelectionChanged="grDetails_InfoChanged">
-			</ComboBox>
+				<Label
+					x:Name="lbLoadCapacity"
+					Content="Laadcapaciteit(LITER):" 
+					Grid.Row="3"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbLoadCapacity"
+					Grid.Row="3"
+					Grid.Column="1"
+					Text="{Binding LoadCapacity, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"/>
 
-			<Label
-				Content="Nummerplaat:" 
-				Grid.Row="6"
-				Grid.Column="0" />
-			<TextBox
-				Style="{StaticResource TextBoxWide}"
-				x:Name="tbLicencePlate"
-				Grid.Row="6"
-				Grid.Column="1"
-				Text="{Binding LicencePlate, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged" />
+				<Label
+					x:Name="lbVehicleType"
+					Content="Type voertuig:" 
+					Grid.Row="4"
+					Grid.Column="0"/>
+				<ComboBox
+					Style="{StaticResource ComboBoxWide}"
+					x:Name="cbVehicleType"
+					Grid.Row="4"
+					Grid.Column="1"
+					SelectedItem="{Binding VehicleType, Mode=TwoWay}"
+					SelectionChanged="grDetails_InfoChanged"/>
 
-			<Label
-				Content="Manueel?:" 
-				Grid.Row="7"
-				Grid.Column="0" />
-			<CheckBox
-				x:Name="chkIsManuel"
-				Grid.Row="7"
-				Grid.Column="1"
-				IsChecked="{Binding IsManuel, Mode=TwoWay}"
-				Checked="grDetails_InfoChanged"
-				Unchecked="grDetails_InfoChanged"/>
+				<Label
+					x:Name="lbFuelType"
+					Content="Type brandstof:" 
+					Grid.Row="5"
+					Grid.Column="0"/>
+				<ComboBox
+					Style="{StaticResource ComboBoxWide}"
+					x:Name="cbFuelType"
+					Grid.Row="5"
+					Grid.Column="1"
+					SelectedItem="{Binding FuelType, Mode=TwoWay}"
+					SelectionChanged="grDetails_InfoChanged"/>
 
-			<StackPanel
-				x:Name="spError"
-				Grid.Row="8"
-				Grid.Column="0"
-				Grid.ColumnSpan="2"/>
+				<Label
+					x:Name="lbLicencePlate"
+					Content="Nummerplaat:" 
+					Grid.Row="6"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbLicencePlate"
+					Grid.Row="6"
+					Grid.Column="1"
+					Text="{Binding LicencePlate, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"/>
+
+				<Label
+					x:Name="lbIsManuel"
+					Content="Manueel?:" 
+					Grid.Row="7"
+					Grid.Column="0"/>
+				<CheckBox
+					x:Name="chkIsManuel"
+					Grid.Row="7"
+					Grid.Column="1"
+					IsChecked="{Binding IsManuel, Mode=TwoWay}"
+					Checked="grDetails_InfoChanged"
+					Unchecked="grDetails_InfoChanged"/>
+
+				<StackPanel
+					x:Name="spError"
+					Grid.Row="8"
+					Grid.ColumnSpan="2"/>
+			</Grid>
 		</Grid>
 		<!--<Button x:Name="btnAssign" Content="Assign Vehicle" Width="150" Margin="0,20,0,0" Click="btnAssign_Click"/>-->
 	</Grid>

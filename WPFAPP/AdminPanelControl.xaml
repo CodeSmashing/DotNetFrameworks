@@ -6,8 +6,7 @@
 				xmlns:local="clr-namespace:WPFAPP"
 				mc:Ignorable="d"
 				Style="{StaticResource BaseUserControl}">
-	<Border
-		Style="{StaticResource BorderWithBoxShadow}">
+	<Border>
 		<TabControl
 			x:Name="tcAdminNavigation">
 			<TabItem

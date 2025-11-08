@@ -1,60 +1,54 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Models;
-using Models.Migrations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Models;
+using System.Data;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static System.Net.WebRequestMethods;
 
 namespace WPFAPP {
 	public partial class VehicleAssignmentControl : UserControl {
 		private readonly AgendaDbContext _context;
-		private readonly UserManager<AgendaUser> _userManager;
 		public List<Tuple<Vehicle, ComboBoxItem>> selectedVehicles = new List<Tuple<Vehicle, ComboBoxItem>>();
+		private bool _isSettingDataContext = false;
+		private bool _isEditing = false;
 
-		// Define vehicle requirements
+		// Define input requirements
 		// Key: Field name, Value: Human-readable name
-		public Dictionary<Control, string> vehicleRequirements = new();
+		public Dictionary<Control, string> inputRequirements = new();
 
-		public VehicleAssignmentControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public VehicleAssignmentControl(AgendaDbContext context) {
 			_context = context;
-			_userManager = userManager;
 			InitializeComponent();
 
-			vehicleRequirements[tbLicencePlate] = "Nummer plaat";
-			vehicleRequirements[cbVehicleTypes] = "Type voertuig";
-			vehicleRequirements[tbBrand] = "Merk";
-			vehicleRequirements[tbModel] = "Model";
-			vehicleRequirements[tbLoadCapacity] = "Laad capaciteit";
-			vehicleRequirements[tbWeightCapacity] = "Gewicht capaciteit";
-			vehicleRequirements[cbFuelTypes] = "Brandstof type";
+			// Set the input requirements
+			inputRequirements[tbLicencePlate] = "Nummer plaat";
+			inputRequirements[cbVehicleType] = "Type voertuig";
+			inputRequirements[tbBrand] = "Merk";
+			inputRequirements[tbModel] = "Model";
+			inputRequirements[tbLoadCapacity] = "Laad capaciteit";
+			inputRequirements[tbWeightCapacity] = "Gewicht capaciteit";
+			inputRequirements[cbFuelType] = "Brandstof type";
 
-			cbVehicleTypes.ItemsSource = Enum.GetValues(typeof(VehicleType)).Cast<VehicleType>();
-			cbFuelTypes.ItemsSource = Enum.GetValues(typeof(FuelType)).Cast<FuelType>();
+			// Load data into combo boxes
+			cbVehicleType.ItemsSource = Enum.GetValues<VehicleType>().Cast<VehicleType>();
+			cbFuelType.ItemsSource = Enum.GetValues<FuelType>().Cast<FuelType>();
 
+			// Update grids and visuals
 			GetEmployees();
-
-			UpdateDgVehicles();
+			UpdateDataGrid();
 		}
 
-		private void grVehicleDetails_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			// Existing index-based logic removed in favour of clearer helper
+		private void dgVehicleDetails_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			grDetailsInputs.Visibility = Visibility.Collapsed;
 			UpdateUIButtons();
 		}
 
-		private void grVehicleDetails_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		private void dgVehicleDetails_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (grVehicleDetails.SelectedItem is Vehicle selectedVehicle)
+			if (dgVehicleDetails.SelectedItem is Vehicle selectedVehicle)
 			{
 				try
 				{
@@ -97,62 +91,71 @@ namespace WPFAPP {
 		}
 
 		public void UpdateUIButtons() {
-			btnAdd.IsEnabled = true;
+			if (App.User == null) {
+				return;
+			}
+
+			// btnAdd visible when a real user is logged in
+			btnAdd.IsEnabled = (App.User != AgendaUser.Dummy);
 
 			// If no selection, nothing more to do
-			if (grVehicleDetails.SelectedItem == CollectionView.NewItemPlaceholder || grVehicleDetails.SelectedIndex < 0) {
+			if (dgVehicleDetails.SelectedItem == CollectionView.NewItemPlaceholder || dgVehicleDetails.SelectedIndex < 0) {
 				// Default states
 				btnEdit.IsEnabled = false;
 				btnDelete.IsEnabled = false;
 				btnSave.IsEnabled = false;
+				SetDataContextWithoutTriggeringEvent(CollectionView.NewItemPlaceholder);
 				return;
 			}
 
-			if (App.User != null && App.User != AgendaUser.Dummy) {
+			// Only allow edit/delete to the logged-in user if they have the correct permissions
+			List<string> roleList = _context.UserRoles
+				.Where(ur => ur.UserId == App.User.Id)
+				.Select(ur => ur.RoleId)
+				.ToList();
+			if (roleList.Count > 0 && (roleList.Contains("Admin") || roleList.Contains("Employee"))) {
 				btnEdit.IsEnabled = true;
 				btnDelete.IsEnabled = true;
 			}
 			btnSave.IsEnabled = false;
 
-			// If the selected item is a vehicle
-			if (grVehicleDetails.SelectedItem is Vehicle selectedVehicle) {
-				// Update the grDetails grid to use the currently selected vehicle data
-				grDetails.DataContext = selectedVehicle;
-			} else {
-				grDetails.DataContext = CollectionView.NewItemPlaceholder;
-			}
+			// Update the grDetails grid to use the currently selected vehicle data
+			SetDataContextWithoutTriggeringEvent(dgVehicleDetails.SelectedItem);
 		}
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e) {
-			grDetails.Visibility = Visibility.Visible;
-			grDetails.DataContext = CollectionView.NewItemPlaceholder;
-			btnSave.IsEnabled = true;
+			grDetailsInputs.Visibility = Visibility.Visible;
+			SetDataContextWithoutTriggeringEvent(CollectionView.NewItemPlaceholder);
+			btnSave.IsEnabled = false;
 			btnEdit.IsEnabled = false;
+			_isEditing = false;
 		}
 
 		private void btnEdit_Click(object sender, RoutedEventArgs e) {
-			grDetails.Visibility = Visibility.Visible;
-			grDetails.DataContext = grVehicleDetails.SelectedItem;
+			grDetailsInputs.Visibility = Visibility.Visible;
+			SetDataContextWithoutTriggeringEvent(dgVehicleDetails.SelectedItem);
 			btnSave.IsEnabled = false;
 			btnEdit.IsEnabled = false;
 			btnAdd.IsEnabled = false;
+			_isEditing = true;
 		}
 
 		private void btnDelete_Click(object sender, RoutedEventArgs e) {
 			try {
-				Vehicle vehicle = (Vehicle) grVehicleDetails.SelectedItem;
+				Vehicle vehicle = (Vehicle) dgVehicleDetails.SelectedItem;
 				Vehicle? contextVehicle = _context.Vehicles.FirstOrDefault(v => v.Id == vehicle.Id);
 
 				if (contextVehicle != null) {
 					contextVehicle.Deleted = DateTime.Now;
 					_context.SaveChanges();
+
 					// Reset the selected Vehicle and refresh the DataGrid
-					grVehicleDetails.SelectedItem = CollectionView.NewItemPlaceholder;
+					dgVehicleDetails.SelectedItem = CollectionView.NewItemPlaceholder;
+					UpdateDataGrid();
 				}
-				UpdateDgVehicles();
 			} catch (Exception errorInfo) {
 				Console.WriteLine("Fout bij verwijderen voertuig; " + errorInfo.Message);
-				UpdateDgVehicles();
+				UpdateDataGrid();
 			}
 		}
 
@@ -160,27 +163,16 @@ namespace WPFAPP {
 			// Clear previous errors
 			spError.Children.Clear();
 
-			// Validate inputs
-			foreach (Control field in vehicleRequirements.Keys) {
-				// Check if the value is empty
-				bool isEmpty = true;
-				switch (field) {
-					case TextBox textBox:
-						isEmpty = textBox.Text.Length == 0;
-						break;
-					case ComboBox comboBox:
-						isEmpty = comboBox.SelectedIndex == -1;
-						break;
-					default:
-						break;
-				}
+			// Validate inputs and show errors
+			MainWindow.ValidateInputs(out List<Control> errors, in inputRequirements);
 
+			foreach (Control field in inputRequirements.Keys) {
 				field.ClearValue(Border.BorderBrushProperty);
 
-				// If empty, add error
-				if (isEmpty) {
+				// If invalid, add error
+				if (errors.Contains(field)) {
 					field.BorderBrush = Brushes.Red;
-					spError.Children.Add(new TextBlock { Text = $"{vehicleRequirements[field]} is vereist" });
+					spError.Children.Add(new TextBlock { Text = $"{inputRequirements[field]} is vereist" });
 				}
 			}
 
@@ -190,30 +182,44 @@ namespace WPFAPP {
 			}
 
 			try {
-				// Attempt to create a new vehicle
-				Vehicle vehicle = new() {
-					LicencePlate = tbLicencePlate.Text,
-					VehicleType = (VehicleType) cbVehicleTypes.SelectedItem,
-					Brand = tbBrand.Text,
-					Model = tbModel.Text,
-					LoadCapacity = double.Parse(tbLoadCapacity.Text),
-					WeightCapacity = double.Parse(tbWeightCapacity.Text),
-					FuelType = (FuelType) cbFuelTypes.SelectedItem,
-				};
+				Vehicle vehicle;
+				if (_isEditing) {
+					// Attempt to update the vehicle info
+					vehicle = _context.Vehicles.First(app => app.Id == ((Vehicle) grDetailsInputs.DataContext).Id);
 
-				// Save to database
-				_context.Vehicles.Add(vehicle);
+					vehicle.LicencePlate = tbLicencePlate.Text;
+					vehicle.VehicleType = (VehicleType) cbVehicleType.SelectedItem;
+					vehicle.Brand = tbBrand.Text;
+					vehicle.Model = tbModel.Text;
+					vehicle.LoadCapacity = double.Parse(tbLoadCapacity.Text);
+					vehicle.WeightCapacity = double.Parse(tbWeightCapacity.Text);
+					vehicle.FuelType = (FuelType) cbFuelType.SelectedItem;
+					_context.Vehicles.Update(vehicle);
+					_isEditing = false;
+				} else {
+					// Attempt to create a new vehicle instance
+					vehicle = new() {
+						LicencePlate = tbLicencePlate.Text,
+						VehicleType = (VehicleType) cbVehicleType.SelectedItem,
+						Brand = tbBrand.Text,
+						Model = tbModel.Text,
+						LoadCapacity = double.Parse(tbLoadCapacity.Text),
+						WeightCapacity = double.Parse(tbWeightCapacity.Text),
+						FuelType = (FuelType) cbFuelType.SelectedItem,
+					};
+
+					// Save to database
+					_context.Vehicles.Add(vehicle);
+				}
 				_context.SaveChanges();
-				grDetails.Visibility = Visibility.Collapsed;
+				grDetailsInputs.Visibility = Visibility.Collapsed;
 
 				// Show success message
 				MessageBox.Show("Voertuig succesvol aangemaakt.");
 
-				// Select the newly created vehicle and refresh the DataGrid
-				grVehicleDetails.SelectedItem = vehicle;
-				UpdateVehicleComboBox();
-				UpdateDgVehicles();
-
+				// Select the vehicle and refresh the DataGrid
+				UpdateDataGrid();
+				dgVehicleDetails.SelectedItem = vehicle;
 			} catch (Exception ex) {
 				MessageBox.Show(
 					 $"Error: {ex.Message}\n" +
@@ -227,20 +233,15 @@ namespace WPFAPP {
 
 		// Handler to show save button when all details are changed
 		private void grDetails_InfoChanged(object sender, EventArgs e) {
-			if (tbBrand.Text != null &&
-				tbModel.Text != null &&
-				tbLicencePlate != null &&
-				tbLoadCapacity != null &&
-				tbWeightCapacity != null) {
-				btnEdit.IsEnabled = true;
-			} else {
-				btnEdit.IsEnabled = false;
+			if (_isSettingDataContext) {
+				return;
 			}
+			btnSave.IsEnabled = MainWindow.ValidateInputs(out _, in inputRequirements);
 		}
 
-		public void UpdateDgVehicles() {
-			grVehicleDetails.ItemsSource = _context.Vehicles
-				.Where(v => v.Deleted > DateTime.Now)
+		public void UpdateDataGrid() {
+			dgVehicleDetails.ItemsSource = _context.Vehicles
+				.Where(v => v.Deleted >= DateTime.Now)
 				.OrderBy(v => v.VehicleType)
 				.ToList();
 
@@ -258,7 +259,7 @@ namespace WPFAPP {
 					contextVehicle.EmployeeId = contextEmployee.Id;
 					contextEmployee.VehicleId = contextVehicle.Id;
 					_context.SaveChanges();
-					UpdateDgVehicles();
+					UpdateDataGrid();
 					GetEmployees();
 				}
 			}
@@ -278,9 +279,9 @@ namespace WPFAPP {
 				btnAssign.IsEnabled = true;
 			}
 			lblCurentVehicle.Content = _context.Vehicles
-					.Where(v => v.Id == ((AgendaUser)cmbEmployees.SelectedItem).VehicleId)
-					.Select(v => v.LicencePlate)
-					.FirstOrDefault() ?? "Geen voertuig toegewezen";
+				.Where(v => v.Id == ((AgendaUser) cmbEmployees.SelectedItem).VehicleId)
+				.Select(v => v.LicencePlate)
+				.FirstOrDefault() ?? "Geen voertuig toegewezen";
 		}
 
 		public void UpdateVehicleComboBox() {
@@ -298,20 +299,21 @@ namespace WPFAPP {
 			//}
 		}
 
-		public async void GetEmployees() {
+		public void GetEmployees() {
 			cmbEmployees.ItemsSource = _context.UserRoles
-									.Where(u => u.RoleId == "Employee")
-									.Select(ur => ur.UserId)
-									.Join(_context.Users,
-											userRoleId => userRoleId,
-											user => user.Id,
-											(userRoleId, user) => user)
-									.ToList();
+				.Where(u => u.RoleId == "Employee")
+				.Select(ur => ur.UserId)
+				.Join(_context.Users,
+					userRoleId => userRoleId,
+					user => user.Id,
+					(userRoleId, user) => user)
+				.ToList();
 		}
 
-		private void grVehicleDetails_MouseDoubleClick_1(object sender, MouseButtonEventArgs e)
-		{
-
+		private void SetDataContextWithoutTriggeringEvent(object item) {
+			_isSettingDataContext = true;
+			grDetailsInputs.DataContext = item;
+			_isSettingDataContext = false;
 		}
 	}
 }

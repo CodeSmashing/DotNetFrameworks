@@ -16,7 +16,7 @@ namespace WPFAPP {
 
 			// Instantiate controls and their containers
 			roleControl = new(_context, _userManager);
-			vehicleControl = new(_context, _userManager);
+			vehicleControl = new(_context);
 			tciUsersTab.Content = roleControl;
 			tciVehicleAssignmentTab.Content = vehicleControl;
 		}
