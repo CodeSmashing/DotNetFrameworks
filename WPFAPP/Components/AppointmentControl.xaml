@@ -50,111 +50,137 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<StackPanel
-			Style="{StaticResource ControlContainer}"
-			CanHorizontallyScroll="True"
-			Grid.Row="2">
-			<Button
-				x:Name="btnAdd"
-				Content="Toevoegen"
-				IsEnabled="False"
-				Click="btnAdd_Click"/>
-			<Button
-				x:Name="btnEdit"
-				Content="Wijzigen"
-				IsEnabled="False"
-				Click="btnEdit_Click"/>
-			<Button
-				x:Name="btnDelete"
-				Content="Verwijderen"
-				IsEnabled="False"
-				Click="btnDelete_Click"/>
-			<Button
-				x:Name="btnSave"
-				Content="Opslaan"
-				IsEnabled="False"
-				Click="btnSave_Click"/>
-		</StackPanel>
-
 		<Grid
 			x:Name="grDetails"
-			Visibility="Collapsed"
-			Grid.Row="3">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>
+			Grid.Row="2">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<Label
-				Content="Wanneer:"
-				Grid.Row="0"
-				Grid.Column="0"/>
-			<DatePicker
-				x:Name="dpDate"
-				Grid.Row="0"
-				Grid.Column="1"
-				SelectedDate="{Binding Date, Mode=TwoWay}"
-				SelectedDateChanged="grDetails_InfoChanged"/>
+			<StackPanel
+				x:Name="spDetailsControls"
+				HorizontalAlignment="Center"
+				Orientation="Horizontal"
+				Margin="5"
+				Grid.Row="0">
+				<Button
+					x:Name="btnAdd"
+					Content="Toevoegen"
+					IsEnabled="False"
+					Click="btnAdd_Click"/>
+				<Button
+					x:Name="btnEdit"
+					Content="Wijzigen"
+					IsEnabled="False"
+					Click="btnEdit_Click"/>
+				<Button
+					x:Name="btnDelete"
+					Content="Verwijderen"
+					IsEnabled="False"
+					Click="btnDelete_Click" />
+				<Button
+					x:Name="btnSave"
+					Content="Opslaan"
+					IsEnabled="False"
+					Click="btnSave_Click"/>
+			</StackPanel>
 
-			<Label
-				Content="Titel:" 
+			<Grid
+				x:Name="grDetailsInputs"
+				Margin="0"
 				Grid.Row="1"
-				Grid.Column="0" />
-			<TextBox
-				x:Name="tbTitle"
-				Grid.Row="1"
-				Grid.Column="1"
-				Text="{Binding Title, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged" />
+				HorizontalAlignment="Center"
+				Visibility="Collapsed">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
 
-			<Label
-				Content="Type Afspraak:" 
-				Grid.Row="2"
-				Grid.Column="0"/>
-			<ComboBox
-				x:Name="cbTypes"
-				Grid.Row="2"
-				Grid.Column="1"
-				SelectedItem="{Binding AppointmentType, Mode=TwoWay}"
-				SelectionChanged="grDetails_InfoChanged">
-				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel>
-							<TextBlock
-								Text="{Binding Name}"
-								FontWeight="Bold"
-								HorizontalAlignment="Left"
-								Margin="0"
-								Padding="0" />
-							<TextBlock
-								Text="{Binding Description}"
-								FontStyle="Italic"
-								Margin="0,0,0,10"
-								Padding="0" />
-						</StackPanel>
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
+				<Label
+					Content="Wanneer:"
+					Grid.Row="0"
+					Grid.Column="0"/>
+				<DatePicker
+					x:Name="dpDate"
+					Grid.Row="0"
+					Grid.Column="1"
+					SelectedDate="{Binding Date, Mode=TwoWay}"
+					SelectedDateChanged="grDetails_InfoChanged"/>
 
-			<Label
-				Content="Extra Informatie:" 
-				Grid.Row="3"
-				Grid.Column="0" />
-			<TextBox
-				x:Name="tbDescription"
-				Grid.Row="3"
-				Grid.Column="1"
-				VerticalScrollBarVisibility="Auto"
-				Height="Auto"
-				Text="{Binding Description, Mode=TwoWay}"
-				TextChanged="grDetails_InfoChanged"
-				AcceptsReturn="True" />
+				<Label
+					Content="Titel:" 
+					Grid.Row="1"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbTitle"
+					Grid.Row="1"
+					Grid.Column="1"
+					Text="{Binding Title, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"/>
+
+				<Label
+					Content="Type Afspraak:" 
+					Grid.Row="2"
+					Grid.Column="0"/>
+				<ComboBox
+					Style="{StaticResource ComboBoxWide}"
+					x:Name="cbTypes"
+					Grid.Row="2"
+					Grid.Column="1"
+					SelectedItem="{Binding AppointmentType, Mode=TwoWay}"
+					SelectionChanged="grDetails_InfoChanged">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel>
+								<TextBlock
+									Text="{Binding Name}"
+									FontWeight="Bold"
+									HorizontalAlignment="Left"
+									Margin="0"
+									Padding="0"/>
+								<TextBlock
+									Text="{Binding Description}"
+									FontStyle="Italic"
+									Margin="0,0,0,10"
+									Padding="0"/>
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+
+				<Label
+					Content="Beschrijving:" 
+					Grid.Row="3"
+					Grid.Column="0"/>
+				<TextBox
+					Style="{StaticResource TextBoxWide}"
+					x:Name="tbDescription"
+					Grid.Row="3"
+					Grid.Column="1"
+					VerticalScrollBarVisibility="Auto"
+					Height="Auto"
+					Text="{Binding Description, Mode=TwoWay}"
+					TextChanged="grDetails_InfoChanged"
+					AcceptsReturn="True"/>
+
+				<StackPanel
+					x:Name="spError"
+					Grid.Row="4"
+					Grid.ColumnSpan="2"/>
+			</Grid>
 		</Grid>
 		<local:VehicleSelector/>
 	</Grid>
