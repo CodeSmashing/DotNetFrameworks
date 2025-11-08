@@ -3,13 +3,39 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- Define variables -->
-	<SolidColorBrush x:Key="PrimaryTextColor" Color="DarkSlateGray"/>
+	<!-- Padding/Margin -->
 	<Thickness x:Key="StandardPadding">5,3,5,3</Thickness>
 	<Thickness x:Key="StandardMargin">7,5,7,5</Thickness>
+
+	<!-- Font -->
 	<FontFamily x:Key="PrimaryFont">Segoe UI</FontFamily>
 	<system:Double x:Key="PrimaryFontSize">12</system:Double>
+
+	<!-- Size -->
 	<system:Double x:Key="InteractiveWidthMedium">120</system:Double>
 	<system:Double x:Key="InteractiveHeightMedium">28</system:Double>
 	<system:Double x:Key="InteractiveHeightLarge">42</system:Double>
+
+	<!-- Border -->
+	<Thickness x:Key="BorderThickness">1.5</Thickness>
+	<CornerRadius x:Key="CornerRadius">3</CornerRadius>
+
+	<!-- Primary color pallet -->
+	<SolidColorBrush x:Key="BackgroundLight" Color="WhiteSmoke"/>
+	<SolidColorBrush x:Key="Background" Color="Gainsboro"/>
+	<SolidColorBrush x:Key="BackgroundDark" Color="LightGray"/>
+
+	<!-- Text color pallet -->
+	<SolidColorBrush x:Key="Foreground" Color="DimGray"/>
+	<SolidColorBrush x:Key="ForegroundMuted" Color="DarkGray"/>
+
+	<!-- State color pallet -->
+	<SolidColorBrush x:Key="HoverForeground" Color="Black"/>
+	<SolidColorBrush x:Key="HoverBackground" Color="Silver"/>
+	<SolidColorBrush x:Key="DisabledBackground" Color="Gray"/>
+	<SolidColorBrush x:Key="DisabledHoverBackground" Color="DimGray"/>
+	<SolidColorBrush x:Key="DisabledForeground" Color="Black"/>
+
+	<!-- Other colors -->
+	<SolidColorBrush x:Key="BorderBrush" Color="DimGray"/>
 </ResourceDictionary>
