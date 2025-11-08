@@ -118,7 +118,7 @@ namespace Models {
 				new() {
 					LicencePlate = "3-XYZ-987",
 					VehicleType = VehicleType.Pickup,
-					ImageUrl = "https://www.ford.ca/cmslibs/content/dam/na/ford/en_ca/images/f-150/2025/jellybeans/F150_Jelly_Tremor1.png",
+					ImageUrl = "https://evoximages.com/wp-content/uploads/2021/12/Ford-F-150-High-Quality-Car-Automotive-Stock-Photos-Images.png",
 					Brand = "Ford",
 					Model = "F-150",
 					LoadCapacity = 13600.0,
@@ -146,7 +146,7 @@ namespace Models {
 				new() {
 					LicencePlate = "7-GHI-789",
 					VehicleType = VehicleType.Truck,
-					ImageUrl = "https://www.basworld.com/_next/image?url=https%3A%2F%2Fstatic.basworld.com%2Fphotos%2Fvehicle%2Fworld%2F1080%2Fused-Trekker-MAN-TGS-18.510-4X4-2020_336024_B9bQ6mgo6rZmI4xk69I7g6rF4HoGRxrUNPQL.jpg&w=1080&q=75",
+					ImageUrl = "https://media.istockphoto.com/id/1165674057/photo/man-tgs.jpg?s=1024x1024&w=is&k=20&c=MNB76hjjYbWT3MfMno3y4kfGkr2bqacBhrVJVjeMVkA=",
 					Brand = "MAN",
 					Model = "TGS",
 					LoadCapacity = 28000.0,

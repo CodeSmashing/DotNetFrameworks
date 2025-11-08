@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -49,6 +50,50 @@ namespace WPFAPP {
 		private void grVehicleDetails_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			// Existing index-based logic removed in favour of clearer helper
 			UpdateUIButtons();
+		}
+
+		private void grVehicleDetails_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (grVehicleDetails.SelectedItem is Vehicle selectedVehicle)
+			{
+				try
+				{
+					// Juiste voertuig ophalen + validatie
+					Vehicle? vehicle = _context.Vehicles.FirstOrDefault(v => v.Id == selectedVehicle.Id);
+					if (vehicle == null)
+					{
+						MessageBox.Show("Voertuig niet gevonden.", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+						return;
+					}
+
+					// Ophalen toegewezen gebruikers
+					var assignedUsers = _context.Users
+						.Where(u => u.VehicleId == vehicle.Id)
+						.ToList();
+					// Controleren of er gebruikers zijn toegewezen
+					if (assignedUsers == null || assignedUsers.Count == 0)
+					{
+						MessageBox.Show("Geen gebruikers toegewezen aan dit voertuig.", "Voertuig - toegewezen gebruikers", MessageBoxButton.OK, MessageBoxImage.Information);
+						return;
+					}
+
+					// Tonen van toegewezen gebruikers
+					var sb = new StringBuilder();
+					foreach (var user in assignedUsers)
+					{
+						string name = !string.IsNullOrWhiteSpace(user.DisplayName)
+							? user.DisplayName
+							: $"{user.FirstName} {user.LastName}".Trim();
+						sb.AppendLine($"{name} ({user.Email})");
+					}
+
+					MessageBox.Show(sb.ToString(), $"Gebruikers toegewezen aan {vehicle.LicencePlate}", MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show($"Fout bij ophalen toegewezen gebruikers: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
 		}
 
 		public void UpdateUIButtons() {
@@ -262,6 +307,11 @@ namespace WPFAPP {
 											user => user.Id,
 											(userRoleId, user) => user)
 									.ToList();
+		}
+
+		private void grVehicleDetails_MouseDoubleClick_1(object sender, MouseButtonEventArgs e)
+		{
+
 		}
 	}
 }

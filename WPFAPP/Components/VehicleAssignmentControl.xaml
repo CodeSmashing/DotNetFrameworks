@@ -115,6 +115,7 @@
 				HorizontalAlignment="Center"
 				SelectionMode="Single"
 				SelectionChanged="grVehicleDetails_SelectionChanged"
+				MouseDoubleClick="grVehicleDetails_MouseDoubleClick"
 				Margin="10px"
 				AutoGenerateColumns="False">
 
