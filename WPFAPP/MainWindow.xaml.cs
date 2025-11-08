@@ -20,6 +20,11 @@ namespace WPFAPP {
 			_userManager = userManager;
 			InitializeComponent();
 
+			// Subscribe to app user change event
+			App.User = _context.Users.First(u => u.Email == "admin.bob@GardenDb.org");
+			DisplayUI(this, new PropertyChangedEventArgs("Admin"));
+
+
 			// Instantiate controls and their containers
 			loginControl = new(_context, _userManager);
 			registerControl = new(_context, _userManager);
@@ -43,7 +48,7 @@ namespace WPFAPP {
 			App.UserChanged += DisplayUI;
 
 			// Initially show the guest UI
-			DisplayUI(this, new PropertyChangedEventArgs(string.Empty));
+			//DisplayUI(this, new PropertyChangedEventArgs(string.Empty));
 		}
 
 		private void SwapControlsHandler(object? sender, EventArgs e) {

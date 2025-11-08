@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
@@ -11,9 +12,11 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(AgendaDbContext))]
-    partial class AgendaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251102115537_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,6 +245,10 @@ namespace Models.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("VehicleId")
+                        .IsUnique()
+                        .HasFilter("[VehicleId] IS NOT NULL");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -364,11 +371,8 @@ namespace Models.Migrations
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("FuelType")
                         .HasColumnType("int");
@@ -403,8 +407,6 @@ namespace Models.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId1");
 
                     b.ToTable("Vehicles");
                 });
@@ -460,6 +462,13 @@ namespace Models.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.AgendaUser", b =>
+                {
+                    b.HasOne("Models.Vehicle", null)
+                        .WithOne("Employee")
+                        .HasForeignKey("Models.AgendaUser", "VehicleId");
+                });
+
             modelBuilder.Entity("Models.Appointment", b =>
                 {
                     b.HasOne("Models.AgendaUser", "AgendaUser")
@@ -481,10 +490,6 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Vehicle", b =>
                 {
-                    b.HasOne("Models.AgendaUser", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId1");
-
                     b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.WebRequestMethods;
 
 namespace WPFAPP {
 	public partial class VehicleAssignmentControl : UserControl {
@@ -114,7 +116,7 @@ namespace WPFAPP {
 				vehicle.Deleted = DateTime.MaxValue;
 				vehicle.ImageUrl = "https://teja9.kuikr.com/images/car/default-cars.jpeg";
 				vehicle.IsInUse = false;
-				vehicle.EmployeeId = 0;
+				vehicle.EmployeeId = null;
 
 
 
@@ -125,7 +127,9 @@ namespace WPFAPP {
 
 				// Select the newly created vehicle and refresh the DataGrid
 				grVehicleDetails.SelectedItem = vehicle;
+				UpdateVehicleComboBox();
 				UpdateDgVehicles();
+
 			} catch (Exception ex) {
 				MessageBox.Show(
 					 $"Error: {ex.Message}\n" +
@@ -156,20 +160,58 @@ namespace WPFAPP {
 				.OrderBy(v => v.VehicleType)
 				.ToList();
 
-			UpdateVehicleImages();
+			UpdateVehicleComboBox();
 			// After reloading the items, update the button visibility
 			UpdateUIButtons();
 		}
 
-		public void UpdateVehicleImages() {
-			List<Vehicle> vehicles = _context.Vehicles.Where(v => v.Deleted > DateTime.Now).ToList();
-
-			foreach (var vehicle in vehicles) {
-				Image newimg = new Image();
-				newimg.Source = new BitmapImage(new Uri(vehicle.ImageUrl));
-				cmbVehicles.Items.Add(new ComboBoxItem { Content = newimg, Width = 100, Height = 100 });
-				selectedVehicles.Add(new Tuple<Vehicle, ComboBoxItem>(vehicle, (ComboBoxItem) cmbVehicles.Items[cmbVehicles.Items.Count - 1]));
+		public void btnAssign_Click(object sender, RoutedEventArgs e) {
+			if (cmbVehicles.SelectedItem is Vehicle selectedVehicle && cmbEmployees.SelectedItem is AgendaUser selectedEmployee) {
+				Vehicle? contextVehicle = _context.Vehicles.FirstOrDefault(v => v.Id == selectedVehicle.Id);
+				AgendaUser? contextEmployee = _context.Users.FirstOrDefault(u => u.Id == selectedEmployee.Id);
+				if (contextVehicle != null && contextEmployee != null) {
+					contextVehicle.IsInUse = true;
+					contextVehicle.EmployeeId = contextEmployee.Id;
+					contextEmployee.VehicleId = contextVehicle.Id;
+					_context.SaveChanges();
+					UpdateDgVehicles();
+					GetEmployees();
+				}
 			}
+		}
+
+		public void cmbVehicles_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			imgVehicle.Source = cmbVehicles.SelectedItem is Vehicle selectedVehicle
+				? new BitmapImage(new Uri(selectedVehicle.ImageUrl))
+				: null;
+			if(cmbVehicles.SelectedItem != null && cmbEmployees.SelectedItem != null){
+				btnAssign.IsEnabled = true;
+			}
+		}
+
+		public void cmbEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			if (cmbVehicles.SelectedItem != null && cmbEmployees.SelectedItem != null) {
+				btnAssign.IsEnabled = true;
+			}
+			lblCurentVehicle.Content = _context.Vehicles
+					.Where(v => v.Id == ((AgendaUser)cmbEmployees.SelectedItem).VehicleId)
+					.Select(v => v.LicencePlate)
+					.FirstOrDefault() ?? "Geen voertuig toegewezen";
+		}
+
+		public void UpdateVehicleComboBox() {
+			cmbVehicles.ItemsSource = _context.Vehicles
+				.Where(v => v.Deleted > DateTime.Now)
+				.ToList();
+
+			//List<Vehicle> vehicles = _context.Vehicles.Where(v => v.Deleted > DateTime.Now).ToList();
+
+			//foreach (var vehicle in vehicles) {
+			//	Image newimg = new Image();
+			//	newimg.Source = new BitmapImage(new Uri(vehicle.ImageUrl));
+			//	cmbVehicles.Items.Add(new ComboBoxItem { Content = newimg, Width = 100, Height = 100 });
+			//	selectedVehicles.Add(new Tuple<Vehicle, ComboBoxItem>(vehicle, (ComboBoxItem) cmbVehicles.Items[cmbVehicles.Items.Count - 1]));
+			//}
 		}
 
 		public async void GetEmployees() {
@@ -180,7 +222,6 @@ namespace WPFAPP {
 											userRoleId => userRoleId,
 											user => user.Id,
 											(userRoleId, user) => user)
-											.Where(user => user.VehicleId == null)
 									.ToList();
 		}
 	}

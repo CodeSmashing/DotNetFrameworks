@@ -28,7 +28,15 @@
 				<ComboBox
 					x:Name="cmbEmployees"
 					Width="200"
-					Margin="10,0,0,0"/>
+					Margin="10,0,0,0"
+					SelectionChanged="cmbEmployees_SelectionChanged"/>
+
+				<Label
+					x:Name="lblCurentVehicle"
+					Content="Huidig voertuig: "
+					Width="160"
+					Margin="20,0,0,0"
+					VerticalAlignment="Center"/>
 			</StackPanel>
 
 			<StackPanel
@@ -41,7 +49,48 @@
 				<ComboBox
 					x:Name="cmbVehicles"
 					Width="200"
-					Margin="10,0,0,0"/>
+					Margin="10,0,0,0"
+					SelectionChanged="cmbVehicles_SelectionChanged">
+
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel>
+								<TextBlock
+							Text="{Binding Model}"
+							FontWeight="Bold"
+							Margin="0"
+							Padding="0" />
+								<TextBlock
+							Text="{Binding Brand}"
+							FontStyle="Italic"
+							FontSize="18"
+							Margin="0,0,0,10"
+							Padding="0" />
+								<TextBlock
+							Text="{Binding LicencePlate}"
+							FontStyle="Italic"
+							FontSize="18"
+							Margin="0,0,0,10"
+							Padding="0" />
+								<TextBlock
+							Text="{Binding ImageSource}"
+							Visibility="Hidden"/>
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				<Image
+					x:Name="imgVehicle"
+					Width="169"
+					Height="112"
+					Margin="20,0,0,0"
+					Source="https://teja9.kuikr.com/images/car/default-cars.jpeg"/>
+				<Button
+					x:Name="btnAssign"
+					Content="Wijs toe"
+					Width="169"
+					IsEnabled="False"
+					Click="btnAssign_Click" RenderTransformOrigin="1.479,0.491"/>
 			</StackPanel>
 			<StackPanel>
 				<Label
