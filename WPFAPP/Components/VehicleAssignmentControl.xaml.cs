@@ -256,7 +256,6 @@ namespace WPFAPP {
 				AgendaUser? contextEmployee = _context.Users.FirstOrDefault(u => u.Id == selectedEmployee.Id);
 				if (contextVehicle != null && contextEmployee != null) {
 					contextVehicle.IsInUse = true;
-					contextVehicle.EmployeeId = contextEmployee.Id;
 					contextEmployee.VehicleId = contextVehicle.Id;
 					_context.SaveChanges();
 					UpdateDataGrid();

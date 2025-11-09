@@ -248,9 +248,7 @@ namespace Models.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("VehicleId")
-                        .IsUnique()
-                        .HasFilter("[VehicleId] IS NOT NULL");
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -301,7 +299,7 @@ namespace Models.Migrations
 
                     b.HasIndex("AppointmentTypeId");
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Models.AppointmentType", b =>
@@ -329,7 +327,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypes", (string)null);
+                    b.ToTable("AppointmentTypes");
                 });
 
             modelBuilder.Entity("Models.ToDo", b =>
@@ -343,6 +341,9 @@ namespace Models.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("Ready")
                         .HasColumnType("bit");
 
@@ -352,7 +353,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ToDos", (string)null);
+                    b.ToTable("ToDos");
                 });
 
             modelBuilder.Entity("Models.Vehicle", b =>
@@ -370,9 +371,6 @@ namespace Models.Migrations
 
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("FuelType")
                         .HasColumnType("int");
@@ -407,7 +405,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicles", (string)null);
+                    b.ToTable("Vehicles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -463,9 +461,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.AgendaUser", b =>
                 {
-                    b.HasOne("Models.Vehicle", null)
-                        .WithOne("Employee")
-                        .HasForeignKey("Models.AgendaUser", "VehicleId");
+                    b.HasOne("Models.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("Models.Appointment", b =>
@@ -485,11 +485,6 @@ namespace Models.Migrations
                     b.Navigation("AgendaUser");
 
                     b.Navigation("AppointmentType");
-                });
-
-            modelBuilder.Entity("Models.Vehicle", b =>
-                {
-                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }

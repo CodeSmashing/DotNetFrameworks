@@ -12,8 +12,8 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(AgendaDbContext))]
-    [Migration("20251102125801_idtostring")]
-    partial class idtostring
+    [Migration("20251109122711_MegaMigration")]
+    partial class MegaMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,12 @@ namespace Models.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DisplayName")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -244,6 +250,8 @@ namespace Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -367,17 +375,10 @@ namespace Models.Migrations
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("FuelType")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsInUse")
@@ -406,8 +407,6 @@ namespace Models.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId1");
 
                     b.ToTable("Vehicles");
                 });
@@ -463,6 +462,15 @@ namespace Models.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.AgendaUser", b =>
+                {
+                    b.HasOne("Models.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("Models.Appointment", b =>
                 {
                     b.HasOne("Models.AgendaUser", "AgendaUser")
@@ -480,15 +488,6 @@ namespace Models.Migrations
                     b.Navigation("AgendaUser");
 
                     b.Navigation("AppointmentType");
-                });
-
-            modelBuilder.Entity("Models.Vehicle", b =>
-                {
-                    b.HasOne("Models.AgendaUser", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId1");
-
-                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }

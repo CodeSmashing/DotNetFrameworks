@@ -130,11 +130,7 @@ namespace Models {
 			}
 
 			if (!context.Vehicles.Any()) {
-				context.Vehicles.AddRange(Vehicle.SeedingData(
-					context.Users
-						.Where(u => context.UserRoles
-							.Any(ur => ur.UserId == u.Id && ur.RoleId == "Employee"))
-						.ToList()));
+				context.Vehicles.AddRange(Vehicle.SeedingData());
 				context.SaveChanges();
 			}
 

@@ -83,24 +83,12 @@ namespace Models {
 			get; set;
 		} = false;
 
-		[ForeignKey("AgendaUser")]
-		[Display(Name = "Werknemer ID")]
-		public string? EmployeeId {
-			get; set;
-		}
-
-		[Display(Name = "Werknemer")]
-		public AgendaUser? Employee {
-			get; set;
-		}
-
 		public override string ToString() {
-			return $"Vehicle {Id} (Licence plate: {LicencePlate}) in use by: {Employee?.FirstName} {Employee?.LastName}";
+			return $"Vehicle {Id} (Licence plate: {LicencePlate})";
 		}
 
 		// Seeding data
-		public static List<Vehicle> SeedingData(List<AgendaUser> listEmployees) {
-			Random rnd = new Random();
+		public static List<Vehicle> SeedingData() {
 			return new() {
 				new() {
 					LicencePlate = "0-ABC-123",
@@ -126,7 +114,6 @@ namespace Models {
 					FuelType = FuelType.Benzine,
 					IsManuel = false,
 					IsInUse = true,
-					EmployeeId = listEmployees[rnd.Next(listEmployees.Count)].Id,
 					Deleted = DateTime.MaxValue
 				},
 				new() {
@@ -140,7 +127,6 @@ namespace Models {
 					FuelType = FuelType.Benzine,
 					IsManuel = true,
 					IsInUse = true,
-					EmployeeId = listEmployees[rnd.Next(listEmployees.Count)].Id,
 					Deleted = DateTime.MaxValue
 				},
 				new() {
@@ -154,7 +140,6 @@ namespace Models {
 					FuelType = FuelType.Diesel,
 					IsManuel = true,
 					IsInUse = true,
-					EmployeeId = listEmployees[rnd.Next(listEmployees.Count)].Id,
 					Deleted = DateTime.MaxValue
 				},
 				new() {

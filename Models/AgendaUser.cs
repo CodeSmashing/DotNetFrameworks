@@ -39,6 +39,11 @@ namespace Models {
 			get; set;
 		}
 
+		[Display(Name = "Voertuig")]
+		public Vehicle? Vehicle {
+			get; set;
+		}
+
 		[Required(ErrorMessage = "{0} is vereist")]
 		[EmailAddress]
 		[Display(Name = "Email")]
