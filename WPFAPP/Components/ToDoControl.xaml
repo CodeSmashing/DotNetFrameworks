@@ -1,23 +1,12 @@
-﻿<UserControl x:Class="WPFAPP.AdminPanelControl"
+﻿<UserControl x:Class="WPFAPP.ToDoControl"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				xmlns:local="clr-namespace:WPFAPP"
-				mc:Ignorable="d"
+				mc:Ignorable="d" 
 				Style="{StaticResource BaseUserControl}">
-	<Border>
-		<TabControl
-			x:Name="tcAdminNavigation">
-			<TabItem
-				x:Name="tciVehicleAssignmentTab"
-				Header="Voertuigtoewijzing"/>
-			<TabItem
-				x:Name="tciUsersTab"
-				Header="Gebruikers"/>
-			<TabItem
-				x:Name="tciToDosTab"
-				Header="Te doen"/>
-		</TabControl>
-	</Border>
+	 <Grid>
+		
+	 </Grid>
 </UserControl>

@@ -8,6 +8,7 @@ namespace WPFAPP {
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly RoleControl roleControl;
 		private readonly VehicleAssignmentControl vehicleControl;
+		private readonly ToDoControl toDoControl;
 
 		public AdminPanelControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
@@ -17,8 +18,10 @@ namespace WPFAPP {
 			// Instantiate controls and their containers
 			roleControl = new(_context, _userManager);
 			vehicleControl = new(_context);
+			toDoControl = new(_context);
 			tciUsersTab.Content = roleControl;
 			tciVehicleAssignmentTab.Content = vehicleControl;
+			tciToDosTab.Content = toDoControl;
 		}
 
 		private void grDetails_InfoChanged(object sender, SelectionChangedEventArgs e) {
