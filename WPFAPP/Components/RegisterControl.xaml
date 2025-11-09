@@ -88,7 +88,7 @@
 			Grid.Column="0"/>
 		<PasswordBox
 			Style="{StaticResource PasswordBoxWide}"
-			x:Name="pbConfirmPassword"
+			x:Name="pbPasswordConfirm"
 			Grid.Row="6"
 			Grid.Column="2"/>
 

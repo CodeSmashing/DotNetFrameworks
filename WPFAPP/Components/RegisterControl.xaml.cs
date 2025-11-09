@@ -25,7 +25,7 @@ namespace WPFAPP {
 			registerRequirements[tbLastName] = "Achternaam";
 			registerRequirements[tbEmail] = "Email";
 			registerRequirements[pbPassword] = "Wachtwoord";
-			registerRequirements[pbConfirmPassword] = "Wachtwoord bevestiging";
+			registerRequirements[pbPasswordConfirm] = "Wachtwoord bevestiging";
 		}
 
 		private void btnRegister_Click(object sender, RoutedEventArgs e) {
@@ -44,8 +44,8 @@ namespace WPFAPP {
 						isEmpty = passwordBox.Password.Length == 0;
 
 						// Special case: Check if passwords match
-						if (!passwordBox.Equals(pbConfirmPassword)) {
-							if (!pbConfirmPassword.Password.Equals(passwordBox.Password)) {
+						if (!passwordBox.Equals(pbPasswordConfirm)) {
+							if (!pbPasswordConfirm.Password.Equals(passwordBox.Password)) {
 								field.BorderBrush = Brushes.Red;
 								spError.Children.Add(new TextBlock { Text = "Wachtwoord bevestiging is niet gelijk aan het paswoord" });
 							}
