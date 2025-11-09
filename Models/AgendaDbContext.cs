@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Models {
@@ -36,6 +38,24 @@ namespace Models {
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			// Define the connection string to the database
 			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
+
+			if (!optionsBuilder.IsConfigured) {
+				try {
+					var config = new ConfigurationBuilder()
+						.SetBasePath(AppContext.BaseDirectory)  // The directory of the Model library, not the executing project
+						.AddJsonFile("appsettings.json", optional: true) // Get the connection string from the Json-file
+						.AddUserSecrets<AgendaDbContext>(optional: true) // Add the User Secrets
+						.AddEnvironmentVariables()
+						.Build();
+					string? con = config.GetConnectionString("ServerConnection");
+
+					if (!con.IsNullOrEmpty())
+						connectionString = con;
+				} catch {
+					throw;
+				}
+			}
+
 			optionsBuilder.UseSqlServer(connectionString, options => {
 				options.EnableRetryOnFailure(
 					 maxRetryCount: 3,
