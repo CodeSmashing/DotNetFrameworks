@@ -10,13 +10,14 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="50px"/>
+			<RowDefinition Height="20"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="50px"/>
+			<RowDefinition Height="20"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
+		<!-- Title -->
 		<TextBlock
 			Style="{StaticResource TitleH3}"
 			Text="Werknemer toevoegen aan voertuig"
@@ -64,25 +65,25 @@
 						<DataTemplate>
 							<StackPanel>
 								<TextBlock
-							Text="{Binding Model}"
-							FontWeight="Bold"
-							Margin="0"
-							Padding="0" />
+									Text="{Binding Model}"
+									FontWeight="Bold"
+									Margin="0"
+									Padding="0"/>
 								<TextBlock
-							Text="{Binding Brand}"
-							FontStyle="Italic"
-							FontSize="18"
-							Margin="0,0,0,10"
-							Padding="0" />
+									Text="{Binding Brand}"
+									FontStyle="Italic"
+									FontSize="18"
+									Margin="0,0,0,10"
+									Padding="0"/>
 								<TextBlock
-							Text="{Binding LicencePlate}"
-							FontStyle="Italic"
-							FontSize="18"
-							Margin="0,0,0,10"
-							Padding="0" />
+									Text="{Binding LicencePlate}"
+									FontStyle="Italic"
+									FontSize="18"
+									Margin="0,0,0,10"
+									Padding="0"/>
 								<TextBlock
-							Text="{Binding ImageSource}"
-							Visibility="Hidden"/>
+									Text="{Binding ImageSource}"
+									Visibility="Hidden"/>
 							</StackPanel>
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
@@ -102,11 +103,13 @@
 			</StackPanel>
 		</StackPanel>
 
+		<!-- Title -->
 		<TextBlock
 			Style="{StaticResource TitleH3}"
 			Text="Voertuigen overzicht"
 			Grid.Row="3"/>
 
+		<!-- Pick the vehicle to edit the values of -->
 		<DataGrid
 			x:Name="dgVehicleDetails"
 			Height="Auto"
@@ -120,7 +123,6 @@
 			Margin="10px"
 			AutoGenerateColumns="False"
 			Grid.Row="4">
-
 			<DataGrid.Columns>
 				<DataGridTextColumn
 					Header="Type"
@@ -166,6 +168,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
+		<!-- Grid to display and edit the selected vehicle info -->
 		<Grid
 			x:Name="grDetails"
 			Grid.Row="6">

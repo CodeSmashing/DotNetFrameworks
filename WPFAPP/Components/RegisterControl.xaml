@@ -24,6 +24,7 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
+		<!-- Title -->
 		<TextBlock
 			Style="{StaticResource TitleH1}"
 			Text="Register"

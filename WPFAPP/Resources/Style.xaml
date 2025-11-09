@@ -731,8 +731,6 @@
 					</Style.Triggers>
 
 					<Setter Property="Background" Value="{DynamicResource Background}"/>
-
-					<!-- Padding -->
 					<Setter Property="Padding" Value="4,3,4,3" />
 					<Setter Property="BorderBrush" Value="Transparent"/>
 					<Setter Property="BorderThickness" Value="1"/>
@@ -862,6 +860,13 @@
 				<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 			</Style>
 		</Style.Resources>
+	</Style>
+
+	<!-- GridDetails -->
+	<Style
+		x:Key="GridDetails"
+		TargetType="Grid">
+		<Setter Property="Margin" Value="{DynamicResource StandardMargin}"/>
 	</Style>
 
 	<!-- WindowContainer -->

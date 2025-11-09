@@ -10,25 +10,18 @@
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="20"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<TextBlock
-			Text="Role Management"
-			Style="{StaticResource TitleH3}"
-			Grid.Row="0"
-			Grid.ColumnSpan="2"/>
 
 		<!-- Filter for a specific user -->
 		<Grid
 			Style="{StaticResource SearchFilterPanel}"
-			Grid.Row="1"
+			Grid.Row="0"
 			Grid.Column="0">
 			<TextBox
 				x:Name="tbFilterUser"
@@ -39,10 +32,10 @@
 				IsHitTestVisible="False"/>
 		</Grid>
 
-		<!-- Filter for a specific Role -->
+		<!-- Filter for a specific role -->
 		<Grid
 			Style="{StaticResource SearchFilterPanel}"
-			Grid.Row="1"
+			Grid.Row="0"
 			Grid.Column="1">
 			<TextBox
 				x:Name="tbFilterRole"
@@ -58,32 +51,33 @@
 			x:Name="dgUsers"
 			SelectionMode="Single"
 			SelectionChanged="dgUsers_SelectionChanged"
-			Grid.Row="2"
+			Grid.Row="1"
 			Grid.ColumnSpan="2">
 			<DataGrid.Columns>
 				<DataGridTextColumn
 					Header="Id"
 					Binding="{Binding Id}"
-					MaxWidth="100"/>
+					MaxWidth="100"
+					Width="*"/>
 
 				<DataGridTextColumn
 					Header="Voornaam"
 					Binding="{Binding FirstName}"
-					Width="Auto"/>
+					Width="*"/>
 
 				<DataGridTextColumn
 					Header="Achternaam"
 					Binding="{Binding LastName}"
-					Width="Auto"/>
+					Width="*"/>
 
 				<DataGridTextColumn
 					Header="Weergavenaam"
 					Binding="{Binding DisplayName}"
-					Width="Auto"/>
+					Width="*"/>
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<!-- ListBox to load the current roles of the user -->
+		<!-- ListBox to display and select roles -->
 		<ListBox
 			x:Name="lbRoles"
 			SelectionMode="Multiple"

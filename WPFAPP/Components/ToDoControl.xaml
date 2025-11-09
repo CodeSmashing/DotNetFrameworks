@@ -6,125 +6,126 @@
 				xmlns:local="clr-namespace:WPFAPP"
 				mc:Ignorable="d" 
 				Style="{StaticResource BaseUserControl}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-        <TextBlock
-		Style="{StaticResource TitleH1}"
-		Text="Voeg ToDo toe"
-		Grid.Row="0"
-		Grid.Column="0"
-		Grid.ColumnSpan="2"/>
+		<!-- Title -->
+		<TextBlock
+			Style="{StaticResource TitleH1}"
+			Text="Voeg ToDo toe"
+			Grid.Row="0"
+			Grid.Column="0"
+			Grid.ColumnSpan="2"/>
 
-        <Label
-		Content="Inhoud Todo:"
-		Grid.Row="1"
-		Grid.Column="0"/>
-        <TextBox
-		Style="{StaticResource TextBoxWide}"
-        Width="Auto"
-		x:Name="tbContent"
-		Grid.Row="1"
-		Grid.Column="1"/>
+		<Label
+			Content="Inhoud Todo:"
+			Grid.Row="1"
+			Grid.Column="0"/>
+		<TextBox
+			Style="{StaticResource TextBoxWide}"
+			Width="Auto"
+			x:Name="tbContent"
+			Grid.Row="1"
+			Grid.Column="1"/>
 
-        <Label
-		Content="Selecteer afspraak"
-		Grid.Row="2"
-		Grid.Column="0"/>
-        <DataGrid
+		<Label
+			Content="Selecteer afspraak"
+			Grid.Row="2"
+			Grid.Column="0"/>
+		<DataGrid
 			x:Name="dgAppointments"
 			SelectionMode="Single"
-            SelectionChanged="dgAppointments_SelectionChanged"
+			SelectionChanged="dgAppointments_SelectionChanged"
 			Grid.Row="2"
-            Grid.Column="1">
-            <DataGrid.Columns>
-                <DataGridTextColumn
+			Grid.Column="1">
+			<DataGrid.Columns>
+				<DataGridTextColumn
 					Header="Date"
 					Binding="{Binding Date}"/>
 
-                <DataGridTextColumn
+				<DataGridTextColumn
 					Header="Appointment"
 					Binding="{Binding Title}"
 					Width="200"/>
 
-                <DataGridTextColumn
+				<DataGridTextColumn
 					Header="Description"
 					Binding="{Binding Description}"
 					Width="300"/>
 
-                <DataGridTextColumn
+				<DataGridTextColumn
 					Header="Type"
 					Binding="{Binding AppointmentType.Name}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+			</DataGrid.Columns>
+		</DataGrid>
 
+		<Button
+			x:Name="btnAssign"
+			Content="Voeg toe"
+			Grid.Row="3"
+			Grid.Column="2"
+			Style="{StaticResource ButtonCentered}"
+			Click="btnAssign_Click"/>
 
-        <Button
-		x:Name="btnAssign"
-		Content="Voeg toe"
-		Grid.Row="3"
-		Grid.Column="2"
-		Style="{StaticResource ButtonCentered}"
-		Click="btnAssign_Click"/>
+		<Button
+			x:Name="btnRefresh"
+			Content="Refresh"
+			Style="{StaticResource ButtonCentered}"
+			Click="btnRefresh_Click" Margin="0,23,0,24"/>
 
-        <Button
-		x:Name="btnRefresh"
-		Content="Refresh"
-		Style="{StaticResource ButtonCentered}"
-		Click="btnRefresh_Click" Margin="0,23,0,24"/>
+		<!-- Title -->
+		<TextBlock
+			Style="{StaticResource TitleH1}"
+			Text="Todos van geselecteerde afspraak"
+			Grid.Row="4"
+			Grid.Column="0"
+			Grid.ColumnSpan="2"/>
 
-        <TextBlock
-		Style="{StaticResource TitleH1}"
-		Text="Todos van geselecteerde afspraak"
-		Grid.Row="4"
-		Grid.Column="0"
-		Grid.ColumnSpan="2"/>
+		<Button
+			x:Name="btnFinish"
+			Content="Markeer als Klaar"
+			Grid.Row="6"
+			Grid.Column="1"
+			Style="{StaticResource ButtonCentered}"
+			Click="btnFinish_Click"/>
 
-        <Button
-            x:Name="btnFinish"
-            Content="Markeer als Klaar"
-            Grid.Row="6"
-            Grid.Column="1"
-            Style="{StaticResource ButtonCentered}"
-            Click="btnFinish_Click"/>
+		<Button
+			x:Name="btnUnfinish"
+			Content="Markeer als Niet Klaar"
+			Grid.Row="7"
+			Grid.Column="1"
+			Style="{StaticResource ButtonCentered}"
+			Click="btnUnfinish_Click"/>
 
-        <Button
-            x:Name="btnUnfinish"
-            Content="Markeer als Niet Klaar"
-            Grid.Row="7"
-            Grid.Column="1"
-            Style="{StaticResource ButtonCentered}"
-            Click="btnUnfinish_Click"/>
-
-        <DataGrid
+		<DataGrid
 			x:Name="dgTodos"
 			SelectionMode="Single"
 			Grid.Row="5"
-            Grid.Column="1">
-            <DataGrid.Columns>
-                <DataGridTextColumn
+			Grid.Column="1">
+			<DataGrid.Columns>
+				<DataGridTextColumn
 					Header="Beschrijving"
-                    Width="400"
+					Width="400"
 					Binding="{Binding Description}"/>
 
-                <DataGridTextColumn
+				<DataGridTextColumn
 					Header="Klaar?"
 					Binding="{Binding Ready}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
 </UserControl>

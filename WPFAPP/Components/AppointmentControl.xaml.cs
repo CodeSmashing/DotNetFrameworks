@@ -10,8 +10,8 @@ using System.Windows.Media;
 
 namespace WPFAPP {
 	public partial class AppointmentControl : UserControl {
-        static public event EventHandler AppointmentCreated = delegate { };
-        private readonly AgendaDbContext _context;
+		static public event EventHandler AppointmentCreated = delegate { };
+		private readonly AgendaDbContext _context;
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
 
@@ -32,7 +32,6 @@ namespace WPFAPP {
 			// Subscribe to events
 			App.UserChanged += HandleUserChanged;
 			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
-
 
 			// Load data into combo boxes
 			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
@@ -145,12 +144,12 @@ namespace WPFAPP {
 					appointment.Title = tbTitle.Text;
 					appointment.AppointmentType = (AppointmentType) cbTypes.SelectedItem;
 					appointment.Description = tbDescription.Text;
-					_context.Appointments.Update(appointment);
-					_isEditing = false;
 
-                    _context.SaveChanges();
-                }
-                else {
+					// Save to database
+					_context.Appointments.Update(appointment);
+					_context.SaveChanges();
+					_isEditing = false;
+				} else {
 					// Attempt to create a new appointment instance
 					appointment = new() {
 						AgendaUserId = App.User.Id,
@@ -162,11 +161,10 @@ namespace WPFAPP {
 
 					// Save to database
 					_context.Appointments.Add(appointment);
-                    _context.SaveChanges();
+					_context.SaveChanges();
 
-                    AppointmentCreated?.Invoke(typeof(App), new EventArgs());
-
-                }
+					AppointmentCreated?.Invoke(typeof(AppointmentControl), new EventArgs());
+				}
 				grDetailsInputs.Visibility = Visibility.Collapsed;
 
 				// Show success message

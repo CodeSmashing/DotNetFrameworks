@@ -10,10 +10,11 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="20"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
+		<!-- Filter for a specific appointment -->
 		<Grid Style="{StaticResource SearchFilterPanel}">
 			<TextBox
 				x:Name="tbFilter"
@@ -24,6 +25,7 @@
 				IsHitTestVisible="False"/>
 		</Grid>
 
+		<!-- Pick the appointment to edit the values of -->
 		<DataGrid
 			x:Name="dgAppointments"
 			SelectionMode="Single"
@@ -32,59 +34,76 @@
 			<DataGrid.Columns>
 				<DataGridTextColumn
 					Header="Date"
-					Binding="{Binding Date}"/>
+					Binding="{Binding Date}"
+					Width="*"/>
 
 				<DataGridTextColumn
 					Header="Appointment"
 					Binding="{Binding Title}"
-					Width="200"/>
+					Width="*"/>
 
 				<DataGridTextColumn
 					Header="Description"
 					Binding="{Binding Description}"
-					Width="300"/>
+					Width="*"/>
 
 				<DataGridTextColumn
 					Header="Type"
-					Binding="{Binding AppointmentType.Name}"/>
+					Binding="{Binding AppointmentType.Name}"
+					Width="*"/>
 			</DataGrid.Columns>
 		</DataGrid>
 
+		<!-- Grid to display and edit the selected users info -->
 		<Grid
+			Style="{StaticResource GridDetails}"
 			x:Name="grDetails"
-			Grid.Row="2">
+			Grid.Row="3">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<StackPanel
-				x:Name="spDetailsControls"
+			<Grid
+				x:Name="grDetailsControls"
 				HorizontalAlignment="Center"
-				Orientation="Horizontal"
 				Margin="5"
 				Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
 				<Button
 					x:Name="btnAdd"
 					Content="Toevoegen"
 					IsEnabled="False"
-					Click="btnAdd_Click"/>
+					Click="btnAdd_Click"
+					Grid.Column="0"/>
 				<Button
 					x:Name="btnEdit"
 					Content="Wijzigen"
 					IsEnabled="False"
-					Click="btnEdit_Click"/>
+					Click="btnEdit_Click"
+					Grid.Column="2"/>
 				<Button
 					x:Name="btnDelete"
 					Content="Verwijderen"
 					IsEnabled="False"
-					Click="btnDelete_Click" />
+					Click="btnDelete_Click"
+					Grid.Column="4"/>
 				<Button
 					x:Name="btnSave"
 					Content="Opslaan"
 					IsEnabled="False"
-					Click="btnSave_Click"/>
-			</StackPanel>
+					Click="btnSave_Click"
+					Grid.Column="6"/>
+			</Grid>
 
 			<Grid
 				x:Name="grDetailsInputs"
