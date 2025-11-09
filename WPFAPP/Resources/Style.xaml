@@ -4,7 +4,7 @@
 	<!-- TextBlock -->
 	<Style TargetType="TextBlock">
 		<Setter Property="OverridesDefaultStyle" Value="True"/>
-		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}, FallbackValue={StaticResource Foreground}}"/>
+		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}, FallbackValue={StaticResource Foreground}}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="{DynamicResource StandardPadding}"/>
@@ -128,8 +128,6 @@
 							Name="ContentSite"
 							IsHitTestVisible="False"
 							Content="{TemplateBinding SelectionBoxItem}"
-							ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-							ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
 							Margin="3"
 							VerticalAlignment="Stretch"
 							HorizontalAlignment="Left"/>
@@ -184,8 +182,7 @@
 							Content="{TemplateBinding Content}"
 							Width="Auto"
 							Height="{StaticResource InteractiveHeightMedium}"
-							RecognizesAccessKey="True">
-						</ContentPresenter>
+							RecognizesAccessKey="True"/>
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="False">

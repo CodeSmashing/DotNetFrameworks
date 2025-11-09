@@ -82,7 +82,7 @@
 									Margin="0,0,0,10"
 									Padding="0"/>
 								<TextBlock
-									Text="{Binding ImageSource}"
+									Text="{Binding ImageUrl}"
 									Visibility="Hidden"/>
 							</StackPanel>
 						</DataTemplate>
