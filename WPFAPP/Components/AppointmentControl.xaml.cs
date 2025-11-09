@@ -1,5 +1,7 @@
 ﻿using Models;
 using System.ComponentModel;
+using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,7 +10,8 @@ using System.Windows.Media;
 
 namespace WPFAPP {
 	public partial class AppointmentControl : UserControl {
-		private readonly AgendaDbContext _context;
+        static public event EventHandler AppointmentCreated = delegate { };
+        private readonly AgendaDbContext _context;
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
 
@@ -30,6 +33,7 @@ namespace WPFAPP {
 			App.UserChanged += HandleUserChanged;
 			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
 
+
 			// Load data into combo boxes
 			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
 
@@ -45,15 +49,25 @@ namespace WPFAPP {
 
 		private void dgAppointments_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
-				// Show appointment details in a popup
+				// Build a details string including related ToDos
+				var todos = _context.ToDos
+					.Where(t => t.Deleted >= DateTime.Now && t.AppointmentId == selectedAppointment.Id)
+					.OrderBy(t => t.Id)
+					.ToList();
+
+				string todosText = todos.Count > 0 ? string.Join("\n", todos) : "(Geen todos)";
+
+				string message =
+					$"Titel: {selectedAppointment.Title}\n" +
+					$"Datum: {selectedAppointment.Date}\n\n" +
+					$"Beschrijving:\n{selectedAppointment.Description}\n\n" +
+					$"Todos:\n{todosText}";
+
 				MessageBox.Show(
-					 $"To: {selectedAppointment.Date}\n" +
-					 $"Title: {selectedAppointment.Title}\n" +
-					 $"Description: {selectedAppointment.Description}\n" +
-					 $"Type: {selectedAppointment.AppointmentType}",
-					 "Appointment Details",
-					 MessageBoxButton.OK,
-					 MessageBoxImage.Information
+					message,
+					"Afspraak details",
+					MessageBoxButton.OK,
+					MessageBoxImage.Information
 				);
 			}
 		}
@@ -133,7 +147,10 @@ namespace WPFAPP {
 					appointment.Description = tbDescription.Text;
 					_context.Appointments.Update(appointment);
 					_isEditing = false;
-				} else {
+
+                    _context.SaveChanges();
+                }
+                else {
 					// Attempt to create a new appointment instance
 					appointment = new() {
 						AgendaUserId = App.User.Id,
@@ -145,8 +162,11 @@ namespace WPFAPP {
 
 					// Save to database
 					_context.Appointments.Add(appointment);
-				}
-				_context.SaveChanges();
+                    _context.SaveChanges();
+
+                    AppointmentCreated?.Invoke(typeof(App), new EventArgs());
+
+                }
 				grDetailsInputs.Visibility = Visibility.Collapsed;
 
 				// Show success message
@@ -155,6 +175,7 @@ namespace WPFAPP {
 				// Select the appointment and refresh the DataGrid
 				UpdateDataGrid();
 				dgAppointments.SelectedItem = appointment;
+
 			} catch (Exception ex) {
 				MessageBox.Show(
 					 $"Error: {ex.Message}\n" +
@@ -222,6 +243,7 @@ namespace WPFAPP {
 				btnDelete.IsEnabled = false;
 				btnSave.IsEnabled = false;
 				SetDataContextWithoutTriggeringEvent(CollectionView.NewItemPlaceholder);
+
 				return;
 			}
 

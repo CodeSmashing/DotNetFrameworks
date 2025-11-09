@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class ToDo {
-		static public readonly ToDo Dummy = new() { Title = "-", Ready = false, AppointmentId = 0 };
+		static public readonly ToDo Dummy = new() { Description = "-", Ready = false, AppointmentId = 0 };
 
 		public long Id {
 			get; set;
@@ -19,7 +19,7 @@ namespace Models {
 		// Eigenschappen
 		[Required]
 		[Display(Name = "Title")]
-		public string Title { get; set; } = string.Empty;
+		public string Description { get; set; } = string.Empty;
 
 		[Required]
 		[Display(Name = "Klaar")]
@@ -29,13 +29,13 @@ namespace Models {
 		[Required]
 		[Display(Name = "Appointment")]
 		[ForeignKey("Appointment")]
-		public int AppointmentId {
+		public long AppointmentId {
 			get; set;
 		}
 
 		// Override ToString methode
 		public override string ToString() {
-			return $"ToDoId: {Id} | Titel: {Title} | Is klaar?({Ready})";
+			return $"Id: {Id} | Description: {Description} | Is klaar?({Ready})";
 		}
 
 		// Seeding data
@@ -45,12 +45,12 @@ namespace Models {
 				Dummy,
 
 				// Voeg enkele voorbeeld ToDos toe
-				new ToDo { Title = "Eerste ToDo", Ready = false, AppointmentId = 1},
-				new ToDo { Title = "Tweede ToDo", Ready = true, AppointmentId = 1},
-				new ToDo { Title = "Derde ToDo", Ready = false , AppointmentId = 1},
-				new ToDo { Title = "Eerste ToDo", Ready = false, AppointmentId = 2},
-				new ToDo { Title = "Tweede ToDo", Ready = true, AppointmentId = 2},
-				new ToDo { Title = "Derde ToDo", Ready = false , AppointmentId = 2 }
+				new ToDo { Description = "Eerste ToDo", Ready = false, AppointmentId = 1},
+				new ToDo { Description = "Tweede ToDo", Ready = true, AppointmentId = 1},
+				new ToDo { Description = "Derde ToDo", Ready = false , AppointmentId = 1},
+				new ToDo { Description = "Eerste ToDo", Ready = false, AppointmentId = 2},
+				new ToDo { Description = "Tweede ToDo", Ready = true, AppointmentId = 2},
+				new ToDo { Description = "Derde ToDo", Ready = false , AppointmentId = 2 }
 			};
 		}
 	}
