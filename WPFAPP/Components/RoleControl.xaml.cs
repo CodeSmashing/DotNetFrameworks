@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace WPFAPP {
 	public partial class RoleControl : UserControl {
@@ -11,7 +13,7 @@ namespace WPFAPP {
 		private bool _isUnselecting = false;
 
 		private AgendaUser? User {
-			get => (AgendaUser) cbUsers.SelectedItem;
+			get => (AgendaUser) dgUsers.SelectedItem;
 		}
 
 		public RoleControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
@@ -19,20 +21,17 @@ namespace WPFAPP {
 			_userManager = userManager;
 			InitializeComponent();
 
-			cbUsers.ItemsSource = _context.Users
-				.Where(u => u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
-				.OrderBy(u => u.LastName + " " + u.FirstName)
-				.ToList();
-
 			// Explicitly create ListBoxItems instead of setting ItemSource directly to allow for setting their style
 			foreach (var role in _context.Roles) {
 				lbRoles.Items.Add(new ListBoxItem { Content = role.Id });
 			}
+
+			UpdateDataGrid();
 		}
 
-		public void cbUsers_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+		public void dgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (User != AgendaUser.Dummy || User != null) {
-				UpdateListBoxRoles();
+				UpdateUIVisuals();
 			}
 		}
 
@@ -59,8 +58,57 @@ namespace WPFAPP {
 				}
 			}
 
-			UpdateListBoxRoles();
+			UpdateUIVisuals();
 			UnselectAllWithoutTriggeringEvent();
+		}
+
+		private void tbFilter_TextChanged(object sender, TextChangedEventArgs e) {
+			// Display or hide the placeholder text
+			if (tbFilterUser.Text.Equals(string.Empty)) {
+				tbFilterUserPlaceholder.Visibility = Visibility.Visible;
+				UpdateDataGrid();
+			} else {
+				tbFilterUserPlaceholder.Visibility = Visibility.Hidden;
+			}
+
+			// Display or hide the placeholder text
+			if (tbFilterRole.Text.Equals(string.Empty)) {
+				tbFilterRolePlaceholder.Visibility = Visibility.Visible;
+				UpdateDataGrid();
+			} else {
+				tbFilterRolePlaceholder.Visibility = Visibility.Hidden;
+			}
+
+			// If given inputs in either fields, filter for those inputs
+			if (!tbFilterUser.Text.Equals(string.Empty) || !tbFilterRole.Text.Equals(string.Empty)) {
+				List<string> userIdList = _context.UserRoles
+					.Where(ur =>
+						// Role Filter
+						(tbFilterRole.Text.Length == 0 || (ur.RoleId.Contains(tbFilterRole.Text))))
+					.Select(ur => ur.UserId)
+					.ToList();
+
+				List<AgendaUser> userList = _context.Users
+					.Where(u =>
+						// Only unlocked and non-deleted users
+						(u.LockoutEnd == null || u.LockoutEnd < DateTime.Now && u.Deleted >= DateTime.Now)
+
+						// Role filter
+						&& (userIdList.Count == 0 || userIdList.Contains(u.Id))
+
+						// User filter
+						&& (tbFilterUser.Text.Length == 0
+							|| u.FirstName.Contains(tbFilterUser.Text)
+							|| u.LastName.Contains(tbFilterUser.Text)))
+					.OrderBy(u => u.LastName + " " + u.FirstName)
+					.Select(u => u)
+					.ToList();
+
+				dgUsers.ItemsSource = userList;
+				dgUsers.SelectedItem = CollectionView.NewItemPlaceholder;
+				UpdateUIVisuals();
+				UnselectAllWithoutTriggeringEvent();
+			}
 		}
 
 		private void UnselectAllWithoutTriggeringEvent() {
@@ -77,18 +125,28 @@ namespace WPFAPP {
 		}
 
 		// Update ListBoxItem styles
-		private void UpdateListBoxRoles() {
+		private void UpdateUIVisuals() {
 			foreach (ListBoxItem item in lbRoles.Items) {
 				string? role = item.Content.ToString();
 
-				if (role != null && User != null) {
-					if (GetUserRoles(User).Contains(role)) {
+				if (role != null) {
+					if (User != null && GetUserRoles(User).Contains(role)) {
 						item.Style = (Style) FindResource("CheckedListBoxItem");
 					} else {
 						item.Style = null;
 					}
 				}
 			}
+		}
+
+		// Refresh the appointments DataGrid with current data from the database
+		public void UpdateDataGrid() {
+			dgUsers.ItemsSource = _context.Users
+				.Where(u => u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
+				.OrderBy(u => u.LastName + " " + u.FirstName)
+				.ToList();
+
+			UpdateUIVisuals();
 		}
 	}
 }

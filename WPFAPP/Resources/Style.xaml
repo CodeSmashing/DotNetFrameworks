@@ -237,8 +237,8 @@
 
 	<!-- PasswordBox -->
 	<Style TargetType="PasswordBox">
-		<Setter Property="Background" Value="LightGray"/>
-		<Setter Property="Foreground" Value="DarkSlateGray" />
+		<Setter Property="Background" Value="{DynamicResource BackgroundLight}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 		<Setter Property="Padding" Value="{DynamicResource StandardPadding}"/>
@@ -247,6 +247,26 @@
 		<Setter Property="Height" Value="{DynamicResource InteractiveHeightMedium}"/>
 		<Setter Property="FontFamily" Value="{DynamicResource PrimaryFont}"/>
 		<Setter Property="FontSize" Value="{DynamicResource PrimaryFontSize}"/>
+
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="PasswordBox">
+					<Border
+						x:Name="Border" 
+						CornerRadius="{DynamicResource CornerRadius}" 
+						BorderBrush="{DynamicResource BorderBrush}" 
+						BorderThickness="{DynamicResource BorderThickness}" 
+						Background="{TemplateBinding Background}" 
+						SnapsToDevicePixels="True">
+						<ScrollViewer
+							x:Name="PART_ContentHost" 
+							Focusable="false" 
+							HorizontalScrollBarVisibility="Hidden" 
+							VerticalScrollBarVisibility="Hidden"/>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 	<!-- CheckBox -->
@@ -254,6 +274,11 @@
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 		<Setter Property="Padding" Value="{DynamicResource StandardPadding}"/>
+		<Setter Property="Margin" Value="{DynamicResource StandardMargin}"/>
+	</Style>
+
+	<!-- ListBox -->
+	<Style TargetType="ListBox">
 		<Setter Property="Margin" Value="{DynamicResource StandardMargin}"/>
 	</Style>
 
@@ -693,9 +718,9 @@
 					<Style.Triggers>
 						<!-- Highlight selected rows -->
 						<Trigger Property="IsSelected" Value="True">
-							<Setter Property="Background" Value="#ff66ccff" />
+							<Setter Property="Background" Value="{DynamicResource BackgroundLight}" />
+							<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
 							<Setter Property="BorderBrush" Value="Transparent" />
-							<Setter Property="Foreground" Value="Black" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="True">
 							<Setter Property="Background" Value="#ff66ccff" />
@@ -782,6 +807,12 @@
 		TargetType="Label"
 		BasedOn="{StaticResource {x:Type Label}}"/>
 
+	<!-- ListBox -->
+	<Style
+		x:Key="BaseListBox"
+		TargetType="ListBox"
+		BasedOn="{StaticResource {x:Type ListBox}}"/>
+
 	<!-- UserControl -->
 	<Style
 		x:Key="BaseUserControl"
@@ -808,6 +839,7 @@
 	<Style
 		x:Key="SearchFilterPanel"
 		TargetType="Grid">
+		<Setter Property="Margin" Value="{DynamicResource StandardMargin}"/>
 		<Style.Resources>
 			<Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}">
 				<Setter Property="HorizontalAlignment" Value="Stretch"/>

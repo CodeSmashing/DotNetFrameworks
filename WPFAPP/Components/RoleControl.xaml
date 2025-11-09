@@ -9,10 +9,12 @@
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="20"/>
 			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
@@ -21,41 +23,78 @@
 			Text="Role Management"
 			Style="{StaticResource TitleH3}"
 			Grid.Row="0"
-			Grid.ColumnSpan="4"/>
+			Grid.ColumnSpan="2"/>
+
+		<!-- Filter for a specific user -->
+		<Grid
+			Style="{StaticResource SearchFilterPanel}"
+			Grid.Row="1"
+			Grid.Column="0">
+			<TextBox
+				x:Name="tbFilterUser"
+				TextChanged="tbFilter_TextChanged"/>
+			<Label
+				x:Name="tbFilterUserPlaceholder"
+				Content="Naam..."
+				IsHitTestVisible="False"/>
+		</Grid>
+
+		<!-- Filter for a specific Role -->
+		<Grid
+			Style="{StaticResource SearchFilterPanel}"
+			Grid.Row="1"
+			Grid.Column="1">
+			<TextBox
+				x:Name="tbFilterRole"
+				TextChanged="tbFilter_TextChanged"/>
+			<Label
+				x:Name="tbFilterRolePlaceholder"
+				Content="Rol..."
+				IsHitTestVisible="False"/>
+		</Grid>
 
 		<!-- Pick the user to edit the roles of -->
-		<Label
-			Content="Gebruiker:"
-			Grid.Row="1"
-			Grid.Column="0"
-			HorizontalAlignment="Right"
-			Margin="0,0,35,0"/>
-		<ComboBox
-			x:Name="cbUsers"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Right"
-			SelectionChanged="cbUsers_SelectionChanged"
+		<DataGrid
+			x:Name="dgUsers"
+			SelectionMode="Single"
+			SelectionChanged="dgUsers_SelectionChanged"
 			Grid.Row="2"
-			Grid.Column="0"/>
+			Grid.ColumnSpan="2">
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Header="Id"
+					Binding="{Binding Id}"
+					MaxWidth="100"/>
+
+				<DataGridTextColumn
+					Header="Voornaam"
+					Binding="{Binding FirstName}"
+					Width="Auto"/>
+
+				<DataGridTextColumn
+					Header="Achternaam"
+					Binding="{Binding LastName}"
+					Width="Auto"/>
+
+				<DataGridTextColumn
+					Header="Weergavenaam"
+					Binding="{Binding DisplayName}"
+					Width="Auto"/>
+			</DataGrid.Columns>
+		</DataGrid>
 
 		<!-- ListBox to load the current roles of the user -->
-		<Label
-			Content="Huidige Rollen:"
-			Grid.Row="1"
-			Grid.Column="2"
-			HorizontalAlignment="Left"/>
 		<ListBox
 			x:Name="lbRoles"
 			SelectionMode="Multiple"
 			SelectionChanged="lbRoles_SelectionChanged"
 			HorizontalAlignment="Stretch"
-			Grid.Row="2"
-			Grid.Column="2">
+			Grid.Row="3"
+			Grid.ColumnSpan="2">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel>
-						<ListBoxItem
-								Content="{Binding Id}"/>
+						<ListBoxItem Content="{Binding Id}"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
