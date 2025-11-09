@@ -99,6 +99,28 @@ Run the test suite using the following command:
 ---
 ##  Sources
 
-- List any resources, contributors, inspiration, etc. here.
+## Helpful resources
 
+ - **Trigger method on user change:**
+   - [Find 1](https://stackoverflow.com/questions/37924612/detect-variable-change-c-sharp)
+   - [Find 2](https://stackoverflow.com/a/5844638)
+   - [Find 3](https://stackoverflow.com/a/1316417)
+   - [Final solution](https://stackoverflow.com/a/14614676)
+
+ - [Nullability of reference types solution](https://stackoverflow.com/a/71951410)
+ - [Data annotations](https://www.infoworld.com/article/2257911/how-to-use-data-annotations-in-c-sharp.html)
+ - [Data annotations](https://www.c-sharpcorner.com/article/dataannotations-in-depth/)
+ - [Placeholder text](https://codingguides.quinnscomputing.com/2022/05/how-to-show-placeholder-text-in-wpf.html)
+ - [Disabled button styling](https://stackoverflow.com/a/25407810)
+ - [Binding specific data to ComboBox](https://wpf-tutorial.com/list-controls/combobox-control/)
+ - [Password-less authentication](https://andrewlock.net/implementing-custom-token-providers-for-passwordless-authentication-in-asp-net-core-identity/)
+
+## Used NuGet packages
+
+ - [Microsoft.AspNetCore.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.AspNetCore.Identity.EntityFrameworkCore/9.0.10?_src=template)
+ - [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore/9.0.10?_src=template)
+ - [Microsoft.EntityFrameworkCore.Design](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Design/9.0.10?_src=template)
+ - [Microsoft.EntityFrameworkCore.Relational](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Relational/9.0.10?_src=template)
+ - [Microsoft.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/9.0.10?_src=template)
+ - [Microsoft.EntityFrameworkCore.Tools](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/9.0.10?_src=template)
 ---
