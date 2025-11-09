@@ -104,9 +104,11 @@ namespace WPFAPP
 		private static void OnSelectedImageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var ctl = (VehicleSelector)d;
-			var img = e.NewValue as ImageSource;
-			ctl.UpdateSelectedIndexFromImage(img);
-			ctl.RaiseSelectedImageChanged();
+
+			if (e.NewValue is ImageSource img) {
+				ctl.UpdateSelectedIndexFromImage(img);
+				ctl.RaiseSelectedImageChanged();
+			}
 		}
 
 		// SelectedIndex: index of selection in ItemsSource if ItemsSource is indexable
@@ -173,7 +175,7 @@ namespace WPFAPP
 		{
 			if (ItemsSource == null || idx < 0)
 			{
-				SelectedImage = null;
+				SelectedImage = (ImageSource) CollectionView.NewItemPlaceholder;
 				return;
 			}
 
@@ -185,23 +187,23 @@ namespace WPFAPP
 					if (item is ImageSource isrc)
 						SelectedImage = isrc;
 					else
-						SelectedImage = null;
+						SelectedImage = (ImageSource) CollectionView.NewItemPlaceholder;
 					return;
 				}
 				index++;
 			}
 
-			SelectedImage = null;
+			SelectedImage = (ImageSource) CollectionView.NewItemPlaceholder;
 		}
 
 		// Optional events
-		public event RoutedEventHandler SelectedImageChanged;
+		public event RoutedEventHandler SelectedImageChanged = null!;
 		protected virtual void RaiseSelectedImageChanged()
 		{
 			SelectedImageChanged?.Invoke(this, new RoutedEventArgs());
 		}
 
-		public event RoutedEventHandler SelectedIndexChanged;
+		public event RoutedEventHandler SelectedIndexChanged = null!;
 		protected virtual void RaiseSelectedIndexChanged()
 		{
 			SelectedIndexChanged?.Invoke(this, new RoutedEventArgs());

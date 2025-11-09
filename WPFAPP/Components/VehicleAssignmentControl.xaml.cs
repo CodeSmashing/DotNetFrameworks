@@ -15,6 +15,13 @@ namespace WPFAPP {
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
 
+		private AgendaUser? SelectedEmployee {
+			get => (AgendaUser?) cmbEmployees.SelectedItem;
+		}
+		private Vehicle? SelectedVehicle {
+			get => (Vehicle?) cmbVehicles.SelectedItem;
+		}
+
 		// Define input requirements
 		// Key: Field name, Value: Human-readable name
 		public Dictionary<Control, string> inputRequirements = new();
@@ -251,7 +258,7 @@ namespace WPFAPP {
 		}
 
 		public void btnAssign_Click(object sender, RoutedEventArgs e) {
-			if (cmbVehicles.SelectedItem is Vehicle selectedVehicle && cmbEmployees.SelectedItem is AgendaUser selectedEmployee) {
+			if (SelectedVehicle is Vehicle selectedVehicle && SelectedEmployee is AgendaUser selectedEmployee) {
 				Vehicle? contextVehicle = _context.Vehicles.FirstOrDefault(v => v.Id == selectedVehicle.Id);
 				AgendaUser? contextEmployee = _context.Users.FirstOrDefault(u => u.Id == selectedEmployee.Id);
 				if (contextVehicle != null && contextEmployee != null) {
@@ -265,22 +272,25 @@ namespace WPFAPP {
 		}
 
 		public void cmbVehicles_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			imgVehicle.Source = cmbVehicles.SelectedItem is Vehicle selectedVehicle
+			imgVehicle.Source = SelectedVehicle is Vehicle selectedVehicle && selectedVehicle.ImageUrl != null
 				? new BitmapImage(new Uri(selectedVehicle.ImageUrl))
 				: null;
-			if(cmbVehicles.SelectedItem != null && cmbEmployees.SelectedItem != null){
+			if(SelectedVehicle != null && SelectedEmployee != null){
 				btnAssign.IsEnabled = true;
 			}
 		}
 
 		public void cmbEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			if (cmbVehicles.SelectedItem != null && cmbEmployees.SelectedItem != null) {
-				btnAssign.IsEnabled = true;
+			if (SelectedEmployee != null) {
+				if (SelectedVehicle != null) {
+					btnAssign.IsEnabled = true;
+				}
+
+				lblCurentVehicle.Content = _context.Vehicles
+					.Where(v => v.Id == SelectedEmployee.VehicleId)
+					.Select(v => v.LicencePlate)
+					.FirstOrDefault() ?? "Geen voertuig toegewezen";
 			}
-			lblCurentVehicle.Content = _context.Vehicles
-				.Where(v => v.Id == ((AgendaUser) cmbEmployees.SelectedItem).VehicleId)
-				.Select(v => v.LicencePlate)
-				.FirstOrDefault() ?? "Geen voertuig toegewezen";
 		}
 
 		public void UpdateVehicleComboBox() {
