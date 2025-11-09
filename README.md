@@ -99,7 +99,7 @@ Run the test suite using the following command:
 ---
 ##  Sources
 
-##@ Helpful resources
+### Helpful resources
 
  - **Trigger method on user change:**
    - [Find 1](https://stackoverflow.com/questions/37924612/detect-variable-change-c-sharp)
@@ -115,7 +115,7 @@ Run the test suite using the following command:
  - [Binding specific data to ComboBox](https://wpf-tutorial.com/list-controls/combobox-control/)
  - [Password-less authentication](https://andrewlock.net/implementing-custom-token-providers-for-passwordless-authentication-in-asp-net-core-identity/)
 
-#@# Used NuGet packages
+### Used NuGet packages
 
  - [Microsoft.AspNetCore.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.AspNetCore.Identity.EntityFrameworkCore/9.0.10?_src=template)
  - [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore/9.0.10?_src=template)
