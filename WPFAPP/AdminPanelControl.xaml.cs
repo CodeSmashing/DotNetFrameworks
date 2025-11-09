@@ -6,6 +6,7 @@ namespace WPFAPP {
 	public partial class AdminPanelControl : UserControl {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
+		private readonly AgendaUserControl agendaUserControl;
 		private readonly RoleControl roleControl;
 		private readonly VehicleAssignmentControl vehicleControl;
 		private readonly ToDoControl toDoControl;
@@ -16,16 +17,14 @@ namespace WPFAPP {
 			InitializeComponent();
 
 			// Instantiate controls and their containers
+			agendaUserControl = new(_context, _userManager);
 			roleControl = new(_context, _userManager);
 			vehicleControl = new(_context);
 			toDoControl = new(_context);
-			tciUsersTab.Content = roleControl;
+			tciUsersTab.Content = agendaUserControl;
+			tciRolesTab.Content = roleControl;
 			tciVehicleAssignmentTab.Content = vehicleControl;
 			tciToDosTab.Content = toDoControl;
-		}
-
-		private void grDetails_InfoChanged(object sender, SelectionChangedEventArgs e) {
-			
 		}
 	}
 }

@@ -16,6 +16,9 @@
 				x:Name="tciUsersTab"
 				Header="Gebruikers"/>
 			<TabItem
+				x:Name="tciRolesTab"
+				Header="Rollen"/>
+			<TabItem
 				x:Name="tciToDosTab"
 				Header="Te doen"/>
 		</TabControl>
