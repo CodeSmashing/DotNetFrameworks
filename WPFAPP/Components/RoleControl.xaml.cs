@@ -91,7 +91,8 @@ namespace WPFAPP {
 				List<AgendaUser> userList = _context.Users
 					.Where(u =>
 						// Only unlocked and non-deleted users
-						(u.LockoutEnd == null || u.LockoutEnd < DateTime.Now && u.Deleted >= DateTime.Now)
+						((u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
+							&& u.Deleted >= DateTime.Now)
 
 						// Role filter
 						&& (userIdList.Count == 0 || userIdList.Contains(u.Id))
@@ -142,7 +143,10 @@ namespace WPFAPP {
 		// Refresh the appointments DataGrid with current data from the database
 		public void UpdateDataGrid() {
 			dgUsers.ItemsSource = _context.Users
-				.Where(u => u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
+				.Where(u =>
+					// Only unlocked and non-deleted users
+					(u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
+						&& u.Deleted >= DateTime.Now)
 				.OrderBy(u => u.LastName + " " + u.FirstName)
 				.ToList();
 

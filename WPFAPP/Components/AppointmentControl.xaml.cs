@@ -214,14 +214,14 @@ namespace WPFAPP {
 		// Refresh the appointments DataGrid with current data from the database
 		public void UpdateDataGrid() {
 			dgAppointments.ItemsSource = _context.Appointments
-				.Where(app => app.Deleted >= DateTime.Now
-					&& !app.IsCompleted
-					&& app.AgendaUserId == App.User.Id)
+				.Where(app =>
+					// Non-deleted appointments that are completed and owned by the user
+					app.Deleted >= DateTime.Now
+						&& !app.IsCompleted
+							&& app.AgendaUserId == App.User.Id)
 				.OrderBy(app => app.Date)
-				//.Include(app => app.AppointmentType)  // Eager loading van AppointmentType
 				.ToList();
 
-			// After reloading the items, update the button visibility
 			UpdateUIButtons();
 		}
 
