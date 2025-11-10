@@ -28,7 +28,7 @@ namespace WPFAPP {
 			registerRequirements[pbPasswordConfirm] = "Wachtwoord bevestiging";
 		}
 
-		private void btnRegister_Click(object sender, RoutedEventArgs e) {
+		private async void btnRegister_Click(object sender, RoutedEventArgs e) {
 			// Clear previous errors
 			spError.Children.Clear();
 
@@ -81,7 +81,7 @@ namespace WPFAPP {
 			};
 			newUser.UserName = newUser.Id;
 
-			var result = _userManager.CreateAsync(newUser, pbPassword.Password).Result;
+			var result = await _userManager.CreateAsync(newUser, pbPassword.Password);
 			if (!result.Succeeded) {
 				spError.Children.Add(new TextBlock { Text = string.Join("\n", result.Errors.Select(err => err.Description)) });
 				return;
