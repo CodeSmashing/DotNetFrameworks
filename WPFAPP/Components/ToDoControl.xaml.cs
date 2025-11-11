@@ -1,6 +1,8 @@
 ﻿using Models;
 using System.Windows;
 using System.Windows.Controls;
+using WPFAPP.Components;
+using WPFAPP.CustomEventArgs;
 
 namespace WPFAPP {
 	public partial class ToDoControl : UserControl {
@@ -12,11 +14,15 @@ namespace WPFAPP {
 
 			// Subscribe to events
 			AppointmentControl.AppointmentCreated += UpdateDataGrid;
-
+			//DetailsControl.ItemCreated += UpdateDataGrid;
 			UpdateDataGrid();
 		}
 
 		public void UpdateDataGrid(object? sender = null, EventArgs? e = null) {
+			//if (e != null && e is not ItemCreatedEventArgs) {
+			//	return;
+			//}
+
 			dgAppointments.ItemsSource = _context.Appointments
 				.Where(v => v.Deleted > DateTime.Now)
 				.ToList();

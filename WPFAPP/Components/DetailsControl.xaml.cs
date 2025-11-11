@@ -5,21 +5,22 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using WPFAPP.CustomEventArgs;
 
 namespace WPFAPP.Components {
 	public partial class DetailsControl : Grid {
-		static public event EventHandler ItemCreated = delegate { };
+		static public event EventHandler ItemCreated = null!;
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
-		private DataGrid _dataGrid = null!;
-		private dynamic _dataType = null!;
-		private IdentityRole<string>[] _permissiveRoles = null!;
+		private readonly DataGrid _dataGrid = null!;
+		private readonly dynamic _dataType = null!;
+		private readonly IdentityRole<string>[] _permissiveRoles = null!;
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
 
 		// Define input requirements
 		// Key: Field name, Value: Human-readable name
-		public Dictionary<Control, string> inputRequirements = new();
+		public readonly Dictionary<Control, string> inputRequirements = new();
 
 		public DetailsControl(AgendaDbContext context, UserManager<AgendaUser> userManager, DataGrid dataGrid, dynamic type, IdentityRole<string>[] permissiveRoles) {
 			_context = context;
@@ -128,7 +129,7 @@ namespace WPFAPP.Components {
 					// Save to database and notify subscribers
 					_context.Appointments.Add(item);
 					_context.SaveChanges();
-					ItemCreated?.Invoke(typeof(DetailsControl), new EventArgs());
+					ItemCreated?.Invoke(this, new ItemCreatedEventArgs(item));
 
 					// Show success message
 					MessageBox.Show("Afspraak succesvol aangemaakt.");

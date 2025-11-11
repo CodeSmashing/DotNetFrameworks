@@ -118,6 +118,7 @@ Run the test suite using the following command:
  - [Cast IDBSet to IEnumerable](https://stackoverflow.com/a/30845731)
  - [Cast dynamic type to IEnumerable](https://stackoverflow.com/a/27169668)
  - [Find dictionaries by string](https://stackoverflow.com/a/52638774)
+ - [Custom EventArgs class](https://stackoverflow.com/a/14977954)
 
 ### Used NuGet packages
 
