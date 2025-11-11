@@ -47,6 +47,19 @@ namespace WPFAPP {
 			DisplayUI(this, new PropertyChangedEventArgs(string.Empty));
 		}
 
+		public static void ReParentElementTo(Control element, Grid targetParent) {
+			Panel parent = (Panel) element.Parent;
+
+			if (parent != null) {
+				parent.Children.Remove(element);
+				targetParent.Children.Add(element);
+
+				if (element is Label) {
+					targetParent.RowDefinitions.Add(new RowDefinition());
+				}
+			}
+		}
+
 		private void SwapControlsHandler(object? sender, EventArgs e) {
 			// Swap between login and register controls
 			if (tciAuthenticationTab.Content == registerControl) {

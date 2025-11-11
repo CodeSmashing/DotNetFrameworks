@@ -114,6 +114,10 @@ Run the test suite using the following command:
  - [Disabled button styling](https://stackoverflow.com/a/25407810)
  - [Binding specific data to ComboBox](https://wpf-tutorial.com/list-controls/combobox-control/)
  - [Password-less authentication](https://andrewlock.net/implementing-custom-token-providers-for-passwordless-authentication-in-asp-net-core-identity/)
+ - [Help understanding setting rows and columns in code behind](https://stackoverflow.com/a/64485185)
+ - [Cast IDBSet to IEnumerable](https://stackoverflow.com/a/30845731)
+ - [Cast dynamic type to IEnumerable](https://stackoverflow.com/a/27169668)
+ - [Find dictionaries by string](https://stackoverflow.com/a/52638774)
 
 ### Used NuGet packages
 

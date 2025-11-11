@@ -1,0 +1,74 @@
+﻿<Grid x:Class="WPFAPP.Components.DetailsControl"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+		xmlns:local="clr-namespace:WPFAPP.Components"
+		mc:Ignorable="d"
+		Style="{StaticResource GridDetails}"
+		x:Name="grDetails">
+	<Grid.RowDefinitions>
+		<RowDefinition Height="*"/>
+		<RowDefinition Height="*"/>
+	</Grid.RowDefinitions>
+
+	<Grid
+		x:Name="grDetailsControls"
+		HorizontalAlignment="Center"
+		Margin="5"
+		Grid.Row="0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="10"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="10"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="10"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<Button
+			x:Name="btnAdd"
+			Content="Toevoegen"
+			IsEnabled="False"
+			Click="btnAdd_Click"
+			Grid.Column="0"/>
+		<Button
+			x:Name="btnEdit"
+			Content="Wijzigen"
+			IsEnabled="False"
+			Click="btnEdit_Click"
+			Grid.Column="2"/>
+		<Button
+			x:Name="btnDelete"
+			Content="Verwijderen"
+			IsEnabled="False"
+			Click="btnDelete_Click"
+			Grid.Column="4"/>
+		<Button
+			x:Name="btnSave"
+			Content="Opslaan"
+			IsEnabled="False"
+			Click="btnSave_Click"
+			Grid.Column="6"/>
+	</Grid>
+
+	<Grid
+		x:Name="grDetailsInputs"
+		Margin="0"
+		Grid.Row="1"
+		HorizontalAlignment="Center"
+		Visibility="Collapsed">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel
+			x:Name="spError"
+			Grid.ColumnSpan="2"/>
+	</Grid>
+</Grid>
