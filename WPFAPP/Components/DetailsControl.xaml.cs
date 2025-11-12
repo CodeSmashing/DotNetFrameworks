@@ -18,17 +18,17 @@ namespace WPFAPP.Components {
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
 
-		// Define input requirements
 		// Key: Field name, Value: Human-readable name
 		public readonly Dictionary<Control, string> inputRequirements = new();
+		public readonly List<(string Key, List<bool> Toggle, Func<dynamic, bool> Filter)> filterOptions = new();
 
 		public DetailsControl(AgendaDbContext context, UserManager<AgendaUser> userManager, DataGrid dataGrid, dynamic type, IdentityRole<string>[] permissiveRoles) {
+			InitializeComponent();
 			_context = context;
 			_userManager = userManager;
 			_dataGrid = dataGrid;
 			_dataType = type;
 			_permissiveRoles = permissiveRoles;
-			InitializeComponent();
 		}
 
 		public void grDetails_InfoChanged(object? sender, EventArgs e) {
@@ -212,7 +212,7 @@ namespace WPFAPP.Components {
 			}
 		}
 
-		public void UpdateDataGrid(Func<dynamic, bool>? filterOptions = null) {
+		public void UpdateDataGrid() {
 			dynamic modelType = _context.Model.FindEntityType(_dataType.ToString());
 
 			/// <summary>
@@ -227,12 +227,11 @@ namespace WPFAPP.Components {
 			Func<AgendaDbContext, IEnumerable<dynamic>> dbSet = dbSetDictionary[modelType.Name];
 			IEnumerable<dynamic> query = dbSet.Invoke(_context);
 
-			// Always filter out deleted items
-			query = query.Where(item => item.Deleted >= DateTime.Now);
-
-			// Apply custom filter if provided
-			if (filterOptions != null) {
-				query = query.Where(filterOptions);
+			// Apply filters
+			foreach (var (Key, Toggle, Filter) in filterOptions) {
+				if (Toggle[0]) {
+					query = query.Where(Filter);
+				}
 			}
 
 			List<dynamic> items = query.OrderBy(item => item.Date).ToList();
