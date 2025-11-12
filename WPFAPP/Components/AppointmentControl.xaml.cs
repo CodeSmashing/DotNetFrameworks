@@ -1,49 +1,95 @@
-﻿using Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Models;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 
-namespace WPFAPP {
+namespace WPFAPP.Components {
 	public partial class AppointmentControl : UserControl {
-		static public event EventHandler AppointmentCreated = delegate { };
 		private readonly AgendaDbContext _context;
-		private bool _isSettingDataContext = false;
-		private bool _isEditing = false;
+		private readonly UserManager<AgendaUser> _userManager;
+		private readonly DetailsControl _detailsControl;
+		private readonly IdentityRole<string>[] _permissiveRoles;
+		private readonly bool _isSetting = true;
 
-		// Define input requirements
-		// Key: Field name, Value: Human-readable name
-		public Dictionary<Control, string> inputRequirements = new();
-
-		public AppointmentControl(AgendaDbContext context) {
-			_context = context;
+		public AppointmentControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
 			InitializeComponent();
+			_context = context;
+			_userManager = userManager;
+			_permissiveRoles = [
+				_context.Roles.First(r => r.Name == "User"),
+				_context.Roles.First(r => r.Name == "UserAdmin"),
+				_context.Roles.First(r => r.Name == "Admin"),
+				_context.Roles.First(r => r.Name == "Employee"),
+			];
+			_detailsControl = new(_context, _userManager, dgAppointments, typeof(Appointment), _permissiveRoles);
 
 			// Set the input requirements
-			inputRequirements[dpDate] = "Datum";
-			inputRequirements[tbTitle] = "Titel";
-			inputRequirements[cbTypes] = "Type Afspraak";
-			inputRequirements[tbDescription] = "Beschrijving";
+			_detailsControl.inputRequirements[dpDate] = "Datum";
+			_detailsControl.inputRequirements[tbTitle] = "Titel";
+			_detailsControl.inputRequirements[cbAppointmentType] = "Type Afspraak";
+			_detailsControl.inputRequirements[tbDescription] = "Beschrijving";
+
+			// Set the details control contents
+			MainWindow.ReParentElementsTo(
+				[lbDate, dpDate, lbTitle, tbTitle, lbAppointmentType, cbAppointmentType, lbDescription, tbDescription],
+				_detailsControl.grDetailsInputs
+			);
+			grAppointmentControl.Children.Remove(spTemporaryContainer);
+
+			// Set rows and columns
+			Grid.SetRow(_detailsControl, 4);
+			Grid.SetRow(
+				(StackPanel) _detailsControl.grDetailsInputs.FindName("spError"),
+				_detailsControl.grDetailsInputs.RowDefinitions.Count
+			);
+
+			// Set filter options
+			_detailsControl.filterOptions.AddRange(
+				new(
+					cbFilterDeleted.Name,
+					[cbFilterDeleted.IsChecked ?? false],
+					(app => app.Deleted >= DateTime.Now)
+				),
+				new(
+					cbFilterCompleted.Name,
+					[cbFilterCompleted.IsChecked ?? false],
+					(app => app.IsCompleted)
+				),
+				new(
+					cbFilterCurrentUser.Name,
+					[cbFilterCurrentUser.IsChecked ?? false],
+					(app => app.AgendaUserId == App.User.Id)
+				),
+				new(
+					cbFilterMatching.Name,
+					[cbFilterMatching.IsChecked ?? false],
+					(app => (app.Title.Contains(tbFilter.Text) || app.Description.Contains(tbFilter.Text)))
+				)
+			);
 
 			// Subscribe to events
 			App.UserChanged += HandleUserChanged;
-			dgAppointments.MouseDoubleClick += dgAppointments_MouseDoubleClick;
+			dpDate.SelectedDateChanged += _detailsControl.grDetails_InfoChanged;
+			tbTitle.TextChanged += _detailsControl.grDetails_InfoChanged;
+			cbAppointmentType.SelectionChanged += _detailsControl.grDetails_InfoChanged;
+			tbDescription.TextChanged += _detailsControl.grDetails_InfoChanged;
 
 			// Load data into combo boxes
-			cbTypes.ItemsSource = _context.AppointmentTypes.ToList();
+			cbAppointmentType.ItemsSource = _context.AppointmentTypes.ToList();
 
 			// Update grids and visuals
-			UpdateDataGrid();
-			UpdateUIButtons();
+			grAppointmentControl.Children.Add(_detailsControl);
+			_detailsControl.UpdateDataGrid();
+			_detailsControl.UpdateUIButtons();
+			_isSetting = false;
 		}
 
 		public void HandleUserChanged(object? sender, PropertyChangedEventArgs e) {
 			// Ensure button visibility is correct after successful login/registry
-			UpdateUIButtons();
+			_detailsControl.UpdateUIButtons();
 		}
 
 		private void dgAppointments_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -72,198 +118,32 @@ namespace WPFAPP {
 		}
 
 		private void dgAppointments_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			grDetailsInputs.Visibility = Visibility.Collapsed;
-			UpdateUIButtons();
-		}
-
-		private void btnAdd_Click(object sender, RoutedEventArgs e) {
-			grDetailsInputs.Visibility = Visibility.Visible;
-			SetDataContextWithoutTriggeringEvent(CollectionView.NewItemPlaceholder);
-			btnSave.IsEnabled = false;
-			btnEdit.IsEnabled = false;
-			_isEditing = false;
-		}
-
-		private void btnEdit_Click(object sender, RoutedEventArgs e) {
-			grDetailsInputs.Visibility = Visibility.Visible;
-			SetDataContextWithoutTriggeringEvent(dgAppointments.SelectedItem);
-			btnSave.IsEnabled = false;
-			btnEdit.IsEnabled = false;
-			btnAdd.IsEnabled = false;
-			_isEditing = true;
-		}
-
-		private void btnDelete_Click(object sender, RoutedEventArgs e) {
-			try {
-				Appointment appointment = (Appointment) dgAppointments.SelectedItem;
-				Appointment? contextAppointment = _context.Appointments.FirstOrDefault(app => app.Id == appointment.Id);
-
-				if (contextAppointment != null) {
-					contextAppointment.Deleted = DateTime.Now;
-					_context.SaveChanges();
-
-					// Reset the selected appointment and refresh the DataGrid
-					dgAppointments.SelectedItem = CollectionView.NewItemPlaceholder;
-					UpdateDataGrid();
-				}
-			} catch (Exception errorInfo) {
-				Console.WriteLine("Fout bij verwijderen afspraak; " + errorInfo.Message);
-				UpdateDataGrid();
-			}
-		}
-
-		private void btnSave_Click(object sender, RoutedEventArgs e) {
-			// Clear previous errors
-			spError.Children.Clear();
-
-			// Validate inputs and show errors
-			MainWindow.ValidateInputs(out List<Control> errors, in inputRequirements);
-
-			foreach (Control field in inputRequirements.Keys) {
-				field.ClearValue(Border.BorderBrushProperty);
-
-				// If invalid, add error
-				if (errors.Contains(field)) {
-					field.BorderBrush = Brushes.Red;
-					spError.Children.Add(new TextBlock { Text = $"{inputRequirements[field]} is vereist" });
-				}
-			}
-
-			// If there are errors, return early
-			if (spError.Children.Count > 0) {
-				return;
-			}
-
-			try {
-				Appointment appointment;
-				if (_isEditing) {
-					// Attempt to update the appointment info
-					appointment = _context.Appointments.First(app => app.Id == ((Appointment) grDetailsInputs.DataContext).Id);
-
-					appointment.Date = dpDate.SelectedDate ?? DateTime.MinValue;
-					appointment.Title = tbTitle.Text;
-					appointment.AppointmentType = (AppointmentType) cbTypes.SelectedItem;
-					appointment.Description = tbDescription.Text;
-
-					// Save to database
-					_context.Appointments.Update(appointment);
-					_context.SaveChanges();
-					_isEditing = false;
-				} else {
-					// Attempt to create a new appointment instance
-					appointment = new() {
-						AgendaUserId = App.User.Id,
-						Date = dpDate.SelectedDate ?? DateTime.MinValue,
-						Title = tbTitle.Text,
-						AppointmentType = (AppointmentType) cbTypes.SelectedItem,
-						Description = tbDescription.Text,
-					};
-
-					// Save to database
-					_context.Appointments.Add(appointment);
-					_context.SaveChanges();
-
-					AppointmentCreated?.Invoke(typeof(AppointmentControl), new EventArgs());
-				}
-				grDetailsInputs.Visibility = Visibility.Collapsed;
-
-				// Show success message
-				MessageBox.Show("Afspraak succesvol aangemaakt.");
-
-				// Select the appointment and refresh the DataGrid
-				UpdateDataGrid();
-				dgAppointments.SelectedItem = appointment;
-
-			} catch (Exception ex) {
-				MessageBox.Show(
-					 $"Error: {ex.Message}\n" +
-					"U zult andere waarden moeten proberen of contact opnemen met de support.",
-					 "Fout details-scherm afspraak aanmaak",
-					 MessageBoxButton.OK,
-					 MessageBoxImage.Error
-				);
-			}
-		}
-
-		// Handler to show save button when all details are changed
-		private void grDetails_InfoChanged(object sender, EventArgs e) {
-			if (_isSettingDataContext) {
-				return;
-			}
-			btnSave.IsEnabled = MainWindow.ValidateInputs(out _, in inputRequirements);
+			_detailsControl.grDetailsInputs.Visibility = Visibility.Collapsed;
+			_detailsControl.UpdateUIButtons();
 		}
 
 		private void tbFilter_TextChanged(object sender, TextChangedEventArgs e) {
 			if (tbFilter.Text != "") {
 				tbFilterPlaceholder.Visibility = Visibility.Hidden;
-				dgAppointments.ItemsSource = _context.Appointments
-					.Where(app => app.Deleted >= DateTime.Now
-						&& app.AgendaUserId == App.User.Id
-						&& (tbFilter.Text.Length == 0
-							|| (app.Title.Contains(tbFilter.Text)
-								|| app.Description.Contains(tbFilter.Text))))
-					.OrderBy(app => app.Date)
-					.Select(app => app)
-					.ToList();
 			} else {
 				tbFilterPlaceholder.Visibility = Visibility.Visible;
-				UpdateDataGrid();
 			}
+			_detailsControl.UpdateDataGrid();
 		}
 
-		// Refresh the appointments DataGrid with current data from the database
-		public void UpdateDataGrid() {
-			dgAppointments.ItemsSource = _context.Appointments
-				.Where(app =>
-					// Non-deleted appointments that are completed and owned by the user
-					app.Deleted >= DateTime.Now
-						&& !app.IsCompleted
-							&& app.AgendaUserId == App.User.Id)
-				.OrderBy(app => app.Date)
-				.ToList();
-
-			UpdateUIButtons();
-		}
-
-		// Helper to update button visibility based on selected appointment and user state
-		public void UpdateUIButtons() {
-			if (App.User == null) {
+		private void FilterOption_Checked(object sender, RoutedEventArgs e) {
+			if (_isSetting) {
 				return;
 			}
 
-			// btnAdd visible when a real user is logged in
-			btnAdd.IsEnabled = (App.User != AgendaUser.Dummy);
+			if (sender is CheckBox checkbox) {
+				var toggle = _detailsControl.filterOptions
+					.First(fo => fo.Key == checkbox.Name)
+					.Toggle;
 
-			// If no selection, nothing more to do
-			if (dgAppointments.SelectedItem == CollectionView.NewItemPlaceholder || dgAppointments.SelectedIndex < 0) {
-				// Default states
-				btnEdit.IsEnabled = false;
-				btnDelete.IsEnabled = false;
-				btnSave.IsEnabled = false;
-				SetDataContextWithoutTriggeringEvent(CollectionView.NewItemPlaceholder);
-
-				return;
+				toggle[0] = checkbox.IsChecked ?? false;
+				_detailsControl.UpdateDataGrid();
 			}
-
-			// Only allow edit/delete to the logged-in user if they have the correct permissions
-			List<string> roleList = _context.UserRoles
-				.Where(ur => ur.UserId == App.User.Id)	
-				.Select(ur => ur.RoleId)
-				.ToList();
-			if (roleList.Count > 0 && (roleList.Contains("User") || roleList.Contains("UserAdmin"))) {
-				btnEdit.IsEnabled = true;
-				btnDelete.IsEnabled = true;
-			}
-			btnSave.IsEnabled = false;
-
-			// Update the grDetails grid to use the currently selected appointment data
-			SetDataContextWithoutTriggeringEvent(dgAppointments.SelectedItem);
-		}
-
-		private void SetDataContextWithoutTriggeringEvent(object item) {
-			_isSettingDataContext = true;
-			grDetailsInputs.DataContext = item;
-			_isSettingDataContext = false;
 		}
 	}
 }

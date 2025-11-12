@@ -13,15 +13,14 @@ namespace WPFAPP {
 			InitializeComponent();
 
 			// Subscribe to events
-			AppointmentControl.AppointmentCreated += UpdateDataGrid;
-			//DetailsControl.ItemCreated += UpdateDataGrid;
+			DetailsControl.ItemCreated += UpdateDataGrid;
 			UpdateDataGrid();
 		}
 
 		public void UpdateDataGrid(object? sender = null, EventArgs? e = null) {
-			//if (e != null && e is not ItemCreatedEventArgs) {
-			//	return;
-			//}
+			if (e != null && e is not ItemCreatedEventArgs) {
+				return;
+			}
 
 			dgAppointments.ItemsSource = _context.Appointments
 				.Where(v => v.Deleted > DateTime.Now)

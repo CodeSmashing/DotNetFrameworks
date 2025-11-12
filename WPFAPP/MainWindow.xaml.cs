@@ -3,6 +3,7 @@ using Models;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using WPFAPP.Components;
 
 namespace WPFAPP {
 	public partial class MainWindow : Window {
@@ -25,7 +26,7 @@ namespace WPFAPP {
 			loginControl = new(_context, _userManager);
 			registerControl = new(_context, _userManager);
 			userInfoControl = new();
-			appointmentControl = new(_context);
+			appointmentControl = new(_context, _userManager);
 			adminPanelControl = new(_context, _userManager);
 			tciAuthenticationTab.Content = registerControl;
 			tciUserInfoTab.Content = userInfoControl;
