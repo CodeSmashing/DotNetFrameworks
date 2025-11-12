@@ -47,15 +47,17 @@ namespace WPFAPP {
 			DisplayUI(this, new PropertyChangedEventArgs(string.Empty));
 		}
 
-		public static void ReParentElementTo(Control element, Grid targetParent) {
-			Panel parent = (Panel) element.Parent;
+		public static void ReParentElementsTo(Control[] controlArray, Grid targetParent) {
+			foreach (Control control in controlArray) {
+				Panel parent = (Panel) control.Parent;
 
-			if (parent != null) {
-				parent.Children.Remove(element);
-				targetParent.Children.Add(element);
+				if (parent != null) {
+					parent.Children.Remove(control);
+					targetParent.Children.Add(control);
 
-				if (element is Label) {
-					targetParent.RowDefinitions.Add(new RowDefinition());
+					if (control is Label) {
+						targetParent.RowDefinitions.Add(new RowDefinition());
+					}
 				}
 			}
 		}
