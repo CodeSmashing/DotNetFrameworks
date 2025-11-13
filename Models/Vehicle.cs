@@ -1,4 +1,5 @@
 ﻿using Models.CustomValidation;
+using Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
