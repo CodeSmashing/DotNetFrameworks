@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class MainWindow : Window {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;

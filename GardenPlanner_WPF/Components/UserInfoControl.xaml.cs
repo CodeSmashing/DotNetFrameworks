@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class UserInfoControl : UserControl {
 		public UserInfoControl() {
 			InitializeComponent();

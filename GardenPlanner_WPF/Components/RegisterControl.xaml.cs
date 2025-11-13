@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class RegisterControl : UserControl {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;

@@ -2,7 +2,7 @@
 using Models;
 using System.Windows.Controls;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class AdminPanelControl : UserControl {
 		private readonly AgendaDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;

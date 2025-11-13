@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPFAPP
+namespace GardenPlanner_WPF
 {
 	/// <summary>
 	/// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
@@ -23,14 +23,14 @@ namespace WPFAPP
 	/// Add this XmlNamespace attribute to the root element of the markup file where it is 
 	/// to be used:
 	///
-	///     xmlns:MyNamespace="clr-namespace:WPFAPP"
+	///     xmlns:MyNamespace="clr-namespace:GardenPlanner_WPF"
 	///
 	///
 	/// Step 1b) Using this custom control in a XAML file that exists in a different project.
 	/// Add this XmlNamespace attribute to the root element of the markup file where it is 
 	/// to be used:
 	///
-	///     xmlns:MyNamespace="clr-namespace:WPFAPP;assembly=WPFAPP"
+	///     xmlns:MyNamespace="clr-namespace:GardenPlanner_WPF;assembly=GardenPlanner_WPF"
 	///
 	/// You will also need to add a project reference from the project where the XAML file lives
 	/// to this project and Rebuild to avoid compilation errors:

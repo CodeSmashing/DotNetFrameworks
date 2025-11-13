@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class ToDoControl : UserControl {
 		private readonly AgendaDbContext _context;
 

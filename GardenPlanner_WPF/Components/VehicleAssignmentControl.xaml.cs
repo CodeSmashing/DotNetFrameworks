@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class VehicleAssignmentControl : UserControl {
 		private readonly AgendaDbContext _context;
 		public List<Tuple<Vehicle, ComboBoxItem>> selectedVehicles = new List<Tuple<Vehicle, ComboBoxItem>>();

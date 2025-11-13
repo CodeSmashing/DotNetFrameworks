@@ -4,7 +4,7 @@ using Models;
 using System.ComponentModel;
 using System.Windows;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public class PasswordlessLoginTotpTokenProvider<TUser> : TotpSecurityStampBasedTokenProvider<TUser>
 	 where TUser : class {
 		public override Task<bool> CanGenerateTwoFactorTokenAsync(UserManager<TUser> manager, TUser user) {

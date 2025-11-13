@@ -8,7 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WPFAPP {
+namespace GardenPlanner_WPF {
 	public partial class AppointmentControl : UserControl {
 		static public event EventHandler AppointmentCreated = delegate { };
 		private readonly AgendaDbContext _context;
