@@ -1,4 +1,4 @@
-﻿namespace Android {
+﻿namespace GardenPlanner_Android {
 	public partial class MainPage : ContentPage {
 		int count = 0;
 

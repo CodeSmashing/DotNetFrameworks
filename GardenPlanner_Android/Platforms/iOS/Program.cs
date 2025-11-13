@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Android {
+namespace GardenPlanner_Android {
 	public class Program {
 		// This is the main entry point of the application.
 		static void Main(string[] args) {
