@@ -96,7 +96,7 @@ namespace Models {
 			}
 
 			if (!context.Users.Any()) {
-				List<AgendaUser> userList = AgendaUser.SeedingData();
+				AgendaUser[] userList = AgendaUser.SeedingData();
 				foreach (var user in userList) {
 					await userManager.CreateAsync(user, "P@ssword1");
 				}
@@ -142,12 +142,12 @@ namespace Models {
 						.Join(context.Users,
 							userRoleUserId => userRoleUserId,
 							user => user.Id,
-							(userRoleUserId, user) => user)
-						.ToList(),
+							(userRoleUserId, user) => user.Id)
+						.ToArray(),
 
 					context.AppointmentTypes
 						.Select(appt => appt.Id)
-						.ToList()
+						.ToArray()
 				));
 				context.SaveChanges();
 			}
@@ -161,7 +161,7 @@ namespace Models {
 				context.ToDos.AddRange(ToDo.SeedingData(
 					context.Appointments
 						.Select(app => app.Id)
-						.ToList()));
+						.ToArray()));
 				context.SaveChanges();
 			}
 		}

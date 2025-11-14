@@ -40,8 +40,8 @@ namespace Models {
 			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
 		}
 
-		public static List<AppointmentType> SeedingData() {
-			return new() {
+		public static AppointmentType[] SeedingData() {
+			return [
 				// Add a dummy AppointmentType
 				Dummy,
 				
@@ -58,7 +58,7 @@ namespace Models {
 					Name = AppointmentTypeName.Kennismaking,
 					Description = "Kennismaking klant"
 				}
-			};
+			];
 		}
 	}
 }

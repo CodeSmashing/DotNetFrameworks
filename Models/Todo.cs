@@ -45,9 +45,9 @@ namespace Models {
 			return $"Id: {Id} | Description: {Description} | Is klaar?({Ready})";
 		}
 
-		public static List<ToDo> SeedingData(List<string> appointmentIds) {
+		public static ToDo[] SeedingData(string[] appointmentIds) {
 			Random rnd = new();
-			return new() {
+			return [
 				// Add a dummy ToDo
 				Dummy,
 				
@@ -55,34 +55,34 @@ namespace Models {
 				new ToDo {
 					Description = "Eerste ToDo",
 					Ready = false,
-					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
 				new ToDo {
 					Description = "Tweede ToDo",
 					Ready = true,
-					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
 				new ToDo {
 					Description = "Derde ToDo",
 					Ready = false ,
-					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
 				new ToDo {
 					Description = "Eerste ToDo",
 					Ready = false,
-					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
 				new ToDo {
 					Description = "Tweede ToDo",
 					Ready = true,
-					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
 				new ToDo {
 					Description = "Derde ToDo",
 					Ready = false ,
-					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				}
-			};
+			];
 		}
 	}
 }

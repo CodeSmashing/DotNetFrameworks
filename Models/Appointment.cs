@@ -85,35 +85,35 @@ namespace Models {
 			return Id + "  Afspraak op " + Date + " betreffende " + Title;
 		}
 
-		public static List<Appointment> SeedingData(List<AgendaUser> listUsers, List<string> appointmentTypeIds) {
+		public static Appointment[] SeedingData(string[] listUserIds, string[] appointmentTypeIds) {
 			Random rnd = new();
-			return new() {
+			return [
 				// Add a dummy Appointment
 				Dummy,
 				
 				// Add a few example Appointments
 				new() {
-					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
+					AgendaUserId = listUserIds[rnd.Next(listUserIds.Length)],
 					Title = "Afspraak met Jan",
 					Description = "Bespreking van het tuin ontwerp",
 					Date = DateTime.Now.AddDays(2).AddHours(11),
-					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Count)],
+					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Length)],
 				},
 				new() {
-					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
+					AgendaUserId = listUserIds[rnd.Next(listUserIds.Length)],
 					Title = "Onderhoud tuin bij Piet",
 					Description = "Jaarlijks onderhoud van de tuin",
 					Date = DateTime.Now.AddDays(5).AddHours(10),
-					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Count)],
+					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Length)],
 				},
 				new() {
-					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
+					AgendaUserId = listUserIds[rnd.Next(listUserIds.Length)],
 					Title = "Kennismaking met Klaas",
 					Description = "Eerste gesprek over mogelijke tuin projecten",
 					Date = DateTime.Now.AddDays(7).AddHours(15),
-					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Count)],
+					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Length)],
 				}
-			};
+			];
 		}
 	}
 }

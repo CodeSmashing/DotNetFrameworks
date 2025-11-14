@@ -89,8 +89,8 @@ namespace Models {
 			return $"Vehicle {Id} (Licence plate: {LicencePlate})";
 		}
 
-		public static List<Vehicle> SeedingData() {
-			return new() {
+		public static Vehicle[] SeedingData() {
+			return [
 				// Add a dummy Vehicle
 				Dummy,
 				
@@ -160,7 +160,7 @@ namespace Models {
 					IsInUse = false,
 					Deleted = DateTime.MaxValue
 				}
-			};
+			];
 		}
 	}
 }

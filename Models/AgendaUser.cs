@@ -71,8 +71,8 @@ namespace Models {
 			return $"{FirstName} {LastName} ({DisplayName})";
 		}
 
-		public static List<AgendaUser> SeedingData() {
-			return new() {
+		public static AgendaUser[] SeedingData() {
+			return [
 				// Add a dummy AgendaUser
 				Dummy,
 				
@@ -131,7 +131,7 @@ namespace Models {
 					Email = "bartbartbart@gmail.com",
 					EmailConfirmed = true
 				}
-			};
+			];
 		}
 	}
 }
