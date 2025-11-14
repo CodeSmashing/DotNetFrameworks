@@ -55,9 +55,9 @@ namespace Models {
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted {
+		public DateTime? Deleted {
 			get; set;
-		} = DateTime.MaxValue;
+		}
 
 		[Display(Name = "Afspraak type ID")]
 		[ForeignKey("AppointmentType")]
@@ -70,7 +70,6 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Is goedgekeurd")]
 		public bool IsApproved {
 			get; set;

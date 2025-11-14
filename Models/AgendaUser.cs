@@ -58,9 +58,9 @@ namespace Models {
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted {
+		public DateTime? Deleted {
 			get; set;
-		} = DateTime.MaxValue;
+		}
 
 		public AgendaUser() {
 			// Automatically assign a GUID-based UserName as ASP.NET Core doesn't allow empty usernames

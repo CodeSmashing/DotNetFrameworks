@@ -16,9 +16,9 @@ namespace Models {
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted {
+		public DateTime? Deleted {
 			get; set;
-		} = DateTime.MaxValue;
+		}
 
 		[StringLength(9, MinimumLength = 9, ErrorMessage = "De nummer plaat moet en mag enkel 9 characters bevatten")]
 		[Display(Name = "Nummer plaat")]

@@ -14,10 +14,9 @@ namespace Models {
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted
-		{
+		public DateTime? Deleted {
 			get; set;
-		} = DateTime.MaxValue;
+		}
 
 		[Display(Name = "Title")]
 		public required string Description {
@@ -52,32 +51,32 @@ namespace Models {
 				Dummy,
 				
 				// Add a few example ToDos
-				new ToDo {
+				new() {
 					Description = "Eerste ToDo",
 					Ready = false,
 					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
-				new ToDo {
+				new() {
 					Description = "Tweede ToDo",
 					Ready = true,
 					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
-				new ToDo {
+				new() {
 					Description = "Derde ToDo",
 					Ready = false ,
 					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
-				new ToDo {
+				new() {
 					Description = "Eerste ToDo",
 					Ready = false,
 					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
-				new ToDo {
+				new() {
 					Description = "Tweede ToDo",
 					Ready = true,
 					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],
 				},
-				new ToDo {
+				new() {
 					Description = "Derde ToDo",
 					Ready = false ,
 					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Length)],

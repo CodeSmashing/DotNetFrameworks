@@ -32,9 +32,9 @@ namespace Models {
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted {
+		public DateTime? Deleted {
 			get; set;
-		} = DateTime.MaxValue;
+		}
 
 		public override string ToString() {
 			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
