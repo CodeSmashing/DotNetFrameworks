@@ -89,6 +89,7 @@ namespace GardenPlanner_WPF {
 						options.Password.RequiredLength = 3;
 						options.Password.RequiredUniqueChars = 1;
 						options.Tokens.PasswordResetTokenProvider = "PasswordlessLoginTotpProvider";
+						options.User.RequireUniqueEmail = true;
 					})
 					.AddRoles<IdentityRole>()
 					.AddEntityFrameworkStores<AgendaDbContext>()

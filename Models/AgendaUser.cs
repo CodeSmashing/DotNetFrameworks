@@ -42,14 +42,6 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
-		[EmailAddress]
-		[Display(Name = "Email")]
-		public override string? Email {
-			get => base.Email;
-			set => base.Email = value;
-		}
-
 		[Display(Name = "Aangemaakt")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
