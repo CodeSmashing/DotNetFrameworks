@@ -1,27 +1,30 @@
 ﻿using Models.CustomValidation;
 using Models.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class Vehicle {
-		public int Id {
-			get; set;
-		}
+		static public readonly Vehicle Dummy = new() {
+			LicencePlate = string.Empty,
+			Brand = string.Empty,
+			Model = string.Empty
+		};
+
+		public string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted
-		{
+		public DateTime Deleted {
 			get; set;
 		} = DateTime.MaxValue;
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(9, MinimumLength = 9, ErrorMessage = "De nummer plaat moet en mag enkel 9 characters bevatten")]
 		[Display(Name = "Nummer plaat")]
-		public string LicencePlate {
+		public required string LicencePlate {
 			get; set;
-		} = null!; // Specifically Belgian plates (e.g. format of 1-ABC-111)
+		} // Specifically Belgian plates (e.g. format of 1-ABC-111)
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Type voertuig")]
@@ -30,19 +33,17 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(50, MinimumLength = 3, ErrorMessage = "Het merk moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Merk")]
-		public string Brand {
+		public required string Brand {
 			get; set;
-		} = null!;
+		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(50, MinimumLength = 3, ErrorMessage = "Het model moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Model")]
-		public string Model {
+		public required string Model {
 			get; set;
-		} = null!;
+		}
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Laad capaciteit")]
@@ -88,17 +89,20 @@ namespace Models {
 			return $"Vehicle {Id} (Licence plate: {LicencePlate})";
 		}
 
-		// Seeding data
 		public static List<Vehicle> SeedingData() {
 			return new() {
+				// Add a dummy Vehicle
+				Dummy,
+				
+				// Add a few example Vehicles
 				new() {
 					LicencePlate = "0-ABC-123",
 					VehicleType = VehicleType.Truck,
 					ImageUrl = "https://assets.volvo.com/is/image/VolvoInformationTechnologyAB/volvo-fh16-cgi-exterior-1?qlt=82&wid=1024&ts=1705310176284&dpr=off&fit=constrain&fmt=png-alpha",
 					Brand = "Volvo",
 					Model = "FH16",
-					LoadCapacity = 26000.0,  // in liters
-					WeightCapacity = 18000.0, // in kilograms
+					LoadCapacity = 26000.0,
+					WeightCapacity = 18000.0,
 					FuelType = FuelType.Diesel,
 					IsManuel = false,
 					IsInUse = false,

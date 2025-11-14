@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Models {
 	public class AgendaUser : IdentityUser {
 		public static readonly AgendaUser Dummy = new() {
-			Id = "-",
+			Created = new DateTime(2000, 1, 1),
 			FirstName = "-",
 			LastName = "-",
 			DisplayName = "dummy",
@@ -13,19 +13,17 @@ namespace Models {
 			EmailConfirmed = true
 		};
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(20, MinimumLength = 2, ErrorMessage = "De voornaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Voornaam")]
-		public string FirstName {
+		public required string FirstName {
 			get; set;
-		} = null!;
+		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(20, MinimumLength = 2, ErrorMessage = "De achternaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Achternaam")]
-		public string LastName {
+		public required string LastName {
 			get; set;
-		} = null!;
+		}
 
 		[StringLength(20, MinimumLength = 5, ErrorMessage = "De gebruikersnaam moet minstens 5 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Gebruikersnaam")]
@@ -35,7 +33,7 @@ namespace Models {
 
 		[Display(Name = "Voertuig ID")]
 		[ForeignKey("Vehicle")]
-		public int? VehicleId {
+		public string? VehicleId {
 			get; set;
 		}
 
@@ -73,9 +71,12 @@ namespace Models {
 			return $"{FirstName} {LastName} ({DisplayName})";
 		}
 
-		// Seeding data
 		public static List<AgendaUser> SeedingData() {
 			return new() {
+				// Add a dummy AgendaUser
+				Dummy,
+				
+				// Add a few example AgendaUsers
 				new() {
 					FirstName = "Bob",
 					LastName = "Dylan",

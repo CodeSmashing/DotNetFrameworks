@@ -4,9 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models {
 	public class AppointmentType {
-		public int Id {
-			get; set;
-		}
+		static public readonly AppointmentType Dummy = new() {
+			Description = string.Empty
+		};
+
+		public string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
@@ -15,12 +19,11 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
 		[Display(Name = "Omschrijving")]
-		public string Description {
+		public required string Description {
 			get; set;
-		} = string.Empty;
+		}
 
 		// Likely to be removed
 		public string Color {
@@ -37,18 +40,24 @@ namespace Models {
 			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
 		}
 
-		// Seeding data
 		public static List<AppointmentType> SeedingData() {
 			return new() {
+				// Add a dummy AppointmentType
+				Dummy,
+				
+				// Add a few example AppointmentTypes
 				new() {
 					Name = AppointmentTypeName.Onderhoud,
-					Description = "Algemeen onderhoud"},
+					Description = "Algemeen onderhoud"
+				},
 				new() {
 					Name = AppointmentTypeName.Aanleg,
-					Description = "Aanleggen van tuin" },
+					Description = "Aanleggen van tuin"
+				},
 				new() {
 					Name = AppointmentTypeName.Kennismaking,
-					Description = "Kennismaking klant" }
+					Description = "Kennismaking klant"
+				}
 			};
 		}
 	}

@@ -3,11 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class ToDo {
-		static public readonly ToDo Dummy = new() { Description = "-", Ready = false, AppointmentId = 0 };
+		static public readonly ToDo Dummy = new() {
+			Description = string.Empty,
+			AppointmentId = Appointment.Dummy.Id
+		};
 
-		public long Id {
-			get; set;
-		}
+		public string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
@@ -16,41 +19,69 @@ namespace Models {
 			get; set;
 		} = DateTime.MaxValue;
 
-		// Eigenschappen
-		[Required]
 		[Display(Name = "Title")]
-		public string Description { get; set; } = string.Empty;
-
-		[Required]
-		[Display(Name = "Klaar")]
-		public bool Ready { get; set; } = false;
-
-		// Foreign key naar Appointment
-		[Required]
-		[Display(Name = "Appointment")]
-		[ForeignKey("Appointment")]
-		public long AppointmentId {
+		public required string Description {
 			get; set;
 		}
 
-		// Override ToString methode
+		[Required]
+		[Display(Name = "Klaar")]
+		public bool Ready {
+			get; set;
+		} = false;
+
+		[Display(Name = "Afspraak ID")]
+		[ForeignKey("Appointment")]
+		public required string AppointmentId {
+			get; set;
+		}
+
+		[Display(Name = "Afspraak")]
+		public Appointment? Appointment {
+			get; set;
+		}
+
 		public override string ToString() {
 			return $"Id: {Id} | Description: {Description} | Is klaar?({Ready})";
 		}
 
-		// Seeding data
-		public static List<ToDo> SeedingData() {
+		public static List<ToDo> SeedingData(List<string> appointmentIds) {
+			Random rnd = new();
 			return new() {
-				// Voeg een dummy ToDo toe
+				// Add a dummy ToDo
 				Dummy,
-
-				// Voeg enkele voorbeeld ToDos toe
-				new ToDo { Description = "Eerste ToDo", Ready = false, AppointmentId = 1},
-				new ToDo { Description = "Tweede ToDo", Ready = true, AppointmentId = 1},
-				new ToDo { Description = "Derde ToDo", Ready = false , AppointmentId = 1},
-				new ToDo { Description = "Eerste ToDo", Ready = false, AppointmentId = 2},
-				new ToDo { Description = "Tweede ToDo", Ready = true, AppointmentId = 2},
-				new ToDo { Description = "Derde ToDo", Ready = false , AppointmentId = 2 }
+				
+				// Add a few example ToDos
+				new ToDo {
+					Description = "Eerste ToDo",
+					Ready = false,
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+				},
+				new ToDo {
+					Description = "Tweede ToDo",
+					Ready = true,
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+				},
+				new ToDo {
+					Description = "Derde ToDo",
+					Ready = false ,
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+				},
+				new ToDo {
+					Description = "Eerste ToDo",
+					Ready = false,
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+				},
+				new ToDo {
+					Description = "Tweede ToDo",
+					Ready = true,
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+				},
+				new ToDo {
+					Description = "Derde ToDo",
+					Ready = false ,
+					AppointmentId = appointmentIds[rnd.Next(appointmentIds.Count)],
+				}
 			};
 		}
 	}

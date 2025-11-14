@@ -155,7 +155,7 @@ namespace GardenPlanner_WPF {
 						AgendaUserId = App.User.Id,
 						Date = dpDate.SelectedDate ?? DateTime.MinValue,
 						Title = tbTitle.Text,
-						AppointmentType = (AppointmentType) cbTypes.SelectedItem,
+						AppointmentTypeId = ((AppointmentType) cbTypes.SelectedItem).Id,
 						Description = tbDescription.Text,
 					};
 

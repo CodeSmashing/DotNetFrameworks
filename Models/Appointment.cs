@@ -3,22 +3,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class Appointment {
-		public long Id {
+		static public readonly Appointment Dummy = new() {
+			Created = new DateTime(2000, 1, 1),
+			AgendaUserId = AgendaUser.Dummy.Id,
+			Title = string.Empty,
+			Description = string.Empty,
+			AppointmentTypeId = AppointmentType.Dummy.Id
+		};
+
+		public string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
+
+
+		[ForeignKey("AgendaUser")]
+		[Display(Name = "Gebruiker ID")]
+		public required string AgendaUserId {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
-		[ForeignKey("AgendaUser")]
-		[Display(Name = "Gebruiker ID")]
-		public string AgendaUserId {
-			get; set;
-		} = null!;
-
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Gebruiker")]
-		public AgendaUser AgendaUser {
+		public AgendaUser? AgendaUser {
 			get; set;
-		} = null!;
+		}
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Datum")]
@@ -27,20 +34,18 @@ namespace Models {
 			get; set;
 		} = DateTime.Now;
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(50, MinimumLength = 3, ErrorMessage = "De titel moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Titel")]
-		public string Title {
+		public required string Title {
 			get; set;
-		} = null!;
+		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
 		[Display(Name = "Omschrijving")]
 		[DataType(DataType.MultilineText)]
-		public string Description {
+		public required string Description {
 			get; set;
-		} = null!;
+		}
 
 		[Display(Name = "Aangemaakt")]
 		[DataType(DataType.DateTime)]
@@ -54,18 +59,16 @@ namespace Models {
 			get; set;
 		} = DateTime.MaxValue;
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Afspraak type ID")]
 		[ForeignKey("AppointmentType")]
-		public int AppointmentTypeId {
+		public required string AppointmentTypeId {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Afspraak type")]
-		public AppointmentType AppointmentType {
+		public AppointmentType? AppointmentType {
 			get; set;
-		} = null!;
+		}
 
 		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Is goedgekeurd")]
@@ -82,30 +85,34 @@ namespace Models {
 			return Id + "  Afspraak op " + Date + " betreffende " + Title;
 		}
 
-		// Seeding data
-		public static List<Appointment> SeedingData(List<AgendaUser> listUsers) {
+		public static List<Appointment> SeedingData(List<AgendaUser> listUsers, List<string> appointmentTypeIds) {
 			Random rnd = new();
 			return new() {
+				// Add a dummy Appointment
+				Dummy,
+				
+				// Add a few example Appointments
 				new() {
 					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Afspraak met Jan",
 					Description = "Bespreking van het tuin ontwerp",
 					Date = DateTime.Now.AddDays(2).AddHours(11),
-					AppointmentTypeId = 2 },
-
+					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Count)],
+				},
 				new() {
 					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Onderhoud tuin bij Piet",
 					Description = "Jaarlijks onderhoud van de tuin",
 					Date = DateTime.Now.AddDays(5).AddHours(10),
-					AppointmentTypeId = 1 },
-
+					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Count)],
+				},
 				new() {
 					AgendaUserId = listUsers[rnd.Next(listUsers.Count)].Id,
 					Title = "Kennismaking met Klaas",
 					Description = "Eerste gesprek over mogelijke tuin projecten",
 					Date = DateTime.Now.AddDays(7).AddHours(15),
-					AppointmentTypeId = 3 }
+					AppointmentTypeId = appointmentTypeIds[rnd.Next(appointmentTypeIds.Count)],
+				}
 			};
 		}
 	}
