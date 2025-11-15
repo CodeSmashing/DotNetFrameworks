@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Models {
 	public class ToDo {
 		static public readonly ToDo Dummy = new() {
+			Created = new DateTime(2000, 1, 1),
 			Description = string.Empty,
 			AppointmentId = Appointment.Dummy.Id
 		};
@@ -11,6 +12,12 @@ namespace Models {
 		public string Id {
 			get; private set;
 		} = Guid.NewGuid().ToString();
+
+		[Display(Name = "Aangemaakt")]
+		[DataType(DataType.DateTime)]
+		public DateTime Created {
+			get; private set;
+		} = DateTime.Now;
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]

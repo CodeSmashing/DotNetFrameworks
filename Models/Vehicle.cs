@@ -5,14 +5,25 @@ using System.ComponentModel.DataAnnotations;
 namespace Models {
 	public class Vehicle {
 		static public readonly Vehicle Dummy = new() {
+			Created = new DateTime(2000, 1, 1),
 			LicencePlate = string.Empty,
 			Brand = string.Empty,
-			Model = string.Empty
+			Model = string.Empty,
+			VehicleType = VehicleType.Personal,
+			LoadCapacity = 0.0,
+			WeightCapacity = 0.0,
+			FuelType = FuelType.Diesel,
 		};
 
 		public string Id {
 			get; private set;
 		} = Guid.NewGuid().ToString();
+
+		[Display(Name = "Aangemaakt")]
+		[DataType(DataType.DateTime)]
+		public DateTime Created {
+			get; private set;
+		} = DateTime.Now;
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
@@ -26,10 +37,9 @@ namespace Models {
 			get; set;
 		} // Specifically Belgian plates (e.g. format of 1-ABC-111)
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Type voertuig")]
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
-		public VehicleType VehicleType {
+		public required VehicleType VehicleType {
 			get; set;
 		}
 
@@ -45,26 +55,23 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Laad capaciteit")]
 		[Range(0.0, 9999999.99)]
 		[RegularExpression(@"^\\d+(\\.\\d{1,2})?$")]
-		public double LoadCapacity {
+		public required double LoadCapacity {
 			get; set;
 		} // In liters
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Gewicht capaciteit")]
 		[Range(0.0, 9999999.99)]
 		[RegularExpression(@"^\\d+(\\.\\d{1,2})?$")]
-		public double WeightCapacity {
+		public required double WeightCapacity {
 			get; set;
 		} // In kilograms
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Brandstof type")]
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
-		public FuelType FuelType {
+		public required FuelType FuelType {
 			get; set;
 		}
 
@@ -73,13 +80,11 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Is manueel")]
 		public bool IsManuel {
 			get; set;
-		}
+		} = false;
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Is in gebruik")]
 		public bool IsInUse {
 			get; set;

@@ -5,6 +5,7 @@ namespace Models {
 	public class Appointment {
 		static public readonly Appointment Dummy = new() {
 			Created = new DateTime(2000, 1, 1),
+			Date = new DateTime(2000, 1, 1),
 			AgendaUserId = AgendaUser.Dummy.Id,
 			Title = string.Empty,
 			Description = string.Empty,
@@ -27,12 +28,11 @@ namespace Models {
 			get; set;
 		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[Display(Name = "Datum")]
 		[DataType(DataType.DateTime)]
-		public DateTime Date {
+		public required DateTime Date {
 			get; set;
-		} = DateTime.Now;
+		}
 
 		[StringLength(50, MinimumLength = 3, ErrorMessage = "De titel moet minstens 3 characters en mag maximum 50 characters bevatten")]
 		[Display(Name = "Titel")]

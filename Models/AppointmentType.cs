@@ -5,17 +5,18 @@ using System.ComponentModel.DataAnnotations;
 namespace Models {
 	public class AppointmentType {
 		static public readonly AppointmentType Dummy = new() {
-			Description = string.Empty
+			Created = new DateTime(2000, 1, 1),
+			Description = string.Empty,
+			Name = AppointmentTypeName.Kennismaking
 		};
 
 		public string Id {
 			get; private set;
 		} = Guid.NewGuid().ToString();
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
 		[Display(Name = "Afspraak type naam")]
-		public AppointmentTypeName Name {
+		public required AppointmentTypeName Name {
 			get; set;
 		}
 
@@ -29,6 +30,12 @@ namespace Models {
 		public string Color {
 			get; set;
 		} = "#FF000000"; // Color in which the appointment wil be shown, default is black
+
+		[Display(Name = "Aangemaakt")]
+		[DataType(DataType.DateTime)]
+		public DateTime Created {
+			get; private set;
+		} = DateTime.Now;
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
