@@ -170,7 +170,7 @@ namespace Models.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Deleted")
+                    b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DisplayName")
@@ -178,7 +178,6 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -228,8 +227,8 @@ namespace Models.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("VehicleId")
-                        .HasColumnType("int");
+                    b.Property<string>("VehicleId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -238,7 +237,8 @@ namespace Models.Migrations
                         .HasFilter("[DisplayName] IS NOT NULL");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -255,18 +255,16 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Appointment", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AgendaUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AppointmentTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("AppointmentTypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -274,7 +272,7 @@ namespace Models.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Deleted")
+                    b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -299,22 +297,22 @@ namespace Models.Migrations
 
                     b.HasIndex("AppointmentTypeId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Models.AppointmentType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Deleted")
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -327,21 +325,22 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypes");
+                    b.ToTable("AppointmentTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.ToDo", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    b.Property<string>("AppointmentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<long>("AppointmentId")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Deleted")
+                    b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -353,23 +352,25 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ToDos");
+                    b.HasIndex("AppointmentId");
+
+                    b.ToTable("ToDos", (string)null);
                 });
 
             modelBuilder.Entity("Models.Vehicle", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("Deleted")
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("FuelType")
@@ -405,7 +406,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Vehicles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -485,6 +486,17 @@ namespace Models.Migrations
                     b.Navigation("AgendaUser");
 
                     b.Navigation("AppointmentType");
+                });
+
+            modelBuilder.Entity("Models.ToDo", b =>
+                {
+                    b.HasOne("Models.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
                 });
 #pragma warning restore 612, 618
         }

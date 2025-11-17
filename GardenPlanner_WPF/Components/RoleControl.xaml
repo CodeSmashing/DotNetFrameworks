@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="GardenPlanner_WPF.RoleControl"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+				xmlns:local="clr-namespace:GardenPlanner_WPF"
+				mc:Ignorable="d"
+				Style="{StaticResource BaseUserControl}">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="20"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<!-- Filter for a specific user -->
+		<Grid
+			Style="{StaticResource SearchFilterPanel}"
+			Grid.Row="0"
+			Grid.Column="0">
+			<TextBox
+				x:Name="tbFilterUser"
+				TextChanged="tbFilter_TextChanged"/>
+			<Label
+				x:Name="tbFilterUserPlaceholder"
+				Content="Naam..."
+				IsHitTestVisible="False"/>
+		</Grid>
+
+		<!-- Filter for a specific role -->
+		<Grid
+			Style="{StaticResource SearchFilterPanel}"
+			Grid.Row="0"
+			Grid.Column="1">
+			<TextBox
+				x:Name="tbFilterRole"
+				TextChanged="tbFilter_TextChanged"/>
+			<Label
+				x:Name="tbFilterRolePlaceholder"
+				Content="Rol..."
+				IsHitTestVisible="False"/>
+		</Grid>
+
+		<!-- Pick the user to edit the roles of -->
+		<DataGrid
+			x:Name="dgUsers"
+			SelectionMode="Single"
+			SelectionChanged="dgUsers_SelectionChanged"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Header="Id"
+					Binding="{Binding Id}"
+					MaxWidth="100"
+					Width="*"/>
+
+				<DataGridTextColumn
+					Header="Voornaam"
+					Binding="{Binding FirstName}"
+					Width="*"/>
+
+				<DataGridTextColumn
+					Header="Achternaam"
+					Binding="{Binding LastName}"
+					Width="*"/>
+
+				<DataGridTextColumn
+					Header="Weergavenaam"
+					Binding="{Binding DisplayName}"
+					Width="*"/>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<!-- ListBox to display and select roles -->
+		<ListBox
+			x:Name="lbRoles"
+			SelectionMode="Multiple"
+			SelectionChanged="lbRoles_SelectionChanged"
+			HorizontalAlignment="Stretch"
+			Grid.Row="3"
+			Grid.ColumnSpan="2">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel>
+						<ListBoxItem Content="{Binding Id}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>

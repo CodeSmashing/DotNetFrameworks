@@ -96,16 +96,11 @@ namespace Models {
 			}
 
 			if (!context.Users.Any()) {
-				context.Add(AgendaUser.Dummy);
-				context.SaveChanges();
-
-				await userManager.AddToRoleAsync(AgendaUser.Dummy, "Guest");
-
-				// Default employees
-				List<AgendaUser> userList = AgendaUser.SeedingData();
+				AgendaUser[] userList = AgendaUser.SeedingData();
 				foreach (var user in userList) {
 					await userManager.CreateAsync(user, "P@ssword1");
 				}
+				await userManager.AddToRoleAsync(AgendaUser.Dummy, "Guest");
 				await userManager.AddToRoleAsync(
 					context.Users.First(ur => ur.Email == "admin.bob@gardenDb.org"),
 					"Admin");
@@ -141,10 +136,18 @@ namespace Models {
 			if (!context.Appointments.Any()) {
 				// Only use regular users
 				context.Appointments.AddRange(Appointment.SeedingData(
-					context.Users
-						.Where(u => context.UserRoles
-							.Any(ur => ur.UserId == u.Id && ur.RoleId == "User"))
-						.ToList()
+					context.UserRoles
+						.Where(ur => ur.RoleId == "User")
+						.Select(ur => ur.UserId)
+						.Join(context.Users,
+							userRoleUserId => userRoleUserId,
+							user => user.Id,
+							(userRoleUserId, user) => user.Id)
+						.ToArray(),
+
+					context.AppointmentTypes
+						.Select(appt => appt.Id)
+						.ToArray()
 				));
 				context.SaveChanges();
 			}
@@ -155,7 +158,10 @@ namespace Models {
 			}
 
 			if (!context.ToDos.Any()) {
-				context.ToDos.AddRange(ToDo.SeedingData());
+				context.ToDos.AddRange(ToDo.SeedingData(
+					context.Appointments
+						.Select(app => app.Id)
+						.ToArray()));
 				context.SaveChanges();
 			}
 		}

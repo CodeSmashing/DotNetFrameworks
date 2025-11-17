@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Models {
 	public class AgendaUser : IdentityUser {
 		public static readonly AgendaUser Dummy = new() {
-			Id = "-",
+			Created = new DateTime(2000, 1, 1),
 			FirstName = "-",
 			LastName = "-",
 			DisplayName = "dummy",
@@ -13,19 +13,17 @@ namespace Models {
 			EmailConfirmed = true
 		};
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(20, MinimumLength = 2, ErrorMessage = "De voornaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Voornaam")]
-		public string FirstName {
+		public required string FirstName {
 			get; set;
-		} = null!;
+		}
 
-		[Required(ErrorMessage = "{0} is vereist")]
 		[StringLength(20, MinimumLength = 2, ErrorMessage = "De achternaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Achternaam")]
-		public string LastName {
+		public required string LastName {
 			get; set;
-		} = null!;
+		}
 
 		[StringLength(20, MinimumLength = 5, ErrorMessage = "De gebruikersnaam moet minstens 5 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Gebruikersnaam")]
@@ -35,21 +33,13 @@ namespace Models {
 
 		[Display(Name = "Voertuig ID")]
 		[ForeignKey("Vehicle")]
-		public int? VehicleId {
+		public string? VehicleId {
 			get; set;
 		}
 
 		[Display(Name = "Voertuig")]
 		public Vehicle? Vehicle {
 			get; set;
-		}
-
-		[Required(ErrorMessage = "{0} is vereist")]
-		[EmailAddress]
-		[Display(Name = "Email")]
-		public override string? Email {
-			get => base.Email;
-			set => base.Email = value;
 		}
 
 		[Display(Name = "Aangemaakt")]
@@ -60,9 +50,9 @@ namespace Models {
 
 		[Display(Name = "Verwijderd")]
 		[DataType(DataType.DateTime)]
-		public DateTime Deleted {
+		public DateTime? Deleted {
 			get; set;
-		} = DateTime.MaxValue;
+		}
 
 		public AgendaUser() {
 			// Automatically assign a GUID-based UserName as ASP.NET Core doesn't allow empty usernames
@@ -73,9 +63,12 @@ namespace Models {
 			return $"{FirstName} {LastName} ({DisplayName})";
 		}
 
-		// Seeding data
-		public static List<AgendaUser> SeedingData() {
-			return new() {
+		public static AgendaUser[] SeedingData() {
+			return [
+				// Add a dummy AgendaUser
+				Dummy,
+				
+				// Add a few example AgendaUsers
 				new() {
 					FirstName = "Bob",
 					LastName = "Dylan",
@@ -130,7 +123,7 @@ namespace Models {
 					Email = "bartbartbart@gmail.com",
 					EmailConfirmed = true
 				}
-			};
+			];
 		}
 	}
 }
