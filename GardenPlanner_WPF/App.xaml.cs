@@ -60,9 +60,6 @@ namespace GardenPlanner_WPF {
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
-			// Set the initial or "default" user
-			_user = AgendaUser.Dummy;
-
 			// Setup dependency injection
 			var serviceSet = new ServiceCollection();
 
@@ -100,6 +97,9 @@ namespace GardenPlanner_WPF {
 
 				// Seed the database
 				await AgendaDbContext.Seeder(ServiceProvider);
+
+				// Set the initial or "default" user
+				_user = AgendaUser.Dummy;
 
 				MainWindow = new(
 					ServiceProvider.GetRequiredService<AgendaDbContext>(),

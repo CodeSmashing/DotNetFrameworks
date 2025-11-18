@@ -50,7 +50,7 @@ namespace GardenPlanner_WPF {
 			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
 				// Build a details string including related ToDos
 				var todos = _context.ToDos
-					.Where(t => t.Deleted >= DateTime.Now && t.AppointmentId == selectedAppointment.Id)
+					.Where(t => t.Deleted == null && t.AppointmentId == selectedAppointment.Id)
 					.OrderBy(t => t.Id)
 					.ToList();
 
@@ -197,7 +197,7 @@ namespace GardenPlanner_WPF {
 			if (tbFilter.Text != "") {
 				tbFilterPlaceholder.Visibility = Visibility.Hidden;
 				dgAppointments.ItemsSource = _context.Appointments
-					.Where(app => app.Deleted >= DateTime.Now
+					.Where(app => app.Deleted == null
 						&& app.AgendaUserId == App.User.Id
 						&& (tbFilter.Text.Length == 0
 							|| (app.Title.Contains(tbFilter.Text)
@@ -216,9 +216,9 @@ namespace GardenPlanner_WPF {
 			dgAppointments.ItemsSource = _context.Appointments
 				.Where(app =>
 					// Non-deleted appointments that are completed and owned by the user
-					app.Deleted >= DateTime.Now
+					app.Deleted == null
 						&& !app.IsCompleted
-							&& app.AgendaUserId == App.User.Id)
+						&& app.AgendaUserId == App.User.Id)
 				.OrderBy(app => app.Date)
 				.ToList();
 

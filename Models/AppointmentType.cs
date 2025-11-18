@@ -1,15 +1,11 @@
 ﻿using Models.CustomValidation;
 using Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Models {
 	public class AppointmentType {
-		static public readonly AppointmentType Dummy = new() {
-			Created = new DateTime(2000, 1, 1),
-			Description = string.Empty,
-			Name = AppointmentTypeName.Kennismaking
-		};
-
+		public static AppointmentType Dummy;
 		public string Id {
 			get; private set;
 		} = Guid.NewGuid().ToString();
@@ -48,6 +44,13 @@ namespace Models {
 		}
 
 		public static AppointmentType[] SeedingData() {
+			Dummy = new() {
+				Id = "-",
+				Created = new DateTime(2000, 1, 1),
+				Description = string.Empty,
+				Name = AppointmentTypeName.Kennismaking
+			};
+
 			return [
 				// Add a dummy AppointmentType
 				Dummy,

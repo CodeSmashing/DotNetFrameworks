@@ -92,7 +92,7 @@ namespace GardenPlanner_WPF {
 					.Where(u =>
 						// Only unlocked and non-deleted users
 						((u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
-							&& u.Deleted >= DateTime.Now)
+							&& u.Deleted == null)
 
 						// Role filter
 						&& (userIdList.Count == 0 || userIdList.Contains(u.Id))
@@ -146,7 +146,7 @@ namespace GardenPlanner_WPF {
 				.Where(u =>
 					// Only unlocked and non-deleted users
 					(u.LockoutEnd == null || u.LockoutEnd < DateTime.Now)
-						&& u.Deleted >= DateTime.Now)
+						&& u.Deleted == null)
 				.OrderBy(u => u.LastName + " " + u.FirstName)
 				.ToList();
 

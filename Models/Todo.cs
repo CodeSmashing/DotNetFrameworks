@@ -3,11 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class ToDo {
-		static public readonly ToDo Dummy = new() {
-			Created = new DateTime(2000, 1, 1),
-			Description = string.Empty,
-			AppointmentId = Appointment.Dummy.Id
-		};
+		public static ToDo Dummy;
 
 		public string Id {
 			get; private set;
@@ -53,6 +49,13 @@ namespace Models {
 
 		public static ToDo[] SeedingData(string[] appointmentIds) {
 			Random rnd = new();
+			Dummy = new() {
+				Id = "-",
+				Created = new DateTime(2000, 1, 1),
+				Description = string.Empty,
+				AppointmentId = Appointment.Dummy.Id
+			};
+
 			return [
 				// Add a dummy ToDo
 				Dummy,

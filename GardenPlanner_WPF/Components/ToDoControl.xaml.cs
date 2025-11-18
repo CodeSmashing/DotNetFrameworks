@@ -54,7 +54,7 @@ namespace GardenPlanner_WPF {
 		public void dgAppointments_SelectionChanged(object? sender = null, SelectionChangedEventArgs? e = null) {
 			if (dgAppointments.SelectedItem is Appointment selectedAppointment) {
 				dgTodos.ItemsSource = _context.ToDos
-					.Where(t => t.Deleted >= DateTime.Now && t.AppointmentId == selectedAppointment.Id)
+					.Where(t => t.Deleted == null && t.AppointmentId == selectedAppointment.Id)
 					.OrderBy(t => t.Id)
 					.ToList();
 			}

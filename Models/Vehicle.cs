@@ -4,16 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models {
 	public class Vehicle {
-		static public readonly Vehicle Dummy = new() {
-			Created = new DateTime(2000, 1, 1),
-			LicencePlate = string.Empty,
-			Brand = string.Empty,
-			Model = string.Empty,
-			VehicleType = VehicleType.Personal,
-			LoadCapacity = 0.0,
-			WeightCapacity = 0.0,
-			FuelType = FuelType.Diesel,
-		};
+		public static Vehicle Dummy;
 
 		public string Id {
 			get; private set;
@@ -95,6 +86,18 @@ namespace Models {
 		}
 
 		public static Vehicle[] SeedingData() {
+			Dummy = new() {
+				Id = "-",
+				Created = new DateTime(2000, 1, 1),
+				LicencePlate = string.Empty,
+				Brand = string.Empty,
+				Model = string.Empty,
+				VehicleType = VehicleType.Personal,
+				LoadCapacity = 0.0,
+				WeightCapacity = 0.0,
+				FuelType = FuelType.Diesel,
+			};
+
 			return [
 				// Add a dummy Vehicle
 				Dummy,

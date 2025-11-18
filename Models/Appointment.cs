@@ -3,14 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class Appointment {
-		static public readonly Appointment Dummy = new() {
-			Created = new DateTime(2000, 1, 1),
-			Date = new DateTime(2000, 1, 1),
-			AgendaUserId = AgendaUser.Dummy.Id,
-			Title = string.Empty,
-			Description = string.Empty,
-			AppointmentTypeId = AppointmentType.Dummy.Id
-		};
+		public static Appointment Dummy;
 
 		public string Id {
 			get; private set;
@@ -86,6 +79,17 @@ namespace Models {
 
 		public static Appointment[] SeedingData(string[] listUserIds, string[] appointmentTypeIds) {
 			Random rnd = new();
+			Dummy = new() {
+				Id = "-",
+				Created = new DateTime(2000, 1, 1),
+				Date = new DateTime(2000, 1, 1),
+				AgendaUserId = AgendaUser.Dummy.Id,
+				Title = string.Empty,
+				Description = string.Empty,
+				AppointmentTypeId = AppointmentType.Dummy.Id,
+				IsCompleted = true
+			};
+
 			return [
 				// Add a dummy Appointment
 				Dummy,

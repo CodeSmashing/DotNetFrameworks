@@ -249,7 +249,7 @@ namespace GardenPlanner_WPF {
 
 		public void UpdateDataGrid() {
 			dgVehicleDetails.ItemsSource = _context.Vehicles
-				.Where(v => v.Deleted >= DateTime.Now)
+				.Where(v => v.Deleted == null)
 				.OrderBy(v => v.VehicleType)
 				.ToList();
 
