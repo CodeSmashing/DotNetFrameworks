@@ -3,28 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System.ComponentModel;
 using System.Windows;
+using Models.CustomServices;
 
 namespace GardenPlanner_WPF {
-	public class PasswordlessLoginTotpTokenProvider<TUser> : TotpSecurityStampBasedTokenProvider<TUser>
-	 where TUser : class {
-		public override Task<bool> CanGenerateTwoFactorTokenAsync(UserManager<TUser> manager, TUser user) {
-			return Task.FromResult(false);
-		}
-
-		public override async Task<string> GetUserModifierAsync(string purpose, UserManager<TUser> manager, TUser user) {
-			var email = await manager.GetEmailAsync(user);
-			return "PasswordlessLogin:" + purpose + ":" + email;
-		}
-	}
-
-	public static class CustomIdentityBuilderExtensions {
-		public static IdentityBuilder AddPasswordlessLoginTotpTokenProvider(this IdentityBuilder builder) {
-			var userType = builder.UserType;
-			var totpProvider = typeof(PasswordlessLoginTotpTokenProvider<>).MakeGenericType(userType);
-			return builder.AddTokenProvider("PasswordlessLoginTotpProvider", totpProvider);
-		}
-	}
-
 	public partial class App : Application {
 		static public event PropertyChangedEventHandler UserChanged = delegate { };
 		static private AgendaUser _user = null!;
