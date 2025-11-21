@@ -126,16 +126,20 @@ namespace Models {
 					context.Users.First(ur => ur.Email == "bartbartbart@gmail.com"),
 					"User");
 				context.SaveChanges();
+			} else {
+				AgendaUser.Dummy = context.Users.First(u => u.Id == "-");
 			}
 
 			if (!context.AppointmentTypes.Any()) {
 				context.AppointmentTypes.AddRange(AppointmentType.SeedingData());
 				context.SaveChanges();
+			} else {
+				AppointmentType.Dummy = context.AppointmentTypes.First(appt => appt.Id == "-");
 			}
 
 			if (!context.Appointments.Any()) {
-				// Only use regular users
 				context.Appointments.AddRange(Appointment.SeedingData(
+					// Only use regular users
 					context.UserRoles
 						.Where(ur => ur.RoleId == "User")
 						.Select(ur => ur.UserId)
@@ -145,24 +149,34 @@ namespace Models {
 							(userRoleUserId, user) => user.Id)
 						.ToArray(),
 
+					// Non dummy data
 					context.AppointmentTypes
+						.Where(appt => appt.Id != "-")
 						.Select(appt => appt.Id)
 						.ToArray()
 				));
 				context.SaveChanges();
+			} else {
+				Appointment.Dummy = context.Appointments.First(app => app.Id == "-");
 			}
 
 			if (!context.Vehicles.Any()) {
 				context.Vehicles.AddRange(Vehicle.SeedingData());
 				context.SaveChanges();
+			} else {
+				Vehicle.Dummy = context.Vehicles.First(v => v.Id == "-");
 			}
 
 			if (!context.ToDos.Any()) {
 				context.ToDos.AddRange(ToDo.SeedingData(
+					// Non dummy data
 					context.Appointments
+						.Where(appt => appt.Id != "-")
 						.Select(app => app.Id)
 						.ToArray()));
 				context.SaveChanges();
+			} else {
+				ToDo.Dummy = context.ToDos.First(td => td.Id == "-");
 			}
 		}
 	}

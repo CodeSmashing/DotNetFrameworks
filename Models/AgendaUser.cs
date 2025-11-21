@@ -4,14 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models {
 	public class AgendaUser : IdentityUser {
-		public static readonly AgendaUser Dummy = new() {
-			Created = new DateTime(2000, 1, 1),
-			FirstName = "-",
-			LastName = "-",
-			DisplayName = "dummy",
-			Email = "dummy@gardenDb.org",
-			EmailConfirmed = true
-		};
+		public static AgendaUser Dummy;
 
 		[StringLength(20, MinimumLength = 2, ErrorMessage = "De voornaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
 		[Display(Name = "Voornaam")]
@@ -64,6 +57,16 @@ namespace Models {
 		}
 
 		public static AgendaUser[] SeedingData() {
+			Dummy = new() {
+				Id = "-",
+				Created = new DateTime(2000, 1, 1),
+				FirstName = "-",
+				LastName = "-",
+				DisplayName = "dummy",
+				Email = "dummy@gardenDb.org",
+				EmailConfirmed = true
+			};
+
 			return [
 				// Add a dummy AgendaUser
 				Dummy,
