@@ -23,6 +23,10 @@ namespace Models {
 			get; set;
 		}
 
+		public AgendaDbContext() : base() { }
+
+		public AgendaDbContext(DbContextOptions<AgendaDbContext> options) : base(options) { }
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			base.OnModelCreating(modelBuilder);
 

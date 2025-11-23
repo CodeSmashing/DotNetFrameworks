@@ -1,6 +1,11 @@
 ﻿using Models;
 
-using (var context = new AgendaDbContext()) {
+namespace Console {
+	public class Program {
+		public static void Main(string[] args) {
+		}
+	}
+
 	/* Before we set the AgendaDbContext.Seeder() to use IServiceProvider:
 	await AgendaDbContext.Seeder(context);
 
@@ -36,6 +41,4 @@ using (var context = new AgendaDbContext()) {
 	//{
 	//    Console.WriteLine(appointment);
 	//}
-
-
 }
