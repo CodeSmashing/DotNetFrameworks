@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -148,6 +149,13 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 				}
 				user.FirstName = Input.FirstName;
 				user.LastName = Input.LastName;
+
+				// Get the user's chosen language from the cookies, otherwise leave it at the default language of the model
+				string cookieCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+
+				if (cookieCulture != null) {
+					user.LanguageCode = cookieCulture.Substring(2, 2); // Extract the language code from the cookie value
+				}
 
 				var result = await _userManager.CreateAsync(user, Input.Password);
 

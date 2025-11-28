@@ -1,8 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Models
+@using Microsoft.AspNetCore.Localization
+@using GardenPlanner_Web.Properties
+@using Microsoft.Extensions.Options
 
 @inject SignInManager<AgendaUser> SignInManager
 @inject UserManager<AgendaUser> UserManager
+@inject AgendaDbContext AgendaDbContext
+@inject IOptions<GlobalAppSettings> GlobalAppSettingsOptions
 
 @{
 	// Since the display name is optional, we'll need a fallback
@@ -11,21 +16,51 @@
 }
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User)) {
-	<li class="nav-item">
-		<a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(name)!</a>
-	</li>
-	<li class="nav-item">
-		<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-			<button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-		</form>
-	</li>
-} else {
-	<li class="nav-item">
-		<a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-	</li>
-}
+	@if (SignInManager.IsSignedIn(User)) {
+		<li class="nav-item">
+			<a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(name)!</a>
+		</li>
+		<li class="nav-item">
+			<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+				<button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+			</form>
+		</li>
+	} else {
+		// The default language
+		string languageCode = GlobalAppSettingsOptions.Value.DefaultLanguageCode;
+
+		// Get the user's chosen language from the cookies, otherwise leave it at the default language
+		string? cookieCulture = Context.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+		if (cookieCulture != null) {
+			languageCode = cookieCulture.Substring(2, 2);
+		}
+		var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/index.html" : $"~{Context.Request.Path.Value}";
+		string? defaultLanguage = AgendaDbContext.Languages.FirstOrDefault(l => l.Code == languageCode)?.Name;
+
+		<li class="nav-item">
+			<a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+		</li>
+		<li class="nav-item dropdown">
+			<a class="nav-link text-dark dropdown" data-bs-toggle="dropdown">@defaultLanguage</a>
+			<ul class="dropdown-menu">
+				@foreach(Language language in AgendaDbContext.Languages) {
+					if (language.Code != languageCode && language.IsSystemLanguage) {
+						<li class="nav-item">
+							<a class="nav-link text-dark"
+								asp-area=""
+								asp-controller="Languages"
+								asp-action="ChangeLanguage"
+								asp-route-code="@language.Code"
+								asp-route-returnUrl="@returnUrl">
+								@language.Name
+							</a>
+						</li>
+					}
+				}
+			</ul>
+		</li>
+	}
 </ul>

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Localization\" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <Folder Include="Areas\Identity\Data\" />
   </ItemGroup>

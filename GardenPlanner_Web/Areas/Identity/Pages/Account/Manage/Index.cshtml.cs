@@ -6,21 +6,30 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GardenPlanner_Web.Properties;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
 
 namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 	public class IndexModel : PageModel {
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly SignInManager<AgendaUser> _signInManager;
+		private readonly AgendaDbContext _context;
+		private readonly GlobalAppSettings _globalAppSettings;
 
 		public IndexModel(
 			UserManager<AgendaUser> userManager,
-			SignInManager<AgendaUser> signInManager) {
+			SignInManager<AgendaUser> signInManager,
+			AgendaDbContext context,
+			GlobalAppSettings globalAppSettings) {
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_context = context;
+			_globalAppSettings = globalAppSettings;
 		}
 
 		/// <summary>
@@ -30,9 +39,11 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 		public string DisplayName {
 			get; set;
 		}
+
 		public string FirstName {
 			get; set;
 		}
+
 		public string LastName {
 			get; set;
 		}
@@ -69,6 +80,11 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 			//public string PhoneNumber {
 			//	get; set;
 			//}
+
+			[Display(Name = "Taal code")]
+			public string LanguageCode {
+				get; set;
+			}
 		}
 
 		private async Task LoadAsync(AgendaUser user) {
@@ -77,6 +93,8 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 			DisplayName = user.DisplayName;
 			FirstName = user.FirstName;
 			LastName = user.LastName;
+			SelectList sl = new(Language.Languages.Where(l => l.Code != "-" && l.IsSystemLanguage), "Code", "Name", user.LanguageCode);
+			ViewData["Languages"] = sl;
 
 			Input = new InputModel {
 				//PhoneNumber = phoneNumber
@@ -112,6 +130,19 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 			//		return RedirectToPage();
 			//	}
 			//}
+
+			// Update user language code if present
+			if (user.LanguageCode != Input.LanguageCode) {
+				user.LanguageCode = Input.LanguageCode;
+				_context.Update(user);
+				_context.SaveChanges();
+
+				Response.Cookies.Append(
+					CookieRequestCultureProvider.DefaultCookieName,
+					CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(Input.LanguageCode)),
+					new CookieOptions { Expires = _globalAppSettings.DefaultCookieLifespan }
+				);
+			}
 
 			await _signInManager.RefreshSignInAsync(user);
 			StatusMessage = "Your profile has been updated";

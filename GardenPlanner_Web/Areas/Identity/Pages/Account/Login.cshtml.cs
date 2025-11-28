@@ -8,9 +8,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using GardenPlanner_Web.Properties;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -21,10 +23,15 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 	public class LoginModel : PageModel {
 		private readonly SignInManager<AgendaUser> _signInManager;
 		private readonly ILogger<LoginModel> _logger;
+		private readonly GlobalAppSettings _globalAppSettings;
 
-		public LoginModel(SignInManager<AgendaUser> signInManager, ILogger<LoginModel> logger) {
+		public LoginModel(
+			SignInManager<AgendaUser> signInManager,
+			ILogger<LoginModel> logger,
+			GlobalAppSettings globalAppSettings) {
 			_signInManager = signInManager;
 			_logger = logger;
+			_globalAppSettings = globalAppSettings;
 		}
 
 		/// <summary>
@@ -122,6 +129,12 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 				AgendaDbContext context = new();
 				AgendaUser contextUser = await context.Users.FirstAsync(u => u.Email == Input.Email);
 				var result = await _signInManager.PasswordSignInAsync(contextUser.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+				Response.Cookies.Append(
+					CookieRequestCultureProvider.DefaultCookieName,
+					CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(contextUser.LanguageCode)),
+					new CookieOptions { Expires = _globalAppSettings.DefaultCookieLifespan }
+				);
 
 				if (result.Succeeded) {
 					_logger.LogInformation("User logged in.");
