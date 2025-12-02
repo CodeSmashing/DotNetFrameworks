@@ -159,13 +159,10 @@ namespace Models {
 			if (!context.Appointments.Any()) {
 				context.Appointments.AddRange(Appointment.SeedingData(
 					// Only use regular users
-					context.UserRoles
-						.Where(ur => ur.RoleId == "User")
-						.Select(ur => ur.UserId)
-						.Join(context.Users,
-							userRoleUserId => userRoleUserId,
-							user => user.Id,
-							(userRoleUserId, user) => user.Id)
+					context.Users
+						.Where(user => context.UserRoles
+								.Any(ur => ur.UserId == user.Id && ur.RoleId == "User"))
+						.Select(u => u.Id)
 						.ToArray(),
 
 					// Non dummy data
