@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
@@ -11,9 +12,11 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(AgendaDbContext))]
-    partial class AgendaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251123121120_LowerMaxLengthNameAndLoginProviderAndProviderKeyInAspNetUserTokensAndAspNetUserLogins")]
+    partial class LowerMaxLengthNameAndLoginProviderAndProviderKeyInAspNetUserTokensAndAspNetUserLogins
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,10 +196,6 @@ namespace Models.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("LanguageCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -247,8 +246,6 @@ namespace Models.Migrations
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("LanguageCode");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -336,26 +333,6 @@ namespace Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppointmentTypes");
-                });
-
-            modelBuilder.Entity("Models.Language", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSystemLanguage")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Models.ToDo", b =>
@@ -492,17 +469,9 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.AgendaUser", b =>
                 {
-                    b.HasOne("Models.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId");
-
-                    b.Navigation("Language");
 
                     b.Navigation("Vehicle");
                 });

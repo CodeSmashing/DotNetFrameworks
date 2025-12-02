@@ -114,6 +114,8 @@ Run the test suite using the following command:
  - [Disabled button styling](https://stackoverflow.com/a/25407810)
  - [Binding specific data to ComboBox](https://wpf-tutorial.com/list-controls/combobox-control/)
  - [Password-less authentication](https://andrewlock.net/implementing-custom-token-providers-for-passwordless-authentication-in-asp-net-core-identity/)
+ - [ASP.NET MVC: Getting the current user](https://stackoverflow.com/a/35128271)
+ - [ASP.NET MVC: Output enum value as string](https://stackoverflow.com/a/23105621)
 
 ### Used NuGet packages
 
@@ -128,4 +130,11 @@ Run the test suite using the following command:
  - [Microsoft.Extensions.Configuration.EnvironmentVariables](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.EnvironmentVariables/9.0.10?_src=template)
  - [Microsoft.Extensions.Configuration.Json](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Json/9.0.10?_src=template)
  - [Microsoft.Extensions.Configuration.UserSecrets](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.UserSecrets/9.0.10?_src=template)
+ - [Microsoft.AspNetCore.Identity.UI](https://www.nuget.org/packages/Microsoft.AspNetCore.Identity.UI/9.0.11?_src=template)
+ - [Microsoft.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/9.0.11?_src=template)
+ - [Microsoft.EntityFrameworkCore.Tools](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/9.0.11?_src=template)
+ - [Microsoft.VisualStudio.Web.CodeGeneration.Design](https://www.nuget.org/packages/Microsoft.VisualStudio.Web.CodeGeneration.Design/9.0.0?_src=template)
+ - [Microsoft.Extensions.Logging.Debug](https://www.nuget.org/packages/Microsoft.Extensions.Logging.Debug/9.0.8?_src=template)
+ - [Microsoft.Maui.Controls](https://www.nuget.org/packages/Microsoft.Maui.Controls/9.0.111?_src=template)
+ - [Microsoft.NET.ILLink.Tasks](https://www.nuget.org/packages/Microsoft.NET.ILLink.Tasks/9.0.11?_src=template)
 ---

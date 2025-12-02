@@ -24,6 +24,17 @@ namespace Models {
 			get; set;
 		}
 
+		[Display(Name = "Voorkeur taal code")]
+		[ForeignKey("Language")]
+		public string LanguageCode {
+			get; set;
+		} = "nl";
+
+		[Display(Name = "Voorkeur taal")]
+		public Language? Language {
+			get; set;
+		}
+
 		[Display(Name = "Voertuig ID")]
 		[ForeignKey("Vehicle")]
 		public string? VehicleId {
@@ -64,7 +75,8 @@ namespace Models {
 				LastName = "-",
 				DisplayName = "dummy",
 				Email = "dummy@gardenDb.org",
-				EmailConfirmed = true
+				EmailConfirmed = true,
+				LanguageCode = Language.Dummy.Code
 			};
 
 			return [
