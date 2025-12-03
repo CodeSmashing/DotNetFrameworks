@@ -116,6 +116,8 @@ Run the test suite using the following command:
  - [Password-less authentication](https://andrewlock.net/implementing-custom-token-providers-for-passwordless-authentication-in-asp-net-core-identity/)
  - [ASP.NET MVC: Getting the current user](https://stackoverflow.com/a/35128271)
  - [ASP.NET MVC: Output enum value as string](https://stackoverflow.com/a/23105621)
+ - [Localization for data annotations](https://stackoverflow.com/a/16838176)
+ - [ASP.NET Core: Localization](https://lokalise.com/blog/asp-net-core-localization/)
 
 ### Used NuGet packages
 

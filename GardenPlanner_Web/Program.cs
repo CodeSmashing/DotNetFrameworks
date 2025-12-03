@@ -1,28 +1,23 @@
 using GardenPlanner_Web.Properties;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.CustomServices;
+using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("AgendaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AgendaDbContextConnection' not found.");
-var totpProvider = typeof(PasswordlessLoginTotpTokenProvider<>).MakeGenericType(typeof(AgendaUser));
 
-// Set configuration options
-builder.Services
-	.Configure<GlobalAppSettings>(builder.Configuration.GetSection("GlobalAppSettings"))
-	.PostConfigure<GlobalAppSettings>(options => {
-		options.DefaultCookieLifespan = DateTime.UtcNow.AddDays(12);
-	})
-	.AddSingleton(resolver => resolver.GetRequiredService<IOptions<GlobalAppSettings>>().Value);
+// Database Context
+builder.Services.AddDbContext<AgendaDbContext>(options =>
+	options.UseSqlServer(
+		builder.Configuration.GetConnectionString("AgendaDbContextConnection")
+		?? throw new InvalidOperationException("Connection string 'AgendaDbContextConnection' not found.")
+	));
 
-// Add services to the container.
+// Identity System
 builder.Services
-	.AddDbContext<AgendaDbContext>()
-	.AddLogging()
-	.AddLocalization(options => {
-		options.ResourcesPath = "Localization";
-	})
 	.AddDefaultIdentity<AgendaUser>(options => {
 		options.Password.RequireDigit = false;
 		options.Password.RequireLowercase = false;
@@ -38,39 +33,55 @@ builder.Services
 	.AddEntityFrameworkStores<AgendaDbContext>()
 	.AddPasswordlessLoginTotpTokenProvider();
 
-builder.Services.AddRazorPages();
-builder.Services.AddControllersWithViews();
+// Custom App Settings
+builder.Services
+	.Configure<GlobalAppSettings>(builder.Configuration.GetSection("GlobalAppSettings"))
+	.PostConfigure<GlobalAppSettings>(options => {
+		options.DefaultCookieLifespan = DateTime.UtcNow.AddDays(12);
+	});
 
-builder.Services.AddMvc()
-	.AddViewLocalization()
+// Allow injecting the raw settings object directly
+builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<GlobalAppSettings>>().Value);
+
+builder.Services.AddLogging();
+
+// Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(options => {
+	CultureInfo[] supportedCultures = {
+		new("en-US"),
+		new("nl-BE"),
+		new("fr-FR"),
+		new("en"),
+		new("nl"),
+		new("fr")
+	 };
+
+	options.DefaultRequestCulture = new RequestCulture(culture: "nl-BE", uiCulture: "nl-BE");
+	options.SupportedCultures = supportedCultures;
+	options.SupportedUICultures = supportedCultures;
+});
+
+// MVC & Views with Localization
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+builder.Services
+	.AddMvc()
+	.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
 	.AddDataAnnotationsLocalization();
 
 var app = builder.Build();
 
+// Seed the database
 using (var scope = app.Services.CreateScope()) {
 	var services = scope.ServiceProvider;
 	try {
-		// Seed the database
 		await AgendaDbContext.Seeder(services);
 	} catch (Exception ex) {
 		var logger = services.GetRequiredService<ILogger<Program>>();
 		logger.LogError(ex, "An error occurred while seeding the database.");
 	}
 }
-
-// Adding middleware for localization
-string[] supportedCultures = [
-	"en-US",
-	"nl-BE",
-	"fr-FR",
-	"en",
-	"nl",
-	"fr"
-];
-var localizationOptions = new RequestLocalizationOptions()
-	.SetDefaultCulture(supportedCultures[1])
-	.AddSupportedCultures(supportedCultures)
-	.AddSupportedUICultures(supportedCultures);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment()) {
@@ -80,16 +91,26 @@ if (!app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 
+// Localization Middleware (Must be before Routing/Auth)
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(localizationOptions.Value);
+
+app.UseStaticFiles();
+app.UseRouting();
+app.UseCors();
+
+// Authentication & Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// Endpoints
 app.MapControllerRoute(
-	 name: "default",
-	 pattern: "{controller=Home}/{action=Index}/{id?}")
-	 .WithStaticAssets();
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}")
+	.WithStaticAssets();
 
 app.MapRazorPages();
 

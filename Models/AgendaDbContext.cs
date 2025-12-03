@@ -80,13 +80,13 @@ namespace Models {
 			if (!context.Languages.Any()) {
 				context.Languages.AddRange(Language.SeedingData());
 				context.SaveChanges();
-
-				// A list to lessen database queries
-				Language.Languages.AddRange(context.Languages
-					.Where(l => l.IsActive)
-					.OrderBy(l => l.Name)
-					.ToList());
 			}
+
+			// A list to lessen database queries
+			Language.Languages.AddRange(context.Languages
+				.Where(l => l.IsActive)
+				.OrderBy(l => l.Name)
+				.ToList());
 
 			if (!context.Roles.Any()) {
 				context.Roles.AddRange(new List<IdentityRole> {
