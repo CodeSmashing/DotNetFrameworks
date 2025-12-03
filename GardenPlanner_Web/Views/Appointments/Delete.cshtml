@@ -1,14 +1,17 @@
 ﻿@model Models.Appointment
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
 
 @{
-	ViewData["Title"] = "Delete";
+	ViewData["Title"] = _sharedLocalizer["Delete"];
 }
 
-<h1>Delete</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@_sharedLocalizer["Are you sure you want to delete this?"]</h3>
 <div>
-	<h4>Appointment</h4>
+	<h4>@_sharedLocalizer["Appointment"]</h4>
 	<hr />
 	<dl class="row">
 		@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin")) {
@@ -65,7 +68,7 @@
 
 	<form asp-action="Delete">
 		<input type="hidden" asp-for="Id" />
-		<input type="submit" value="Delete" class="btn btn-danger" /> |
-		<a asp-action="Index">Back to List</a>
+		<input type="submit" value=@_sharedLocalizer["Delete"] class="btn btn-danger" /> |
+		<a asp-action="Index">@_sharedLocalizer["Back to List"]</a>
 	</form>
 </div>

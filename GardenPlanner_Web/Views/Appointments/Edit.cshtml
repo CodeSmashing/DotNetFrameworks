@@ -1,12 +1,15 @@
 ﻿@model Models.Appointment
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
 
 @{
-	ViewData["Title"] = "Edit";
+	ViewData["Title"] = _sharedLocalizer["Edit"];
 }
 
-<h1>Edit</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Appointment</h4>
+<h4>@_sharedLocalizer["Appointment"]</h4>
 <hr />
 <div class="row">
 	<div class="col-md-4">
@@ -47,14 +50,14 @@
 				</label>
 			</div>
 			<div class="form-group">
-				<input type="submit" value="Save" class="btn btn-primary" />
+				<input type="submit" value=@_sharedLocalizer["Save"] class="btn btn-primary" />
 			</div>
 		</form>
 	</div>
 </div>
 
 <div>
-	<a asp-action="Index">Back to List</a>
+	<a asp-action="Index">@_sharedLocalizer["Back to List"]</a>
 </div>
 
 @section Scripts {

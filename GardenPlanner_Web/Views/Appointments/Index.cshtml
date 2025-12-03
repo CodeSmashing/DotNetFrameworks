@@ -1,18 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Models.Enums
 @using Models
+@using Microsoft.AspNetCore.Mvc.Localization
 @model IEnumerable<Models.Appointment>
 
+@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
 @inject AgendaDbContext Context
+
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = _sharedLocalizer["Index"];
 	var appointmentTypes = Context.AppointmentTypes;
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-	<a asp-action="Create">Create New</a>
+	<a asp-action="Create">@_sharedLocalizer["Create New"]</a>
 </p>
 <table class="table">
 	<thead>
@@ -76,9 +79,9 @@
 					@Html.DisplayFor(modelItem => item.IsCompleted)
 				</td>
 				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					<a asp-action="Edit" asp-route-id="@item.Id">@_sharedLocalizer["Edit"]</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">@_sharedLocalizer["Details"]</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a>
 				</td>
 			</tr>
 		}
