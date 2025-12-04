@@ -1,11 +1,13 @@
 using GardenPlanner_Web.Properties;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.CustomServices;
+using Models.CustomValidation;
 using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,7 @@ builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<G
 builder.Services.AddLogging();
 
 // Localization
+builder.Services.AddSingleton<IValidationAttributeAdapterProvider, LocalizedValidationAttributeAdapterProvider>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.Configure<RequestLocalizationOptions>(options => {
 	CultureInfo[] supportedCultures = {
@@ -68,7 +71,10 @@ builder.Services.AddRazorPages();
 builder.Services
 	.AddMvc()
 	.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-	.AddDataAnnotationsLocalization();
+	.AddDataAnnotationsLocalization(options => {
+	 options.DataAnnotationLocalizerProvider = (type, factory) =>
+		 factory.Create(typeof(Models.SharedResource));
+ });
 
 var app = builder.Build();
 

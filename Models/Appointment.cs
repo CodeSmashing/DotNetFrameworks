@@ -9,72 +9,71 @@ namespace Models {
 			get; private set;
 		} = Guid.NewGuid().ToString();
 
-
 		[ForeignKey("AgendaUser")]
-		[Display(Name = "Gebruiker ID")]
+		[Display(Name = "UserId", ResourceType = typeof(Resources.Appointment))]
 		public required string AgendaUserId {
 			get; set;
 		}
 
-		[Display(Name = "Gebruiker")]
+		[Display(Name = "User", ResourceType = typeof(Resources.Appointment))]
 		public AgendaUser? AgendaUser {
 			get; set;
 		}
 
-		[Display(Name = "Datum")]
+		[Display(Name = "Date", ResourceType = typeof(Resources.Appointment))]
 		[DataType(DataType.DateTime)]
 		public required DateTime Date {
 			get; set;
 		}
 
-		[StringLength(50, MinimumLength = 3, ErrorMessage = "De titel moet minstens 3 characters en mag maximum 50 characters bevatten")]
-		[Display(Name = "Titel")]
+		[StringLength(50, MinimumLength = 3)]
+		[Display(Name = "Title", ResourceType = typeof(Resources.Appointment))]
 		public required string Title {
 			get; set;
 		}
 
-		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
-		[Display(Name = "Omschrijving")]
+		[StringLength(2000, MinimumLength = 3)]
+		[Display(Name = "Description", ResourceType = typeof(Resources.Appointment))]
 		[DataType(DataType.MultilineText)]
 		public required string Description {
 			get; set;
 		}
 
-		[Display(Name = "Aangemaakt")]
+		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
-		[Display(Name = "Verwijderd")]
+		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
 		public DateTime? Deleted {
 			get; set;
 		}
 
-		[Display(Name = "Afspraak type ID")]
+		[Display(Name = "AppointmentTypeId", ResourceType = typeof(Resources.Appointment))]
 		[ForeignKey("AppointmentType")]
 		public required string AppointmentTypeId {
 			get; set;
 		}
 
-		[Display(Name = "Afspraak type")]
+		[Display(Name = "AppointmentType", ResourceType = typeof(Resources.Appointment))]
 		public AppointmentType? AppointmentType {
 			get; set;
 		}
 
-		[Display(Name = "Is goedgekeurd")]
+		[Display(Name = "IsApproved", ResourceType = typeof(Resources.Appointment))]
 		public bool IsApproved {
 			get; set;
 		} = false;
 
-		[Display(Name = "Is afgerond")]
+		[Display(Name = "IsCompleted", ResourceType = typeof(Resources.Appointment))]
 		public bool IsCompleted {
 			get; set;
 		} = false;
 
 		public override string ToString() {
-			return Id + "  Afspraak op " + Date + " betreffende " + Title;
+			return String.Format(Resources.Appointment.ToString, Id, Date, Title);
 		}
 
 		public static Appointment[] SeedingData(string[] listUserIds, string[] appointmentTypeIds) {

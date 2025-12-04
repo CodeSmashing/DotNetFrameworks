@@ -118,6 +118,7 @@ Run the test suite using the following command:
  - [ASP.NET MVC: Output enum value as string](https://stackoverflow.com/a/23105621)
  - [Localization for data annotations](https://stackoverflow.com/a/16838176)
  - [ASP.NET Core: Localization](https://lokalise.com/blog/asp-net-core-localization/)
+ - [Localization of RequiredAttribute](https://stackoverflow.com/a/50230263)
 
 ### Used NuGet packages
 
@@ -139,4 +140,5 @@ Run the test suite using the following command:
  - [Microsoft.Extensions.Logging.Debug](https://www.nuget.org/packages/Microsoft.Extensions.Logging.Debug/9.0.8?_src=template)
  - [Microsoft.Maui.Controls](https://www.nuget.org/packages/Microsoft.Maui.Controls/9.0.111?_src=template)
  - [Microsoft.NET.ILLink.Tasks](https://www.nuget.org/packages/Microsoft.NET.ILLink.Tasks/9.0.11?_src=template)
+ - [Microsoft.AspNetCore.Mvc.DataAnnotations](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.DataAnnotations/2.3.0?_src=template)
 ---

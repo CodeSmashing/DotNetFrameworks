@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create" xml:space="preserve">
-    <value>Creëer</value>
+  <data name="Created" xml:space="preserve">
+    <value>Aangemaakt op</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>Titel</value>
+  <data name="Deleted" xml:space="preserve">
+    <value>Verwijderd op</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>{0} is vereist</value>
+  </data>
+  <data name="StringLength" xml:space="preserve">
+    <value>De {0} moet minstens {2} characters en mag maximum {1} characters bevatten</value>
   </data>
 </root>
