@@ -1,10 +1,14 @@
 ﻿@model ErrorViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
+
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = @_sharedLocalizer["Error"];
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h1 class="text-danger">@_sharedLocalizer["Error"].</h1>
+<h2 class="text-danger">@_sharedLocalizer["An error occurred while processing your request"].</h2>
 
 @if (Model.ShowRequestId)
 {

@@ -1,6 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
+
+@{
+    ViewData["Title"] = @_sharedLocalizer["Privacy Policy"];
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<p>@_sharedLocalizer["This is our privacy policy"].</p>

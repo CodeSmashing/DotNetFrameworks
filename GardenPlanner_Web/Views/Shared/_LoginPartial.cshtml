@@ -3,11 +3,15 @@
 @using Microsoft.AspNetCore.Localization
 @using GardenPlanner_Web.Properties
 @using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Mvc.Localization
 
 @inject SignInManager<AgendaUser> SignInManager
 @inject UserManager<AgendaUser> UserManager
 @inject AgendaDbContext AgendaDbContext
 @inject IOptions<GlobalAppSettings> GlobalAppSettingsOptions
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
+
+
 
 @{
 	// Since the display name is optional, we'll need a fallback
@@ -38,10 +42,10 @@
 		string? defaultLanguage = AgendaDbContext.Languages.FirstOrDefault(l => l.Code == languageCode)?.Name;
 
 		<li class="nav-item">
-			<a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+			<a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">@_sharedLocalizer["Register"]</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+			<a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">@_sharedLocalizer["Login"]</a>
 		</li>
 		<li class="nav-item dropdown">
 			<a class="nav-link text-dark dropdown" data-bs-toggle="dropdown">@defaultLanguage</a>
