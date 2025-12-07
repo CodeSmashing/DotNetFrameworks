@@ -22,7 +22,7 @@ namespace Models {
 			get; set;
 		}
 
-		[StringLength(9, MinimumLength = 9, ErrorMessageResourceType = typeof(Resources.Vehicle))]
+		[StringLength(9, MinimumLength = 9)]
 		[Display(Name = "LicencePlate", ResourceType = typeof(Resources.Vehicle))]
 		public required string LicencePlate {
 			get; set;
