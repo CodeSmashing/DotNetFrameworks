@@ -34,6 +34,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Appointment.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\AppointmentType.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppointmentType.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\SharedResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -50,6 +55,10 @@
     <EmbeddedResource Update="Resources\Appointment.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Appointment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AppointmentType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppointmentType.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\SharedResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
