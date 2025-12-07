@@ -9,42 +9,42 @@ namespace Models {
 			get; private set;
 		} = Guid.NewGuid().ToString();
 
-		[Display(Name = "Aangemaakt")]
+		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
-		[Display(Name = "Verwijderd")]
+		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
 		public DateTime? Deleted {
 			get; set;
 		}
 
-		[Display(Name = "Title")]
+		[Display(Name = "Description")]
 		public required string Description {
 			get; set;
 		}
 
 		[Required]
-		[Display(Name = "Klaar")]
+		[Display(Name = "Ready")]
 		public bool Ready {
 			get; set;
 		} = false;
 
-		[Display(Name = "Afspraak ID")]
+		[Display(Name = "AppointmentId")]
 		[ForeignKey("Appointment")]
 		public required string AppointmentId {
 			get; set;
 		}
 
-		[Display(Name = "Afspraak")]
+		[Display(Name = "Appointment")]
 		public Appointment? Appointment {
 			get; set;
 		}
 
 		public override string ToString() {
-			return $"Id: {Id} | Description: {Description} | Is klaar?({Ready})";
+			return string.Format(Resources.ToDo.ToString, Id, Description, Ready);
 		}
 
 		public static ToDo[] SeedingData(string[] appointmentIds) {
