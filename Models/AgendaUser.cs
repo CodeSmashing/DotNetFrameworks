@@ -6,53 +6,53 @@ namespace Models {
 	public class AgendaUser : IdentityUser {
 		public static AgendaUser Dummy;
 
-		[StringLength(20, MinimumLength = 2, ErrorMessage = "De voornaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
-		[Display(Name = "Voornaam")]
+		[StringLength(20, MinimumLength = 2)]
+		[Display(Name = "FirstName", ResourceType = typeof(Resources.AgendaUser))]
 		public required string FirstName {
 			get; set;
 		}
 
-		[StringLength(20, MinimumLength = 2, ErrorMessage = "De achternaam moet minstens 2 characters en mag maximum 20 characters bevatten")]
-		[Display(Name = "Achternaam")]
+		[StringLength(20, MinimumLength = 2)]
+		[Display(Name = "LastName", ResourceType = typeof(Resources.AgendaUser))]
 		public required string LastName {
 			get; set;
 		}
 
-		[StringLength(20, MinimumLength = 5, ErrorMessage = "De gebruikersnaam moet minstens 5 characters en mag maximum 20 characters bevatten")]
-		[Display(Name = "Gebruikersnaam")]
+		[StringLength(20, MinimumLength = 5)]
+		[Display(Name = "DisplayName", ResourceType = typeof(Resources.AgendaUser))]
 		public string? DisplayName {
 			get; set;
 		}
 
-		[Display(Name = "Voorkeur taal code")]
+		[Display(Name = "LanguageCode", ResourceType = typeof(Resources.AgendaUser))]
 		[ForeignKey("Language")]
 		public string LanguageCode {
 			get; set;
 		} = "nl";
 
-		[Display(Name = "Voorkeur taal")]
+		[Display(Name = "Language", ResourceType = typeof(Resources.AgendaUser))]
 		public Language? Language {
 			get; set;
 		}
 
-		[Display(Name = "Voertuig ID")]
+		[Display(Name = "VehicleId", ResourceType = typeof(Resources.AgendaUser))]
 		[ForeignKey("Vehicle")]
 		public string? VehicleId {
 			get; set;
 		}
 
-		[Display(Name = "Voertuig")]
+		[Display(Name = "Vehicle", ResourceType = typeof(Resources.AgendaUser))]
 		public Vehicle? Vehicle {
 			get; set;
 		}
 
-		[Display(Name = "Aangemaakt")]
+		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
-		[Display(Name = "Verwijderd")]
+		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
 		public DateTime? Deleted {
 			get; set;
@@ -64,7 +64,7 @@ namespace Models {
 		}
 
 		override public string ToString() {
-			return $"{FirstName} {LastName} ({DisplayName})";
+			return string.Format(Resources.AgendaUser.ToString, FirstName, LastName, DisplayName);
 		}
 
 		public static AgendaUser[] SeedingData() {

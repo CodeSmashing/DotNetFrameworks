@@ -29,6 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\AgendaUser.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AgendaUser.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Appointment.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -52,6 +57,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\AgendaUser.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AgendaUser.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Appointment.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Appointment.Designer.cs</LastGenOutput>
