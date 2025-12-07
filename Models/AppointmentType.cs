@@ -22,11 +22,6 @@ namespace Models {
 			get; set;
 		}
 
-		// Likely to be removed
-		public string Color {
-			get; set;
-		} = "#FF000000"; // Color in which the appointment wil be shown, default is black
-
 		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
