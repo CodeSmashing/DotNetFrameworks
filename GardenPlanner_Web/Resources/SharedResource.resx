@@ -177,8 +177,14 @@
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="Login or make an account to begin" xml:space="preserve">
+    <value>Login or make an account to begin</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="Plan and organize your landscaping business with ease using GardenPlanner" xml:space="preserve">
+    <value>Plan and organize your landscaping business with ease using GardenPlanner</value>
   </data>
   <data name="Please choose your display name" xml:space="preserve">
     <value>Please choose your display name</value>

@@ -19,14 +19,13 @@
 	string? name = user?.DisplayName ?? user?.FirstName;
 }
 
-<ul class="navbar-nav">
 	@if (SignInManager.IsSignedIn(User)) {
-		<li class="nav-item">
-			<a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(name)!</a>
+		<li class="nav-button">
+			<a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(name)!</a>
 		</li>
-		<li class="nav-item">
+		<li class="nav-button">
 			<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-				<button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+				<button id="logout" type="submit" class="nav-link btn btn-link text-light border-0">Logout</button>
 			</form>
 		</li>
 	} else {
@@ -41,14 +40,14 @@
 		var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/index.html" : $"~{Context.Request.Path.Value}";
 		string? defaultLanguage = AgendaDbContext.Languages.FirstOrDefault(l => l.Code == languageCode)?.Name;
 
-		<li class="nav-item">
-			<a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">@_sharedLocalizer["Register"]</a>
+		<li class="nav-button">
+			<a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">@_sharedLocalizer["Register"]</a>
 		</li>
-		<li class="nav-item">
-			<a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">@_sharedLocalizer["Login"]</a>
+		<li class="nav-button">
+			<a class="nav-link text-light" id="login" asp-area="Identity" asp-page="/Account/Login">@_sharedLocalizer["Login"]</a>
 		</li>
-		<li class="nav-item dropdown">
-			<a class="nav-link text-dark dropdown" data-bs-toggle="dropdown">@defaultLanguage</a>
+		<li class="nav-button dropdown">
+			<a class="nav-link text-light dropdown" data-bs-toggle="dropdown">@defaultLanguage</a>
 			<ul class="dropdown-menu">
 				@foreach(Language language in AgendaDbContext.Languages) {
 					if (language.Code != languageCode && language.IsSystemLanguage) {
@@ -67,4 +66,3 @@
 			</ul>
 		</li>
 	}
-</ul>

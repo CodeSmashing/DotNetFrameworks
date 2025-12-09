@@ -8,82 +8,89 @@
 @inject AgendaDbContext Context
 
 @{
-	ViewData["Title"] = _sharedLocalizer["Home"];
+	ViewData["Title"] = _sharedLocalizer["Appointments"];
 	var appointmentTypes = Context.AppointmentTypes;
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<p>
-	<a asp-action="Create">@_sharedLocalizer["Create New"]</a>
-</p>
-<table class="table">
-	<thead>
-		<tr>
-			@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin")) {
-				<th>
-					@Html.DisplayNameFor(model => model.AgendaUser)
-				</th>
-			}
-			<th>
-				@Html.DisplayNameFor(model => model.Date)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Title)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Description)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Created)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.AppointmentType)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.IsApproved)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.IsCompleted)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model) {
+<div class="makebubbly" style="border-collapse: initial;">
+	<h1 class="text-light">@ViewData["Title"]</h1>
+
+	<p class="makebubbly" style="width: fit-content;">
+		<a class="text-light" asp-action="Create">@_sharedLocalizer["Create New"]</a>
+	</p>
+	<table>
+		<thead class="thead-design">
 			<tr>
-				@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin")) {
-					<td>
-						@Html.DisplayFor(modelItem => item.AgendaUser.Id)
-					</td>
+				@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin"))
+				{
+					<th class="table-header">
+						@Html.DisplayNameFor(model => model.AgendaUser)
+					</th>
 				}
-				<td>
-					@Html.DisplayFor(modelItem => item.Date)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Title)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Description)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Created)
-				</td>
-				<td>
-					@Enum.GetName(typeof(AppointmentTypeName), appointmentTypes.First(appt => appt.Id == item.AppointmentTypeId).Name)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.IsApproved)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.IsCompleted)
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">@_sharedLocalizer["Edit"]</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">@_sharedLocalizer["Details"]</a> |
-					<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a>
-				</td>
+				<th class="table-header">
+					@Html.DisplayNameFor(model => model.Date)
+				</th>
+				<th class="table-header">
+					@Html.DisplayNameFor(model => model.Title)
+				</th>
+				<th class="table-header">
+					@Html.DisplayNameFor(model => model.Description)
+				</th>
+				<th class="table-header">
+					@Html.DisplayNameFor(model => model.Created)
+				</th class="table-header">
+				<th>
+					@Html.DisplayNameFor(model => model.AppointmentType)
+				</th class="table-header">
+				<th class="table-header">
+					@Html.DisplayNameFor(model => model.IsApproved)
+				</th>
+				<th class="table-header">
+					@Html.DisplayNameFor(model => model.IsCompleted)
+				</th>
+				<th class="table-header"></th>
 			</tr>
-		}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin"))
+					{
+						<td>
+							@Html.DisplayFor(modelItem => item.AgendaUser.Id)
+						</td>
+					}
+					<td>
+						@Html.DisplayFor(modelItem => item.Date)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Title)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Description)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Created)
+					</td>
+					<td>
+						@Enum.GetName(typeof(AppointmentTypeName), appointmentTypes.First(appt => appt.Id == item.AppointmentTypeId).Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IsApproved)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IsCompleted)
+					</td>
+					<td>
+						<a asp-action="Edit" asp-route-id="@item.Id">@_sharedLocalizer["Edit"]</a> |
+						<a asp-action="Details" asp-route-id="@item.Id">@_sharedLocalizer["Details"]</a> |
+						<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+

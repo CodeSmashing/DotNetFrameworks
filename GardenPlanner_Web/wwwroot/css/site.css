@@ -1,3 +1,7 @@
+:root {
+    --primary-bg-color: rgba(149, 201, 181, 0.4); /* global scope */
+}
+
 html {
   font-size: 14px;
 }
@@ -18,7 +22,9 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background: linear-gradient(rgba(0,0, 0,0.4), rgba(0,0,0,0.4)), url(https://images.pexels.com/photos/158028/bellingrath-gardens-alabama-landscape-scenic-158028.jpeg?cs=srgb&dl=pexels-pixabay-158028.jpg&fm=jpg);
+    background-size: cover;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +34,96 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+/*nav*/
+
+.nav-container {
+    width: 100%;
+    padding-right: 2%;
+    padding-left: 2%;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    flex-wrap: inherit;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 50px;
+}
+
+.navbar-bar {
+    width: auto;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    background-color: transparent;
+}
+
+/*Make the login/reg/lang buttons align right*/
+.navbar-bar > :nth-child(2) {
+    margin-right: auto;
+}
+
+.nav-button {
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px;
+    padding: 2rem;
+    border-radius: 28px;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(5px);
+    -webkit-box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
+    box-shadow: inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7);
+    transition: transform .5s;
+}
+
+.nav-button:hover {
+    transform: scaleY(1.1) scaleX(1.1);
+    transform-origin: center;
+}
+
+.right-align {
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.navbar-material {
+    padding: 10px;
+    margin: 0px;
+}
+
+.nav-gradient {
+    background: linear-gradient(180deg,rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0) 100%) !important;
+}
+
+.makebubbly {
+    padding: 2rem;
+    border-radius: 28px;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(5px) brightness(.9);
+    -webkit-box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
+    box-shadow: inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7);
+}
+
+.thead-design{
+    background-color: rgba(255, 255, 255, 0.8);
+    border: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.table-header {
+    margin: 10px;
+    padding: 15px;
+    border: solid;
+    border-width: 1px;
+    border-color: black;
 }

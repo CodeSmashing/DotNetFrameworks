@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <Folder Include="Areas\Identity\Data\" />
   </ItemGroup>

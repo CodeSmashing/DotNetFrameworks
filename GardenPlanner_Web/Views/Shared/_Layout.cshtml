@@ -16,28 +16,30 @@
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GardenPlanner</a>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm nav-gradient">
+			<div class="nav-container">
+				<a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">GardenPlanner</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@_sharedLocalizer["Home"]</a>
+					<ul class="navbar-bar flex-grow-1">
+						<li class="nav-button">
+							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">@_sharedLocalizer["Home"]</a>
 						</li>
 						@if (User.IsInRole("User") || User.IsInRole("UserAdmin") || User.IsInRole("Admin") || User.IsInRole("Employee")) {
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index">@_sharedLocalizer["Appointments"]</a>
+							<li class="nav-button">
+								<a class="nav-link text-light" asp-area="" asp-controller="Appointments" asp-action="Index">@_sharedLocalizer["Appointments"]</a>
 							</li>
 						}
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@_sharedLocalizer["Privacy"]</a>
+						<li class="nav-button">
+							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">@_sharedLocalizer["Privacy"]</a>
 						</li>
+
+						<partial name="_LoginPartial" />
+
 					</ul>
-					<partial name="_LoginPartial" />
 				</div>
 			</div>
 		</nav>
@@ -48,7 +50,7 @@
 		</main>
 	</div>
 
-	<footer class="border-top footer text-muted">
+	<footer class="footer text-light" style="background: linear-gradient(0deg,rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, 0) 100%);">
 		<div class="container">
 			&copy; 2025 - GardenPlanner - <a asp-area="" asp-controller="Home" asp-action="Privacy">@_sharedLocalizer["Privacy"]</a>
 		</div>
@@ -58,4 +60,26 @@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
+
+@* https://iili.io/fTGVyuf.png *@
+<svg style="display:none;">
+	<filter id="displacementFilter"
+			width="100%" height="100%">
+
+		<feTurbulence type="turbulence"
+					  baseFrequency="0.05"
+					  numOctaves="2"
+					  result="turbulence" />
+
+		<feImage xlink:href="https://iili.io/fTGVyuf.png"
+				 result="dispMap" />
+
+		<feDisplacementMap in="turbulence"
+						   in2="dispMap"
+						   scale="50"
+						   xChannelSelector="R"
+						   yChannelSelector="G" />
+	</filter>
+</svg>
+
 </html>
