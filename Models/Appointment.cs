@@ -73,7 +73,7 @@ namespace Models {
 		} = false;
 
 		public override string ToString() {
-			return String.Format(Resources.Appointment.ToString, Id, Date, Title);
+			return string.Format(Resources.Appointment.ToString, Id, Date, Title);
 		}
 
 		public static Appointment[] SeedingData(string[] listUserIds, string[] appointmentTypeIds) {

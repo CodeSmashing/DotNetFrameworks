@@ -1,46 +1,41 @@
 ﻿using Models.CustomValidation;
 using Models.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Models {
 	public class AppointmentType {
 		public static AppointmentType Dummy;
+
 		public string Id {
 			get; private set;
 		} = Guid.NewGuid().ToString();
 
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
-		[Display(Name = "Afspraak type naam")]
+		[Display(Name = "AppointmentTypeName", ResourceType = typeof(Resources.AppointmentType))]
 		public required AppointmentTypeName Name {
 			get; set;
 		}
 
-		[StringLength(2000, MinimumLength = 3, ErrorMessage = "De omschrijving moet minstens 3 characters en mag maximum 2000 characters bevatten")]
-		[Display(Name = "Omschrijving")]
+		[StringLength(2000, MinimumLength = 3)]
+		[Display(Name = "Description", ResourceType = typeof(Resources.AppointmentType))]
 		public required string Description {
 			get; set;
 		}
 
-		// Likely to be removed
-		public string Color {
-			get; set;
-		} = "#FF000000"; // Color in which the appointment wil be shown, default is black
-
-		[Display(Name = "Aangemaakt")]
+		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
-		[Display(Name = "Verwijderd")]
+		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
 		public DateTime? Deleted {
 			get; set;
 		}
 
 		public override string ToString() {
-			return $"{Id}: {Name} ({Description}) - Deleted: {Deleted}";
+			return string.Format(Resources.AppointmentType.ToString, Id, Name, Description, Created);
 		}
 
 		public static AppointmentType[] SeedingData() {

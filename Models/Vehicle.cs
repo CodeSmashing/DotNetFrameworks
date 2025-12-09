@@ -10,79 +10,79 @@ namespace Models {
 			get; private set;
 		} = Guid.NewGuid().ToString();
 
-		[Display(Name = "Aangemaakt")]
+		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
-		[Display(Name = "Verwijderd")]
+		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
 		public DateTime? Deleted {
 			get; set;
 		}
 
-		[StringLength(9, MinimumLength = 9, ErrorMessage = "De nummer plaat moet en mag enkel 9 characters bevatten")]
-		[Display(Name = "Nummer plaat")]
+		[StringLength(9, MinimumLength = 9)]
+		[Display(Name = "LicencePlate", ResourceType = typeof(Resources.Vehicle))]
 		public required string LicencePlate {
 			get; set;
 		} // Specifically Belgian plates (e.g. format of 1-ABC-111)
 
-		[Display(Name = "Type voertuig")]
+		[Display(Name = "VehicleType", ResourceType = typeof(Resources.Vehicle))]
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
 		public required VehicleType VehicleType {
 			get; set;
 		}
 
-		[StringLength(50, MinimumLength = 3, ErrorMessage = "Het merk moet minstens 3 characters en mag maximum 50 characters bevatten")]
-		[Display(Name = "Merk")]
+		[StringLength(50, MinimumLength = 3)]
+		[Display(Name = "Brand", ResourceType = typeof(Resources.Vehicle))]
 		public required string Brand {
 			get; set;
 		}
 
-		[StringLength(50, MinimumLength = 3, ErrorMessage = "Het model moet minstens 3 characters en mag maximum 50 characters bevatten")]
-		[Display(Name = "Model")]
+		[StringLength(50, MinimumLength = 3)]
+		[Display(Name = "Model", ResourceType = typeof(Resources.Vehicle))]
 		public required string Model {
 			get; set;
 		}
 
-		[Display(Name = "Laad capaciteit")]
+		[Display(Name = "LoadCapacity", ResourceType = typeof(Resources.Vehicle))]
 		[Range(0.0, 9999999.99)]
 		[RegularExpression(@"^\\d+(\\.\\d{1,2})?$")]
 		public required double LoadCapacity {
 			get; set;
 		} // In liters
 
-		[Display(Name = "Gewicht capaciteit")]
+		[Display(Name = "WeightCapacity", ResourceType = typeof(Resources.Vehicle))]
 		[Range(0.0, 9999999.99)]
 		[RegularExpression(@"^\\d+(\\.\\d{1,2})?$")]
 		public required double WeightCapacity {
 			get; set;
 		} // In kilograms
 
-		[Display(Name = "Brandstof type")]
+		[Display(Name = "FuelType", ResourceType = typeof(Resources.Vehicle))]
 		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
 		public required FuelType FuelType {
 			get; set;
 		}
 
-		[Display(Name = "Afbeelding")]
+		[Display(Name = "ImageUrl", ResourceType = typeof(Resources.Vehicle))]
 		public string? ImageUrl {
 			get; set;
 		}
 
-		[Display(Name = "Is manueel")]
+		[Display(Name = "IsManuel", ResourceType = typeof(Resources.Vehicle))]
 		public bool IsManuel {
 			get; set;
 		} = false;
 
-		[Display(Name = "Is in gebruik")]
+		[Display(Name = "IsInUse", ResourceType = typeof(Resources.Vehicle))]
 		public bool IsInUse {
 			get; set;
 		} = false;
 
 		public override string ToString() {
-			return $"Vehicle {Id} (Licence plate: {LicencePlate})";
+			return string.Format(Resources.Vehicle.ToString, Id, LicencePlate);
 		}
 
 		public static Vehicle[] SeedingData() {

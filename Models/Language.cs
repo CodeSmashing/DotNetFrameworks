@@ -6,22 +6,22 @@ namespace Models {
 		public static Language Dummy;
 
 		[Key]
-		[Display(Name = "Taal code")]
+		[Display(Name = "Code", ResourceType = typeof(Resources.Language))]
 		public required string Code {
 			get; set;
 		}
 
-		[Display(Name = "Naam")]
+		[Display(Name = "Name", ResourceType = typeof(Resources.Language))]
 		public required string Name {
 			get; set;
 		}
 
-		[Display(Name = "Is systeem taal")]
+		[Display(Name = "IsSystemLanguage", ResourceType = typeof(Resources.Language))]
 		public required bool IsSystemLanguage {
 			get; set;
 		}
 
-		[Display(Name = "Is actief")]
+		[Display(Name = "IsActive", ResourceType = typeof(Resources.Language))]
 		public bool IsActive {
 			get; set;
 		} = false;
