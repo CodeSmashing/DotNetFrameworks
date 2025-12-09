@@ -141,9 +141,6 @@
   <data name="Model" xml:space="preserve">
     <value>Model</value>
   </data>
-  <data name="StringLength" xml:space="preserve">
-    <value>The license plate must and may only contain {0} characters</value>
-  </data>
   <data name="ToString" xml:space="preserve">
     <value>Vehicle {0} (Licence plate: {1})</value>
   </data>

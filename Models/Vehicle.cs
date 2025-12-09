@@ -29,7 +29,6 @@ namespace Models {
 		} // Specifically Belgian plates (e.g. format of 1-ABC-111)
 
 		[Display(Name = "VehicleType", ResourceType = typeof(Resources.Vehicle))]
-		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
 		public required VehicleType VehicleType {
 			get; set;
 		}
@@ -48,20 +47,17 @@ namespace Models {
 
 		[Display(Name = "LoadCapacity", ResourceType = typeof(Resources.Vehicle))]
 		[Range(0.0, 9999999.99)]
-		[RegularExpression(@"^\\d+(\\.\\d{1,2})?$")]
 		public required double LoadCapacity {
 			get; set;
 		} // In liters
 
 		[Display(Name = "WeightCapacity", ResourceType = typeof(Resources.Vehicle))]
 		[Range(0.0, 9999999.99)]
-		[RegularExpression(@"^\\d+(\\.\\d{1,2})?$")]
 		public required double WeightCapacity {
 			get; set;
 		} // In kilograms
 
 		[Display(Name = "FuelType", ResourceType = typeof(Resources.Vehicle))]
-		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
 		public required FuelType FuelType {
 			get; set;
 		}
@@ -113,8 +109,7 @@ namespace Models {
 					WeightCapacity = 18000.0,
 					FuelType = FuelType.Diesel,
 					IsManuel = false,
-					IsInUse = false,
-					Deleted = DateTime.MaxValue
+					IsInUse = false
 				},
 				new() {
 					LicencePlate = "3-XYZ-987",
@@ -126,8 +121,7 @@ namespace Models {
 					WeightCapacity = 1200.0,
 					FuelType = FuelType.Benzine,
 					IsManuel = false,
-					IsInUse = true,
-					Deleted = DateTime.MaxValue
+					IsInUse = true
 				},
 				new() {
 					LicencePlate = "5-JKL-456",
@@ -139,8 +133,7 @@ namespace Models {
 					WeightCapacity = 1500.0,
 					FuelType = FuelType.Benzine,
 					IsManuel = true,
-					IsInUse = true,
-					Deleted = DateTime.MaxValue
+					IsInUse = true
 				},
 				new() {
 					LicencePlate = "7-GHI-789",
@@ -152,8 +145,7 @@ namespace Models {
 					WeightCapacity = 20000.0,
 					FuelType = FuelType.Diesel,
 					IsManuel = true,
-					IsInUse = true,
-					Deleted = DateTime.MaxValue
+					IsInUse = true
 				},
 				new() {
 					LicencePlate = "9-MNO-321",
@@ -165,8 +157,7 @@ namespace Models {
 					WeightCapacity = 1400.0,
 					FuelType = FuelType.Benzine,
 					IsManuel = false,
-					IsInUse = false,
-					Deleted = DateTime.MaxValue
+					IsInUse = false
 				}
 			];
 		}

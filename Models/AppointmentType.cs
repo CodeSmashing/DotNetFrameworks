@@ -1,5 +1,4 @@
-﻿using Models.CustomValidation;
-using Models.Enums;
+﻿using Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models {
@@ -10,7 +9,6 @@ namespace Models {
 			get; private set;
 		} = Guid.NewGuid().ToString();
 
-		[CustomValidation(typeof(EnumValidation), nameof(EnumValidation.ValidateEnum))]
 		[Display(Name = "AppointmentTypeName", ResourceType = typeof(Resources.AppointmentType))]
 		public required AppointmentTypeName Name {
 			get; set;

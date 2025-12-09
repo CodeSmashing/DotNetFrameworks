@@ -141,9 +141,6 @@
   <data name="Model" xml:space="preserve">
     <value>Model</value>
   </data>
-  <data name="StringLength" xml:space="preserve">
-    <value>De nummer plaat moet en mag enkel {0} karakters bevatten</value>
-  </data>
   <data name="ToString" xml:space="preserve">
     <value>Voertuig {0} (Kenteken: {1})</value>
   </data>

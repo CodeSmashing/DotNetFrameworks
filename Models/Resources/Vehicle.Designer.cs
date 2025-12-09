@@ -133,15 +133,6 @@ namespace Models.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The license plate must and may only contain {0} characters.
-        /// </summary>
-        public static string StringLength {
-            get {
-                return ResourceManager.GetString("StringLength", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Vehicle {0} (Licence plate: {1}).
         /// </summary>
         public static string ToString {

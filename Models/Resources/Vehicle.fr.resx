@@ -141,9 +141,6 @@
   <data name="Model" xml:space="preserve">
     <value>Modèle</value>
   </data>
-  <data name="StringLength" xml:space="preserve">
-    <value>La plaque d'immatriculation doit et ne peut contenir que des caractères {0}</value>
-  </data>
   <data name="ToString" xml:space="preserve">
     <value>Véhicule {0} (Plaque d'immatriculation : {1})</value>
   </data>
