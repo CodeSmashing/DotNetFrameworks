@@ -1,0 +1,87 @@
+﻿@model Models.Vehicle
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
+
+@{
+	ViewData["Title"] = _sharedLocalizer["Details"];
+}
+
+<h1 class="text-light">@ViewData["Title"]</h1>
+
+<div class="text-light">
+	<h4>@_sharedLocalizer["Vehicle"]</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Created)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Created)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.LicencePlate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.LicencePlate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.VehicleType)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.VehicleType)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Brand)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Brand)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Model)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Model)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.LoadCapacity)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.LoadCapacity)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.WeightCapacity)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.WeightCapacity)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.FuelType)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.FuelType)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ImageUrl)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ImageUrl)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.IsManuel)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.IsManuel)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.IsInUse)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.IsInUse)
+		</dd>
+	</dl>
+</div>
+<div>
+	<a asp-action="Edit" asp-route-id="@Model?.Id">@_sharedLocalizer["Edit"]</a> |
+	<a asp-action="Index">@_sharedLocalizer["Back to List"]</a>
+</div>

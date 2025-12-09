@@ -132,6 +132,9 @@
   <data name="Back to List" xml:space="preserve">
     <value>Retour à la liste</value>
   </data>
+  <data name="Benzine" xml:space="preserve">
+    <value>Essence</value>
+  </data>
   <data name="Confirm password" xml:space="preserve">
     <value>Confirmez le mot de passe</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="Details" xml:space="preserve">
     <value>Détails</value>
+  </data>
+  <data name="Diesel" xml:space="preserve">
+    <value>Diesel</value>
   </data>
   <data name="Display name" xml:space="preserve">
     <value>Nom d'utilisateur</value>
@@ -183,6 +189,12 @@
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
   </data>
+  <data name="Personal" xml:space="preserve">
+    <value>Personnel</value>
+  </data>
+  <data name="Pickup" xml:space="preserve">
+    <value>Camionnette</value>
+  </data>
   <data name="Plan and organize your landscaping business with ease using GardenPlanner" xml:space="preserve">
     <value>Planifiez et organisez facilement votre entreprise d'aménagement paysager grâce à GardenPlanner</value>
   </data>
@@ -216,11 +228,17 @@
   <data name="Save" xml:space="preserve">
     <value>Sauvegarder</value>
   </data>
+  <data name="SelectListPlaceholder" xml:space="preserve">
+    <value>Sélectionnez quelque chose</value>
+  </data>
   <data name="This is our privacy policy" xml:space="preserve">
     <value>Voici notre politique de confidentialité</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titre</value>
+  </data>
+  <data name="Truck" xml:space="preserve">
+    <value>Camion</value>
   </data>
   <data name="Use a local account to log in" xml:space="preserve">
     <value>Utilisez un compte local pour vous connecter</value>

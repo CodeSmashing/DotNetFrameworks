@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Models.Vehicle>
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
+
+@{
+	ViewData["Title"] = _sharedLocalizer["Index"];
+}
+
+<h1 class="text-light">@ViewData["Title"]</h1>
+
+<p>
+	<a asp-action="Create">@_sharedLocalizer["Create New"]</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.LicencePlate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.VehicleType)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Brand)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Model)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.LoadCapacity)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.WeightCapacity)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FuelType)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ImageUrl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsManuel)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsInUse)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model) {
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.LicencePlate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.VehicleType)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Brand)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Model)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.LoadCapacity)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.WeightCapacity)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FuelType)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ImageUrl)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsManuel)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsInUse)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">@_sharedLocalizer["Edit"]</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">@_sharedLocalizer["Details"]</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

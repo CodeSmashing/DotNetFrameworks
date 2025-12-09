@@ -1,4 +1,5 @@
 using GardenPlanner_Web.Properties;
+using GardenPlanner_Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
@@ -58,7 +59,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
 		new("en"),
 		new("nl"),
 		new("fr")
-	 };
+	};
 
 	options.DefaultRequestCulture = new RequestCulture(culture: "nl-BE", uiCulture: "nl-BE");
 	options.SupportedCultures = supportedCultures;
@@ -75,6 +76,9 @@ builder.Services
 	 options.DataAnnotationLocalizerProvider = (type, factory) =>
 		 factory.Create(typeof(Models.SharedResource));
  });
+
+// Utilities
+builder.Services.AddTransient<Utilities>();
 
 var app = builder.Build();
 

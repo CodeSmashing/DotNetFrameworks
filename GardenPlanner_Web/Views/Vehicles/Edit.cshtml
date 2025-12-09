@@ -1,0 +1,86 @@
+﻿@model Models.Vehicle
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
+
+@{
+	ViewData["Title"] = _sharedLocalizer["Edit"];
+}
+
+<h1 class="text-light">@ViewData["Title"]</h1>
+
+<h4 class="text-light">@_sharedLocalizer["Vehicle"]</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit" class="text-light">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+			<input type="hidden" asp-for="Created" />
+			<input type="hidden" asp-for="Deleted" />
+			<div class="form-group">
+				<label asp-for="LicencePlate" class="control-label"></label>
+				<input asp-for="LicencePlate" class="form-control" />
+				<span asp-validation-for="LicencePlate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="VehicleType" class="control-label"></label>
+				<select asp-for="VehicleType" class="form-control" asp-items="ViewBag.VehicleTypeItems"></select>
+				<span asp-validation-for="VehicleType" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Brand" class="control-label"></label>
+				<input asp-for="Brand" class="form-control" />
+				<span asp-validation-for="Brand" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Model" class="control-label"></label>
+				<input asp-for="Model" class="form-control" />
+				<span asp-validation-for="Model" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="LoadCapacity" class="control-label"></label>
+				<input asp-for="LoadCapacity" class="form-control" />
+				<span asp-validation-for="LoadCapacity" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="WeightCapacity" class="control-label"></label>
+				<input asp-for="WeightCapacity" class="form-control" />
+				<span asp-validation-for="WeightCapacity" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="FuelType" class="control-label"></label>
+				<select asp-for="FuelType" class="form-control" asp-items="ViewBag.FuelTypeItems"></select>
+				<span asp-validation-for="FuelType" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ImageUrl" class="control-label"></label>
+				<input asp-for="ImageUrl" class="form-control" />
+				<span asp-validation-for="ImageUrl" class="text-danger"></span>
+			</div>
+			<div class="form-group form-check">
+				<label class="form-check-label">
+					<input class="form-check-input" asp-for="IsManuel" /> @Html.DisplayNameFor(model => model.IsManuel)
+				</label>
+			</div>
+			<div class="form-group form-check">
+				<label class="form-check-label">
+					<input class="form-check-input" asp-for="IsInUse" /> @Html.DisplayNameFor(model => model.IsInUse)
+				</label>
+			</div>
+			<div class="form-group">
+				<input type="submit" value=@_sharedLocalizer["Save"] class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">@_sharedLocalizer["Back to List"]</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
