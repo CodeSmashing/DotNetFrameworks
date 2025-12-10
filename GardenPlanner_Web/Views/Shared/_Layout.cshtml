@@ -33,6 +33,14 @@
 								<a class="nav-link text-light" asp-area="" asp-controller="Appointments" asp-action="Index">@_sharedLocalizer["Appointments"]</a>
 							</li>
 						}
+						@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin") || User.IsInRole("Employee")) {
+							<li class="nav-button">
+								<a class="nav-link text-light" asp-area="" asp-controller="Vehicles" asp-action="Index">@_sharedLocalizer["Vehicles"]</a>
+							</li>
+							<li class="nav-button">
+								<a class="nav-link text-light" asp-area="" asp-controller="AppointmentTypes" asp-action="Index">@_sharedLocalizer["Appointment Types"]</a>
+							</li>
+						}
 						<li class="nav-button">
 							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">@_sharedLocalizer["Privacy"]</a>
 						</li>
