@@ -1,5 +1,4 @@
-﻿using Models.CustomValidation;
-using Models.Enums;
+﻿using Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models {
@@ -12,12 +11,14 @@ namespace Models {
 
 		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
 		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public DateTime? Deleted {
 			get; set;
 		}

@@ -2,7 +2,6 @@
 
 @inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +12,7 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/GardenPlanner_Web.styles.css" asp-append-version="true" />
+	<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
 </head>
 <body>
 	<header>
@@ -46,7 +46,6 @@
 						</li>
 
 						<partial name="_LoginPartial" />
-
 					</ul>
 				</div>
 			</div>
@@ -66,6 +65,17 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script>
+		flatpickr("#datePicker", {
+			enableTime: true,
+			dateFormat: "Y-m-d H:i",	// Important for binding
+			altInput: true,
+			altFormat: "d-m-Y H:i",		// Display
+			time_24hr: true,
+			minDate: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm")"
+		});
+	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 

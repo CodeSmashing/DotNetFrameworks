@@ -22,6 +22,7 @@ namespace Models {
 
 		[Display(Name = "Date", ResourceType = typeof(Resources.Appointment))]
 		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public required DateTime Date {
 			get; set;
 		}
@@ -41,12 +42,14 @@ namespace Models {
 
 		[Display(Name = "Created")]
 		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public DateTime Created {
 			get; private set;
 		} = DateTime.Now;
 
 		[Display(Name = "Deleted")]
 		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public DateTime? Deleted {
 			get; set;
 		}

@@ -119,6 +119,7 @@ Run the test suite using the following command:
  - [Localization for data annotations](https://stackoverflow.com/a/16838176)
  - [ASP.NET Core: Localization](https://lokalise.com/blog/asp-net-core-localization/)
  - [Localization of RequiredAttribute](https://stackoverflow.com/a/50230263)
+ - [Formated date picker](https://flatpickr.js.org)
 
 ### Used NuGet packages
 
