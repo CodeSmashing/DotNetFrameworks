@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model Models.ToDo
+
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
+
+@{
+	ViewData["Title"] = _sharedLocalizer["Details"];
+}
+
+<h1 class="text-light">@ViewData["Title"]</h1>
+
+<div class="text-light">
+	<h4>@_sharedLocalizer["ToDo"]</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Created)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Created)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Deleted)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Deleted)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Description)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Description)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Ready)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Ready)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Appointment)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Appointment.Id)
+		</dd>
+	</dl>
+</div>
+<div>
+	<a asp-action="Edit" asp-route-id="@Model.Id">@_sharedLocalizer["Edit"]</a> |
+	<a asp-action="Index" asp-route-id="@Model.AppointmentId">@_sharedLocalizer["Back to List"]</a>
+</div>

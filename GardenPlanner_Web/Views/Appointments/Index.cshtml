@@ -86,7 +86,8 @@
 					<td>
 						<a asp-action="Edit" asp-route-id="@item.Id">@_sharedLocalizer["Edit"]</a> |
 						<a asp-action="Details" asp-route-id="@item.Id">@_sharedLocalizer["Details"]</a> |
-						<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a>
+						<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a> |
+						<a asp-area="" asp-action="Index" asp-controller="ToDos" asp-route-id="@item.Id">@_sharedLocalizer["To do's"]</a>
 					</td>
 				</tr>
 			}

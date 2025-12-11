@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Models
+@model ToDo
+
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
+
+@{
+	ViewData["Title"] = _sharedLocalizer["Create"];
+	var myappointment = (Appointment) ViewBag.Appointment;
+}
+
+<h1 class="text-light">@ViewData["Title"]</h1>
+
+<h4 class="text-light">@_sharedLocalizer["ToDo"]</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Create" class="text-light">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+			<input type="hidden" asp-for="AppointmentId" />
+			<input type="hidden" asp-for="Created" />
+			<input type="hidden" asp-for="Deleted" />
+			<div class="form-group">
+				@if (myappointment != null) {
+					<label class="control-label">@myappointment.Title</label>
+				}
+			</div>
+			<div class="form-group">
+				<label asp-for="Description" class="control-label"></label>
+				<input asp-for="Description" class="form-control" />
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+			<div class="form-group form-check">
+				<label class="form-check-label">
+					<input class="form-check-input" asp-for="Ready" /> @Html.DisplayNameFor(model => model.Ready)
+				</label>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="@_sharedLocalizer["Create"]" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index" asp-route-id="@myappointment.Id">@_sharedLocalizer["Back to List"]</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

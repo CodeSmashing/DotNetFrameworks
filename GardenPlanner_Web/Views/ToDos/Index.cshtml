@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Models
+@model IEnumerable<ToDo>
+
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
+
+@{
+	ViewData["Title"] = _sharedLocalizer["Index"];
+	var myappointment = (Appointment) ViewBag.Appointment;
+}
+
+<h1 class="text-light">@ViewData["Title"]</h1>
+
+<p>
+	<a asp-action="Create" asp-route-id="@myappointment?.Id">@_sharedLocalizer["Create New"]</a>
+</p>
+<table class="table text-light">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Appointment.Title)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Description)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Ready)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model) {
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Appointment.Title)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Description)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Ready)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">@_sharedLocalizer["Edit"]</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">@_sharedLocalizer["Details"]</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">@_sharedLocalizer["Delete"]</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
