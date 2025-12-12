@@ -1,64 +1,70 @@
-﻿@model Models.Appointment
-@using Microsoft.AspNetCore.Mvc.Localization
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Models
+@using Models.Enums
+@model Appointment
 
-@inject IHtmlLocalizer<SharedResource> _sharedLocalizer
+@inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
 
 @{
-	ViewData["Title"] = _sharedLocalizer["Edit"];
+	Layout = null;
+	var selectList = (SelectList?) ViewData["SelectListAppointmentType"];
+	if (selectList != null) {
+		selectList.First(item => item.Value == Model.AppointmentTypeId).Selected = true;
+	}
 }
 
-<h1>@ViewData["Title"]</h1>
+@using (Html.AjaxBeginForm(
+	actionName: "Edit",
+	controllerName: "Appointments",
+	ajaxOptions: new AjaxOptions {
+		HttpMethod = "post",
+		InsertionMode = InsertionMode.Replace,
+		UpdateTargetId = Model.Id
+	})) {
+	Html.AntiForgeryToken();
+	<tr id="#@Model.Id">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="AgendaUserId" />
+		<input type="hidden" asp-for="Created" />
+		<input type="hidden" asp-for="Deleted" />
 
-<h4>@_sharedLocalizer["Appointment"]</h4>
-<hr />
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="Edit">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input type="hidden" asp-for="Id" />
-			<input type="hidden" asp-for="AgendaUserId" />
-			<input type="hidden" asp-for="Created" />
-			<input type="hidden" asp-for="Deleted" />
-			<div class="form-group">
-				<label asp-for="Date" class="control-label"></label>
-				<input asp-for="Date" id="datePicker" class="form-control" placeholder="Select date and time" value="@Model.Date.ToString("yyyy-MM-dd HH:mm")" />
-				<span asp-validation-for="Date" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Title" class="control-label"></label>
-				<input asp-for="Title" class="form-control" />
-				<span asp-validation-for="Title" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Description" class="control-label"></label>
-				<textarea asp-for="Description" class="form-control"></textarea>
-				<span asp-validation-for="Description" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="AppointmentType" class="control-label"></label>
-				<select asp-for="AppointmentType" class="form-control" asp-items="ViewBag.AppointmentType"></select>
-				<span asp-validation-for="AppointmentType" class="text-danger"></span>
-			</div>
-			<div class="form-group form-check">
+		@if (!(User.IsInRole("UserAdmin") || User.IsInRole("Admin") || User.IsInRole("Employee"))) {
+			<input type="hidden" asp-for="IsApproved" />
+			<input type="hidden" asp-for="IsCompleted" />
+		}
+		<td class="form-group">
+			<input asp-for="Date" id="datePicker" class="form-control" placeholder="Select date and time" value="@Model.Date.ToString("yyyy-MM-dd HH:mm")" onchange="$(this.form).submit();" />
+			<span asp-validation-for="Date" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+			<input asp-for="Title" class="form-control" onchange="$(this.form).submit();" />
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+			<textarea asp-for="Description" class="form-control" onchange="$(this.form).submit();"></textarea>
+			<span asp-validation-for="Description" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+			<select asp-for="AppointmentTypeId" class="form-control" asp-items="@selectList" onchange="$(this.form).submit();"></select>
+			<span asp-validation-for="AppointmentTypeId" class="text-danger"></span>
+		</td>
+		@if (User.IsInRole("UserAdmin") || User.IsInRole("Admin") || User.IsInRole("Employee")) {
+			<td class="form-group">
 				<label class="form-check-label">
-					<input class="form-check-input" asp-for="IsApproved" /> @Html.DisplayNameFor(model => model.IsApproved)
+					<input class="form-check-input" asp-for="IsApproved" onchange="$(this.form).submit();" />
 				</label>
-			</div>
-			<div class="form-group form-check">
+			</td>
+			<td class="form-group">
 				<label class="form-check-label">
-					<input class="form-check-input" asp-for="IsCompleted" /> @Html.DisplayNameFor(model => model.IsCompleted)
+					<input class="form-check-input" asp-for="IsCompleted" onchange="$(this.form).submit();" />
 				</label>
-			</div>
-			<div class="form-group">
-				<input type="submit" value=@_sharedLocalizer["Save"] class="btn btn-primary" />
-			</div>
-		</form>
-	</div>
-</div>
-
-<div>
-	<a asp-action="Index">@_sharedLocalizer["Back to List"]</a>
-</div>
+			</td>
+		}
+		<td class="form-group">
+			<a asp-action="Delete" asp-route-id="@Model.Id">@_sharedLocalizer["Delete"]</a>
+		</td>
+	</tr>
+}
 
 @section Scripts {
 	@{

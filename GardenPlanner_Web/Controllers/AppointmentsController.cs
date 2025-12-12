@@ -4,10 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GardenPlanner_Web.Controllers {
 	[Authorize(Roles = "User,UserAdmin,Admin")]
@@ -30,8 +26,10 @@ namespace GardenPlanner_Web.Controllers {
 					return View();
 				}
 
-				var agendaDbContext = _context.Appointments
-					.Where(a => a.AgendaUserId == contextUser.Id && a.Deleted == null);
+				var agendaDbContext = _context.Appointments.Where(a => a.AgendaUserId == contextUser.Id && a.Deleted == null);
+				ViewData["SelectListAppointmentType"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-" && appt.Deleted == null), "Id", "Description");
+				ViewData["UserId"] = contextUser.Id;
+				ViewData["AppointmentTypeId"] = _context.AppointmentTypes.First(appt => appt.Id != "-").Id;
 				return View(await agendaDbContext.ToListAsync());
 			} catch (Exception ex) {
 				// Log the exception (you can use a logging framework here)
@@ -46,32 +44,13 @@ namespace GardenPlanner_Web.Controllers {
 			}
 
 			var appointment = await _context.Appointments
-				 .Include(a => a.AgendaUser)
-				 .Include(a => a.AppointmentType)
-				 .FirstOrDefaultAsync(m => m.Id == id);
+				.Include(a => a.AgendaUser)
+				.Include(a => a.AppointmentType)
+				.FirstOrDefaultAsync(m => m.Id == id);
 			if (appointment == null) {
 				return NotFound();
 			}
 
-			return View(appointment);
-		}
-
-		// GET: Appointments/Create
-		public IActionResult Create() {
-			AgendaUser? contextUser = GetCurrentUserAsync().Result;
-			ViewData["AppointmentTypeId"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name");
-
-			if (contextUser == null) {
-				return View();
-			}
-
-			Appointment appointment = new() {
-				AgendaUserId = contextUser.Id,
-				Date = DateTime.Now,
-				AppointmentTypeId = _context.AppointmentTypes.First(appt => appt.Id != "-").Id,
-				Description = string.Empty,
-				Title = string.Empty
-			};
 			return View(appointment);
 		}
 
@@ -81,26 +60,13 @@ namespace GardenPlanner_Web.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("Id,AgendaUserId,Date,Title,Description,Created,Deleted,AppointmentTypeId,IsApproved,IsCompleted")] Appointment appointment) {
+			ViewData["SelectListAppointmentType"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name", appointment.AppointmentType);
+
 			if (ModelState.IsValid) {
 				_context.Add(appointment);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 			}
-			ViewData["AppointmentTypeId"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name", appointment.AppointmentType);
-			return View(appointment);
-		}
-
-		// GET: Appointments/Edit/5
-		public async Task<IActionResult> Edit(string id) {
-			if (id == null) {
-				return NotFound();
-			}
-
-			var appointment = await _context.Appointments.FindAsync(id);
-			if (appointment == null) {
-				return NotFound();
-			}
-			ViewData["AppointmentTypeId"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name", appointment.AppointmentType);
 			return View(appointment);
 		}
 
@@ -109,26 +75,43 @@ namespace GardenPlanner_Web.Controllers {
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(string id, [Bind("Id,AgendaUserId,Date,Title,Description,Created,Deleted,AppointmentTypeId,IsApproved,IsCompleted")] Appointment appointment) {
-			if (id != appointment.Id) {
+		public async Task<IActionResult> Edit(string id, [Bind("Id,AgendaUserId,Date,Title,Description,Created,Deleted,AppointmentTypeId,IsApproved,IsCompleted")] Appointment posted) {
+			AgendaUser? contextUser = GetCurrentUserAsync().Result;
+			Appointment? targetAppointment = await _context.Appointments.FindAsync(id);
+
+			if (contextUser == null) {
+				return PartialView(nameof(Index));
+			}
+
+			if (targetAppointment == null) {
 				return NotFound();
 			}
 
+			var userAppointments = _context.Appointments.Where(a =>
+				a.AgendaUserId == contextUser.Id
+				&& a.Deleted == null);
+			ViewData["SelectListAppointmentType"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name", posted.AppointmentType);
+
 			if (ModelState.IsValid) {
 				try {
-					_context.Update(appointment);
+					targetAppointment.Date = posted.Date;
+					targetAppointment.Title = posted.Title;
+					targetAppointment.Description = posted.Description;
+					targetAppointment.AppointmentTypeId = posted.AppointmentTypeId;
+					targetAppointment.IsApproved = posted.IsApproved;
+					targetAppointment.IsCompleted = posted.IsCompleted;
+					_context.Update(targetAppointment);
 					await _context.SaveChangesAsync();
 				} catch (DbUpdateConcurrencyException) {
-					if (!AppointmentExists(appointment.Id)) {
+					if (!AppointmentExists(posted.Id)) {
 						return NotFound();
 					} else {
 						throw;
 					}
 				}
-				return RedirectToAction(nameof(Index));
+				return PartialView(nameof(Edit), targetAppointment);
 			}
-			ViewData["AppointmentTypeId"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name", appointment.AppointmentType);
-			return View(appointment);
+			return PartialView(nameof(Edit), targetAppointment);
 		}
 
 		// GET: Appointments/Delete/5

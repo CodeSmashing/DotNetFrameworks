@@ -222,6 +222,9 @@
   <data name="Remember Me" xml:space="preserve">
     <value>Onthoud mij</value>
   </data>
+  <data name="Request" xml:space="preserve">
+    <value>Aanvragen</value>
+  </data>
   <data name="Resend email confirmation" xml:space="preserve">
     <value>E-mailbevestiging opnieuw verzenden</value>
   </data>

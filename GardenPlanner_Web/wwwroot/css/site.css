@@ -1,15 +1,18 @@
 :root {
-    --primary-bg-color: rgba(149, 201, 181, 0.4); /* global scope */
+	--primary-bg-color: rgba(149, 201, 181, 0.4);
+	--font-size: 1rem;
+	--font-size-small: 0.87rem;
+	--input-min-height: 35px;
 }
 
 html {
-  font-size: 14px;
+	font-size: var(--font-size-small);
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+	html {
+		font-size: var(--font-size);
+	}
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -126,4 +129,13 @@ body {
     border: solid;
     border-width: 1px;
     border-color: black;
+
+textarea.form-control {
+	min-height: var(--input-min-height);
+	height: 0;
+}
+
+.table-ruler {
+	height: 10px;
+	opacity: 50%;
 }

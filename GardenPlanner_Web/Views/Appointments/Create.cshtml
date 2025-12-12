@@ -4,53 +4,50 @@
 @inject IHtmlLocalizer<SharedResource> _sharedLocalizer
 
 @{
-	ViewData["Title"] = _sharedLocalizer["Create"];
+	Layout = null;
+	var selectList = ViewData["SelectListAppointmentType"] as SelectList;
+	if (selectList != null) {
+		selectList.First(item => item.Value == Model.AppointmentTypeId).Selected = true;
+	}
 }
 
-<h1>@ViewData["Title"]</h1>
+<form asp-action="Create" class="text-light">
+	@Html.AntiForgeryToken()
 
-<h4>@_sharedLocalizer["Appointment"]</h4>
-<hr />
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="Create">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input type="hidden" asp-for="Id" />
-			<input type="hidden" asp-for="AgendaUserId" />
-			<input type="hidden" asp-for="Created" />
-			<input type="hidden" asp-for="Deleted" />
-			<input type="hidden" asp-for="IsApproved" />
-			<input type="hidden" asp-for="IsCompleted" />
-			<input type="hidden" asp-for="AppointmentType" />
-			<div class="form-group">
-				<label asp-for="Date" class="control-label"></label>
-				<input asp-for="Date" id="datePicker" class="form-control" placeholder="Select date and time" value="@Model.Date.ToString("yyyy-MM-dd HH:mm")" />
-				<span asp-validation-for="Date" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Title" class="control-label"></label>
-				<input asp-for="Title" class="form-control" />
-				<span asp-validation-for="Title" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Description" class="control-label"></label>
-				<textarea asp-for="Description" class="form-control"></textarea>
-				<span asp-validation-for="Description" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="AppointmentTypeId" class="control-label"></label>
-				<select asp-for="AppointmentTypeId" class="form-control" asp-items="ViewBag.AppointmentTypeId"></select>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="Create" class="btn btn-primary" />
-			</div>
-		</form>
-	</div>
-</div>
+	<tr id="#@Model.Id">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="AgendaUserId" />
+		<input type="hidden" asp-for="Created" />
+		<input type="hidden" asp-for="Deleted" />
+		<input type="hidden" asp-for="IsApproved" />
+		<input type="hidden" asp-for="IsCompleted" />
+		<input type="hidden" asp-for="AppointmentType" />
 
-<div>
-	<a asp-action="Index">@_sharedLocalizer["Back to List"]</a>
-</div>
+		<td class="form-group">
+			<input asp-for="Date" id="datePicker" class="form-control" placeholder="Select date and time" value="@Model.Date.ToString("yyyy-MM-dd HH:mm")" />
+			<span asp-validation-for="Date" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+			<input asp-for="Title" class="form-control" />
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+			<textarea asp-for="Description" class="form-control"></textarea>
+			<span asp-validation-for="Description" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+			<select asp-for="AppointmentTypeId" class="form-control" asp-items="@selectList"></select>
+			<span asp-validation-for="AppointmentTypeId" class="text-danger"></span>
+		</td>
+		<td class="form-group">
+		</td>
+		<td class="form-group">
+		</td>
+		<td class="form-group">
+			<input type="submit" value="@_sharedLocalizer["Request"]" class="btn btn-primary w-100" />
+		</td>
+	</tr>
+</form>
 
 @section Scripts {
 	@{

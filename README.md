@@ -142,4 +142,5 @@ Run the test suite using the following command:
  - [Microsoft.Maui.Controls](https://www.nuget.org/packages/Microsoft.Maui.Controls/9.0.111?_src=template)
  - [Microsoft.NET.ILLink.Tasks](https://www.nuget.org/packages/Microsoft.NET.ILLink.Tasks/9.0.11?_src=template)
  - [Microsoft.AspNetCore.Mvc.DataAnnotations](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.DataAnnotations/2.3.0?_src=template)
+ - [AspNetCore.Unobtrusive.Ajax](https://www.nuget.org/packages/AspNetCore.Unobtrusive.Ajax/3.2.0?_src=template)
 ---

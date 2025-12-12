@@ -1,3 +1,4 @@
+using AspNetCore.Unobtrusive.Ajax;
 using GardenPlanner_Web.Properties;
 using GardenPlanner_Web.Services;
 using Microsoft.AspNetCore.Identity;
@@ -35,6 +36,9 @@ builder.Services
 	.AddRoles<IdentityRole>()
 	.AddEntityFrameworkStores<AgendaDbContext>()
 	.AddPasswordlessLoginTotpTokenProvider();
+
+// Register the Ajax (Unobtrusive) service
+builder.Services.AddUnobtrusiveAjax();
 
 // Custom App Settings
 builder.Services
@@ -105,6 +109,9 @@ app.UseHttpsRedirection();
 // Localization Middleware (Must be before Routing/Auth)
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(localizationOptions.Value);
+
+// Ajax Middleware (Must be before Routing)
+app.UseUnobtrusiveAjax();
 
 app.UseStaticFiles();
 app.UseRouting();
