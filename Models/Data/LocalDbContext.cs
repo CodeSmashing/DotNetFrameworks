@@ -54,6 +54,14 @@ namespace Models {
 		}
 
 		/// <summary>
+		/// Haalt de verzameling van <see cref="Login"/> entiteiten op of stelt deze in.
+		/// Deze set vertegenwoordigt de lokale tabel voor de gesynchroniseerde modellen.
+		/// </summary>
+		public DbSet<Login> Logins {
+			get; set;
+		}
+
+		/// <summary>
 		/// Wordt aangeroepen om de databaseverbinding en andere configuratieopties in te stellen.
 		/// Wordt hier specifiek gebruikt voor de configuratie van de lokale SQLite-verbinding.
 		/// </summary>

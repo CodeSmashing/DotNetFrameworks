@@ -168,10 +168,12 @@ namespace Models {
 	/// <summary>
 	/// Representeert een voertuig dat gebruikt word voor locale opslag synchronisatie, met een expliciet gezette identificatiecode.
 	/// </summary>
-	/// <remarks><see cref="LocalVehicle"/> breidt <see cref="Vehicle"/> uit door een <c>Id</c> eigenschap
+	/// <remarks>
+	/// <see cref="LocalVehicle"/> breidt <see cref="Vehicle"/> uit door een <c>Id</c> eigenschap
 	/// toe te voegen die niet door de database wordt gegenereerd. Dit is handig in scenario's waarin voertuigen
 	/// lokaal moeten worden gevolgd of gesynchroniseerd en de identificaties door de applicatie in plaats van
-	/// de database worden toegewezen.</remarks>
+	/// de database worden toegewezen.
+	/// </remarks>
 	public class LocalVehicle : Vehicle {
 		/// <summary>
 		/// Hiermee wordt de unieke identificatiecode voor de entiteit opgehaald of ingesteld.

@@ -71,10 +71,12 @@ namespace Models {
 	/// <summary>
 	/// Representeert een afspraak type dat gebruikt word voor locale opslag synchronisatie, met een expliciet gezette identificatiecode.
 	/// </summary>
-	/// <remarks><see cref="LocalAppointmentType"/> breidt <see cref="AppointmentType"/> uit door een <c>Id</c> eigenschap
+	/// <remarks>
+	/// <see cref="LocalAppointmentType"/> breidt <see cref="AppointmentType"/> uit door een <c>Id</c> eigenschap
 	/// toe te voegen die niet door de database wordt gegenereerd. Dit is handig in scenario's waarin afspraken
 	/// lokaal moeten worden gevolgd of gesynchroniseerd en de identificaties door de applicatie in plaats van
-	/// de database worden toegewezen.</remarks>
+	/// de database worden toegewezen.
+	/// </remarks>
 	public class LocalAppointmentType : AppointmentType {
 		/// <summary>
 		/// Hiermee wordt de unieke identificatiecode voor de entiteit opgehaald of ingesteld.
