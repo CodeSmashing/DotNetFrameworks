@@ -121,4 +121,38 @@ namespace Models {
 			];
 		}
 	}
+
+	/// <summary>
+	/// Representeert een afspraak dat gebruikt word voor locale opslag synchronisatie, met een expliciet gezette identificatiecode, afspraak type identificatiecode, en afspraak type referentie eigenschap.
+	/// </summary>
+	/// <remarks><see cref="LocalAppointment"/> breidt <see cref="Appointment"/> uit door een <c>Id</c> eigenschap
+	/// toe te voegen die niet door de database wordt gegenereerd. Dit is handig in scenario's waarin afspraken
+	/// lokaal moeten worden gevolgd of gesynchroniseerd en de identificaties door de applicatie in plaats van
+	/// de database worden toegewezen.</remarks>
+	public class LocalAppointment : Appointment {
+		/// <summary>
+		/// Hiermee wordt de unieke identificatiecode voor de entiteit opgehaald of ingesteld.
+		/// </summary>
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
+		public new required string Id {
+			get; set;
+		}
+
+		/// <summary>
+		/// Hiermee wordt de lokale identificatiecode voor het bijbehorende afspraak type opgehaald of ingesteld, die wordt gebruikt bij lokale (SQLite) synchronisatie.
+		/// </summary>
+		public string LocalAppointmentTypeId {
+			get => base.AppointmentTypeId;
+			set => base.AppointmentTypeId = value;
+		}
+		
+		/// <summary>
+		/// Hiermee wordt de lokale afspraak type dat aan deze afspraak is gekoppeld, opgehaald of ingesteld.
+		/// </summary>
+		/// <remarks>Deze eigenschap overschrijft de basiseigenschap <c>AppointmentType</c> om
+		/// lokale (SQLite) synchronisatiescenario's te ondersteunen met behulp van <see cref="LocalAppointmentType"/>.</remarks>
+		public new LocalAppointmentType? AppointmentType {
+			get; set;
+		}
+	}
 }

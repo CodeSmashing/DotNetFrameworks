@@ -96,4 +96,38 @@ namespace Models {
 			];
 		}
 	}
+
+	/// <summary>
+	/// Representeert een to-do dat gebruikt word voor locale opslag synchronisatie, met een expliciet gezette identificatiecode, afspraak identificatiecode, en afspraak referentie eigenschap.
+	/// </summary>
+	/// <remarks><see cref="LocalToDo"/> breidt <see cref="ToDo"/> uit door een <c>Id</c> eigenschap
+	/// toe te voegen die niet door de database wordt gegenereerd. Dit is handig in scenario's waarin voertuigen
+	/// lokaal moeten worden gevolgd of gesynchroniseerd en de identificaties door de applicatie in plaats van
+	/// de database worden toegewezen.</remarks>
+	public class LocalToDo : ToDo {
+		/// <summary>
+		/// Hiermee wordt de unieke identificatiecode voor de entiteit opgehaald of ingesteld.
+		/// </summary>
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
+		public new required string Id {
+			get; set;
+		}
+
+		/// <summary>
+		/// Hiermee wordt de lokale identificatiecode voor het bijbehorende to-do opgehaald of ingesteld, die wordt gebruikt bij lokale (SQLite) synchronisatie.
+		/// </summary>
+		public string LocalAppointmentId {
+			get => base.AppointmentId;
+			set => base.AppointmentId = value;
+		}
+
+		/// <summary>
+		/// Hiermee wordt de lokale afspraak dat aan deze to-do is gekoppeld, opgehaald of ingesteld.
+		/// </summary>
+		/// <remarks>Deze eigenschap overschrijft de basiseigenschap <c>Appointment</c> om
+		/// lokale (SQLite) synchronisatiescenario's te ondersteunen met behulp van <see cref="LocalAppointment"/>.</remarks>
+		public new LocalAppointment? Appointment {
+			get; set;
+		}
+	}
 }
