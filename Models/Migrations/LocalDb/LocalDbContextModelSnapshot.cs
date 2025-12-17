@@ -97,7 +97,7 @@ namespace Models.Migrations.LocalDb
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Models.Language", b =>
@@ -117,7 +117,7 @@ namespace Models.Migrations.LocalDb
 
                     b.HasKey("Code");
 
-                    b.ToTable("Languages");
+                    b.ToTable("Languages", (string)null);
                 });
 
             modelBuilder.Entity("Models.LocalAppointment", b =>
@@ -168,7 +168,7 @@ namespace Models.Migrations.LocalDb
 
                     b.HasIndex("AppointmentTypeId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Models.LocalAppointmentType", b =>
@@ -192,7 +192,7 @@ namespace Models.Migrations.LocalDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTypes");
+                    b.ToTable("AppointmentTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.LocalToDo", b =>
@@ -225,7 +225,7 @@ namespace Models.Migrations.LocalDb
 
                     b.HasIndex("AppointmentId");
 
-                    b.ToTable("ToDos");
+                    b.ToTable("ToDos", (string)null);
                 });
 
             modelBuilder.Entity("Models.Vehicle", b =>
@@ -282,7 +282,7 @@ namespace Models.Migrations.LocalDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicle");
+                    b.ToTable("Vehicle", (string)null);
 
                     b.HasDiscriminator().HasValue("Vehicle");
 

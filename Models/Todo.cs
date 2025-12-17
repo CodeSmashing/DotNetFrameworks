@@ -109,9 +109,9 @@ namespace Models {
 		/// Hiermee wordt de unieke identificatiecode voor de entiteit opgehaald of ingesteld.
 		/// </summary>
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		public new required string Id {
-			get; set;
-		}
+		public new string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
 
 		/// <summary>
 		/// Hiermee wordt de lokale identificatiecode voor het bijbehorende to-do opgehaald of ingesteld, die wordt gebruikt bij lokale (SQLite) synchronisatie.
