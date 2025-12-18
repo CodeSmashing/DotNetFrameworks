@@ -120,6 +120,8 @@ Run the test suite using the following command:
  - [ASP.NET Core: Localization](https://lokalise.com/blog/asp-net-core-localization/)
  - [Localization of RequiredAttribute](https://stackoverflow.com/a/50230263)
  - [Formated date picker](https://flatpickr.js.org)
+ - [Write custom ASP.NET Core middleware](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/write?view=aspnetcore-10.0)
+ - [AddOptions() vs Multiple Configure(...)](https://stackoverflow.com/a/55763194)
 
 ### Used NuGet packages
 
@@ -143,4 +145,8 @@ Run the test suite using the following command:
  - [Microsoft.NET.ILLink.Tasks](https://www.nuget.org/packages/Microsoft.NET.ILLink.Tasks/9.0.11?_src=template)
  - [Microsoft.AspNetCore.Mvc.DataAnnotations](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.DataAnnotations/2.3.0?_src=template)
  - [AspNetCore.Unobtrusive.Ajax](https://www.nuget.org/packages/AspNetCore.Unobtrusive.Ajax/3.2.0?_src=template)
+ - [Microsoft.AspNetCore.OpenApi](https://www.nuget.org/packages/Microsoft.AspNetCore.OpenApi/9.0.11?_src=template)
+ - [Swashbuckle.AspNetCore.Swagger](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Swagger/9.0.6?_src=template)
+ - [Swashbuckle.AspNetCore.SwaggerGen](https://www.nuget.org/packages/Swashbuckle.AspNetCore.SwaggerGen/9.0.6?_src=template)
+ - [Swashbuckle.AspNetCore.SwaggerUI](https://www.nuget.org/packages/Swashbuckle.AspNetCore.SwaggerUI/9.0.6?_src=template)
 ---

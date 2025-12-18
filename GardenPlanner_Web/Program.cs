@@ -1,4 +1,5 @@
 using AspNetCore.Unobtrusive.Ajax;
+using GardenPlanner_Web.Middleware;
 using GardenPlanner_Web.Properties;
 using GardenPlanner_Web.Services;
 using Microsoft.AspNetCore.Identity;
@@ -7,20 +8,21 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Models;
 using Models.CustomServices;
 using Models.CustomValidation;
 using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
-// Database Context
+// Databasecontext
 builder.Services.AddDbContext<AgendaDbContext>(options =>
 	options.UseSqlServer(
 		builder.Configuration.GetConnectionString("AgendaDbContextConnection")
 		?? throw new InvalidOperationException("Connection string 'AgendaDbContextConnection' not found.")
 	));
 
-// Identity System
+// Identiteitssysteem
 builder.Services
 	.AddDefaultIdentity<AgendaUser>(options => {
 		options.Password.RequireDigit = false;
@@ -37,22 +39,26 @@ builder.Services
 	.AddEntityFrameworkStores<AgendaDbContext>()
 	.AddPasswordlessLoginTotpTokenProvider();
 
-// Register the Ajax (Unobtrusive) service
+// Registreer de Ajax (Unobtrusive) service
 builder.Services.AddUnobtrusiveAjax();
 
-// Custom App Settings
+// Aangepaste app-instellingen
 builder.Services
-	.Configure<GlobalAppSettings>(builder.Configuration.GetSection("GlobalAppSettings"))
-	.PostConfigure<GlobalAppSettings>(options => {
+	.AddOptions<GlobalAppSettings>()
+	.Bind(builder.Configuration.GetSection("GlobalAppSettings"))
+	.Configure(options => {
 		options.DefaultCookieLifespan = DateTime.UtcNow.AddDays(12);
-	});
+		options.EnvironmentName = builder.Environment.EnvironmentName;
+		options.DefaultLanguageCode ??= "nl";
+	})
+	.ValidateOnStart(); // CRITIEK: De app start niet als de instellingen fout zijn;
 
-// Allow injecting the raw settings object directly
+// Maakt het mogelijk om het object met de ruwe instellingen direct te injecteren
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<GlobalAppSettings>>().Value);
 
 builder.Services.AddLogging();
 
-// Localization
+// Lokalisatie
 builder.Services.AddSingleton<IValidationAttributeAdapterProvider, LocalizedValidationAttributeAdapterProvider>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.Configure<RequestLocalizationOptions>(options => {
@@ -70,7 +76,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
 	options.SupportedUICultures = supportedCultures;
 });
 
-// MVC & Views with Localization
+// MVC & Views met lokalisatie
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services
@@ -81,12 +87,23 @@ builder.Services
 		 factory.Create(typeof(Models.SharedResource));
  });
 
+// Voor de configuratie van Restful API's
+builder.Services.AddControllers();
+
+// Voor het gebruik van Swagger
+builder.Services.AddSwaggerGen(action => {
+	action.SwaggerDoc("v1", new OpenApiInfo {
+		Title = "GardenPlanner_Web",
+		Version = "v1"
+	});
+});
+
 // Utilities
 builder.Services.AddTransient<Utilities>();
 
 var app = builder.Build();
 
-// Seed the database
+// Vul de database met data
 using (var scope = app.Services.CreateScope()) {
 	var services = scope.ServiceProvider;
 	try {
@@ -97,33 +114,39 @@ using (var scope = app.Services.CreateScope()) {
 	}
 }
 
-// Configure the HTTP request pipeline.
+// Configureer de HTTP-aanvraagpijplijn.
 if (!app.Environment.IsDevelopment()) {
 	app.UseExceptionHandler("/Home/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	// De standaardwaarde voor HSTS is 30 dagen. Mogelijk wilt u dit wijzigen voor productiescenario's; zie https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
+} else {
+	app.UseSwagger();
+	app.UseSwaggerUI(action => action.SwaggerEndpoint("/swagger/v1/swagger.json", "GardenPlanner_Web v1"));
 }
 
 app.UseHttpsRedirection();
 
-// Localization Middleware (Must be before Routing/Auth)
+// Lokalisatie middleware (Moet voor Routing/Authentication komen)
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(localizationOptions.Value);
 
-// Ajax Middleware (Must be before Routing)
+// Ajax middleware (Moet voor Routing komen)
 app.UseUnobtrusiveAjax();
 
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
 
-// Authentication & Authorization
+// Authenticatie & autorisatie
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
+// UseUserIdResolver middleware (Moet voor Endpoints komen)
+app.UseUserIdResolver();
 
-// Endpoints
+// Eindpunten
+app.MapStaticAssets();
+app.MapControllers();
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}")
