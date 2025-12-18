@@ -2,36 +2,31 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using GardenPlanner_Web.Properties;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using Models;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 	public class LoginModel : PageModel {
 		private readonly SignInManager<AgendaUser> _signInManager;
 		private readonly ILogger<LoginModel> _logger;
 		private readonly GlobalAppSettings _globalAppSettings;
+		private readonly UserManager<AgendaUser> _userManager;
 
 		public LoginModel(
 			SignInManager<AgendaUser> signInManager,
 			ILogger<LoginModel> logger,
-			GlobalAppSettings globalAppSettings) {
+			GlobalAppSettings globalAppSettings,
+			UserManager<AgendaUser> userManager) {
 			_signInManager = signInManager;
 			_logger = logger;
 			_globalAppSettings = globalAppSettings;
+			_userManager = userManager;
 		}
 
 		/// <summary>
@@ -126,8 +121,7 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 			if (ModelState.IsValid) {
 				// This doesn't count login failures towards account lockout
 				// To enable password failures to trigger account lockout, set lockoutOnFailure: true
-				AgendaDbContext context = new();
-				AgendaUser contextUser = await context.Users.FirstAsync(u => u.Email == Input.Email);
+				AgendaUser contextUser = await _userManager.FindByEmailAsync(Input.Email);
 				var result = await _signInManager.PasswordSignInAsync(contextUser.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
 				Response.Cookies.Append(

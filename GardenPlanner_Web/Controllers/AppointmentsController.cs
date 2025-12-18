@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using GardenPlanner_Web.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,26 +9,22 @@ namespace GardenPlanner_Web.Controllers {
 	[Authorize(Roles = "User,UserAdmin,Admin")]
 	public class AppointmentsController : Controller {
 		private readonly AgendaDbContext _context;
-		private readonly UserManager<AgendaUser> _userManager;
 
-		public AppointmentsController(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public AppointmentsController(AgendaDbContext context) {
 			_context = context;
-			_userManager = userManager;
 		}
-
-		private Task<AgendaUser?> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
 		// GET: Appointments
 		public async Task<IActionResult> Index() {
 			try {
-				AgendaUser? contextUser = GetCurrentUserAsync().Result;
-				if (contextUser == null) {
+				string? currentUserId = Request.HttpContext.GetUserId();
+				if (string.IsNullOrEmpty(currentUserId)) {
 					return View();
 				}
 
-				var agendaDbContext = _context.Appointments.Where(a => a.AgendaUserId == contextUser.Id && a.Deleted == null);
+				var agendaDbContext = _context.Appointments.Where(a => a.AgendaUserId == currentUserId && a.Deleted == null);
 				ViewData["SelectListAppointmentType"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-" && appt.Deleted == null), "Id", "Description");
-				ViewData["UserId"] = contextUser.Id;
+				ViewData["UserId"] = currentUserId;
 				ViewData["AppointmentTypeId"] = _context.AppointmentTypes.First(appt => appt.Id != "-").Id;
 				return View(await agendaDbContext.ToListAsync());
 			} catch (Exception ex) {
@@ -76,10 +72,10 @@ namespace GardenPlanner_Web.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(string id, [Bind("Id,AgendaUserId,Date,Title,Description,Created,Deleted,AppointmentTypeId,IsApproved,IsCompleted")] Appointment posted) {
-			AgendaUser? contextUser = GetCurrentUserAsync().Result;
+			string? currentUserId = Request.HttpContext.GetUserId();
 			Appointment? targetAppointment = await _context.Appointments.FindAsync(id);
 
-			if (contextUser == null) {
+			if (string.IsNullOrEmpty(currentUserId)) {
 				return PartialView(nameof(Index));
 			}
 
@@ -88,7 +84,7 @@ namespace GardenPlanner_Web.Controllers {
 			}
 
 			var userAppointments = _context.Appointments.Where(a =>
-				a.AgendaUserId == contextUser.Id
+				a.AgendaUserId == currentUserId
 				&& a.Deleted == null);
 			ViewData["SelectListAppointmentType"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-"), "Id", "Name", posted.AppointmentType);
 

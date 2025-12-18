@@ -122,6 +122,8 @@ Run the test suite using the following command:
  - [Formated date picker](https://flatpickr.js.org)
  - [Write custom ASP.NET Core middleware](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/write?view=aspnetcore-10.0)
  - [AddOptions() vs Multiple Configure(...)](https://stackoverflow.com/a/55763194)
+ - [HttpContextExtensions simple example](https://stackoverflow.com/a/16809951)
+ - [HttpContextExtensions expanded example](https://github.com/RickStrahl/Westwind.AspNetCore/blob/master/Westwind.AspNetCore/Extensions/HttpContextExtensions.cs)
 
 ### Used NuGet packages
 

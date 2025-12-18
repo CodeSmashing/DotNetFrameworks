@@ -1,5 +1,5 @@
 using AspNetCore.Unobtrusive.Ajax;
-using GardenPlanner_Web.Middleware;
+using GardenPlanner_Web.Extensions;
 using GardenPlanner_Web.Properties;
 using GardenPlanner_Web.Services;
 using Microsoft.AspNetCore.Identity;

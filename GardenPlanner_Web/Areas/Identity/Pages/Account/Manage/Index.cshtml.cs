@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+using GardenPlanner_Web.Extensions;
 using GardenPlanner_Web.Properties;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -13,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 	public class IndexModel : PageModel {
@@ -104,7 +102,7 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 		public async Task<IActionResult> OnGetAsync() {
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) {
-				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+				return NotFound($"Unable to load user with ID '{Request.HttpContext.GetUserId()}'.");
 			}
 
 			await LoadAsync(user);
@@ -114,7 +112,7 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 		public async Task<IActionResult> OnPostAsync() {
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) {
-				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+				return NotFound($"Unable to load user with ID '{Request.HttpContext.GetUserId()}'.");
 			}
 
 			if (!ModelState.IsValid) {
