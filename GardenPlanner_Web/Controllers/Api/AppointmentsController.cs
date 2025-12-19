@@ -76,7 +76,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		public async Task<ActionResult<Appointment>> GetAppointment(string id) {
 			var appointment = await _context.Appointments.FindAsync(id);
 
-			if (appointment == null) {
+			if (appointment == null || appointment.Deleted != null) {
 				return NotFound();
 			}
 

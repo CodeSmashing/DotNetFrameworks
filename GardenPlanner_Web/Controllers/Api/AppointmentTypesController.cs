@@ -72,7 +72,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		public async Task<ActionResult<AppointmentType>> GetAppointmentType(string id) {
 			var appointmentType = await _context.AppointmentTypes.FindAsync(id);
 
-			if (appointmentType == null) {
+			if (appointmentType == null || appointmentType.Deleted != null) {
 				return NotFound();
 			}
 
