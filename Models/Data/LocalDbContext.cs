@@ -62,6 +62,22 @@ namespace Models {
 		}
 
 		/// <summary>
+		/// Initialiseert een nieuwe instantie van de <see cref="LocalDbContext"/> klasse
+		/// met standaardinstellingen.
+		/// </summary>
+		public LocalDbContext() : base() { }
+
+		/// <summary>
+		/// Initialiseert een nieuwe instantie van de <see cref="LocalDbContext"/> klasse
+		/// met de opgegeven configuratie-opties.
+		/// </summary>
+		/// <param name="options">
+		/// De <see cref="DbContextOptions{LocalDbContext}"/> die worden gebruikt om
+		/// de verbinding en het gedrag van de databasecontext te configureren.
+		/// </param>
+		public LocalDbContext(DbContextOptions<LocalDbContext> options) : base(options) { }
+
+		/// <summary>
 		/// Wordt aangeroepen om de databaseverbinding en andere configuratieopties in te stellen.
 		/// Wordt hier specifiek gebruikt voor de configuratie van de lokale SQLite-verbinding.
 		/// </summary>
