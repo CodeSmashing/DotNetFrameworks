@@ -62,6 +62,14 @@ namespace Models {
 		}
 
 		/// <summary>
+		/// Haalt de verzameling van <see cref="Register"/> entiteiten op of stelt deze in.
+		/// Deze set vertegenwoordigt de lokale tabel voor de gesynchroniseerde modellen.
+		/// </summary>
+		public DbSet<Register> Registers {
+			get; set;
+		}
+
+		/// <summary>
 		/// Initialiseert een nieuwe instantie van de <see cref="LocalDbContext"/> klasse
 		/// met standaardinstellingen.
 		/// </summary>
@@ -85,8 +93,8 @@ namespace Models {
 		protected override void OnConfiguring(DbContextOptionsBuilder options) {
 			var folder = Environment.SpecialFolder.LocalApplicationData;
 			var path = Environment.GetFolderPath(folder);
-			var DbPath = System.IO.Path.Join(path, "GardenPlanner_Local.db");
-			options.UseSqlite($"Data Source={DbPath}");
+			var dbPath = System.IO.Path.Join(path, "GardenPlanner_Local.db3");
+			options.UseSqlite($"Data Source={dbPath}");
 		}
 	}
 }
