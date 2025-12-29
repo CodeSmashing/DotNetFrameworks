@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.CustomServices;
+using Models.DTO;
+using System.Net.Mime;
 
 namespace GardenPlanner_Web.Controllers.Api {
 	/// <summary>
@@ -9,6 +12,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Consumes(MediaTypeNames.Application.Json)]
+	[Produces(MediaTypeNames.Application.Json)]
 	public class AppointmentTypesController : ControllerBase {
 		private readonly AgendaDbContext _context;
 
@@ -34,15 +39,15 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </remarks>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> die een lijst met
-		/// <see cref="AppointmentType"/> objecten bevat.
+		/// <see cref="AppointmentTypeDTO"/> objecten bevat.
 		/// </returns>
-		/// <response code="200">
-		/// Retourneert de lijst met de afspraak types.
-		/// </response>
 		[HttpGet]
-		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<IEnumerable<AppointmentType>>> GetAppointmentTypes() {
-			return await _context.AppointmentTypes.Where(appt => appt.Deleted == null).ToListAsync();
+		[ProducesResponseType<IEnumerable<AppointmentTypeDTO>>(StatusCodes.Status200OK)]
+		public async Task<ActionResult<IEnumerable<AppointmentTypeDTO>>> GetAppointmentTypes() {
+			return Ok(await _context.AppointmentTypes
+				.Where(appt => appt.Deleted == null)
+				.Select(appt => appt.ToDTO())
+				.ToListAsync());
 		}
 
 		// GET: api/AppointmentTypes/5
@@ -59,7 +64,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </param>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> met het gevraagde
-		/// <see cref="AppointmentType"/> object.
+		/// <see cref="AppointmentTypeDTO"/> object.
 		/// </returns>
 		/// <response code="200">
 		/// Retourneert de gevraagde afspraak type.
@@ -69,18 +74,19 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </response>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<AppointmentType>> GetAppointmentType(string id) {
+		[ProducesResponseType<AppointmentTypeDTO>(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<AppointmentTypeDTO>> GetAppointmentType(string id) {
 			var appointmentType = await _context.AppointmentTypes.FindAsync(id);
 
 			if (appointmentType == null || appointmentType.Deleted != null) {
 				return NotFound();
 			}
 
-			return appointmentType;
+			return Ok(appointmentType.ToDTO());
 		}
 
 		// PUT: api/AppointmentTypes/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		/// <summary>
 		/// Werkt een bestaande afspraak type bij.
 		/// </summary>
@@ -92,47 +98,42 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de afspraak type die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="appointmentType">
+		/// <param name="appointmentTypeDTO">
 		/// De bijgewerkte afspraak type gegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
-		/// Een <see cref="IActionResult"/> die de status van de
+		/// Een <see cref="ActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de afspraak type succesvol is bijgewerkt (No Content).
-		/// </response>
-		/// <response code="400">
-		/// Indien de opgegeven ID in de route niet overeenkomt met de
-		/// ID in de body.
-		/// </response>
-		/// <response code="404">
-		/// Indien de afspraak type niet gevonden is.
-		/// </response>
 		[HttpPut("{id}")]
 		[Authorize(Roles = "UserAdmin,Admin,Employee")]
-		public async Task<IActionResult> PutAppointmentType(string id, AppointmentType appointmentType) {
-			if (id != appointmentType.Id) {
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> PutAppointmentType(string id, AppointmentTypeDTO appointmentTypeDTO) {
+			if (id != appointmentTypeDTO.Id) {
 				return BadRequest();
 			}
 
+			var appointmentType = await _context.AppointmentTypes.FindAsync(id);
+			if (appointmentType == null) {
+				return NotFound();
+			}
+
+			appointmentType.Name = appointmentTypeDTO.Name;
+			appointmentType.Description = appointmentTypeDTO.Description;
 			_context.Entry(appointmentType).State = EntityState.Modified;
 
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateConcurrencyException) {
-				if (!AppointmentTypeExists(id)) {
-					return NotFound();
-				} else {
-					throw;
-				}
+			} catch (DbUpdateConcurrencyException) when (!AppointmentTypeExists(id)) {
+				return NotFound();
 			}
 
 			return NoContent();
 		}
 
 		// POST: api/AppointmentTypes
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		/// <summary>
 		/// Maakt een nieuwe afspraak type aan.
 		/// </summary>
@@ -141,40 +142,39 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "UserAdmin", "Admin", "Employee".
 		/// </remarks>
-		/// <param name="appointmentType">
-		/// Het <see cref="AppointmentType"/> object dat moet worden
+		/// <param name="appointmentTypeDTO">
+		/// Het <see cref="AppointmentTypeDTO"/> object dat moet worden
 		/// toegevoegd.
 		/// </param>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> die de zojuist aangemaakte
 		/// afspraak type retourneert.
 		/// </returns>
-		/// <response code="201">
-		/// Retourneert het aangemaakte item (Created).
-		/// </response>
-		/// <response code="400">
-		/// Indien de invoergegevens ongeldig zijn.
-		/// </response>
-		/// <response code="409">
-		/// Als de afspraak type ID al bestaat in de database.
-		/// </response>
 		[HttpPost]
 		[Authorize(Roles = "UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<AppointmentType>> PostAppointmentType(AppointmentType appointmentType) {
+		[ProducesResponseType<AppointmentTypeDTO>(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status409Conflict)]
+		public async Task<ActionResult<AppointmentTypeDTO>> PostAppointmentType(AppointmentTypeDTO appointmentTypeDTO) {
+			AppointmentType appointmentType = new() {
+				Name = appointmentTypeDTO.Name,
+				Description = appointmentTypeDTO.Description
+			};
+
 			_context.AppointmentTypes.Add(appointmentType);
+
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateException) {
-				if (AppointmentTypeExists(appointmentType.Id)) {
-					return Conflict();
-				} else {
-					throw;
-				}
+			} catch (DbUpdateException) when (AppointmentTypeExists(appointmentType.Id)) {
+				return Conflict();
 			}
 
-			return CreatedAtAction("GetAppointmentType", new {
-				id = appointmentType.Id
-			}, appointmentType);
+			return CreatedAtAction(
+				nameof(GetAppointmentType),
+				new {
+					id = appointmentType.Id
+				},
+				appointmentType.ToDTO());
 		}
 
 		// DELETE: api/AppointmentTypes/5
@@ -190,18 +190,14 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// De ID van de afspraak type die moet worden verwijderd.
 		/// </param>
 		/// <returns>
-		/// Een <see cref="IActionResult"/> die de status van de
+		/// Een <see cref="ActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de afspraak type succesvol is verwijderd (No Content).
-		/// </response>
-		/// <response code="404">
-		/// Indien de afspraak type niet gevonden is.
-		/// </response>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "UserAdmin,Admin,Employee")]
-		public async Task<IActionResult> DeleteAppointmentType(string id) {
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteAppointmentType(string id) {
 			var appointmentType = await _context.AppointmentTypes.FindAsync(id);
 			if (appointmentType == null) {
 				return NotFound();

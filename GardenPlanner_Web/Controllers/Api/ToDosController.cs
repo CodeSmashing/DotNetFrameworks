@@ -1,8 +1,10 @@
-﻿using GardenPlanner_Web.Extensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.CustomServices;
+using Models.DTO;
+using System.Net.Mime;
 
 namespace GardenPlanner_Web.Controllers.Api {
 	/// <summary>
@@ -10,6 +12,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Consumes(MediaTypeNames.Application.Json)]
+	[Produces(MediaTypeNames.Application.Json)]
 	public class ToDosController : ControllerBase {
 		private readonly AgendaDbContext _context;
 
@@ -35,15 +39,16 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </remarks>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> die een lijst met
-		/// <see cref="ToDo"/> objecten bevat.
+		/// <see cref="ToDoDTO"/> objecten bevat.
 		/// </returns>
-		/// <response code="200">
-		/// Retourneert de lijst met de to-do's.
-		/// </response>
 		[HttpGet("{appointmentId}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<IEnumerable<ToDo>>> GetToDos(string appointmentId) {
-			return await _context.ToDos.Where(td => td.Deleted == null && td.AppointmentId == appointmentId).ToListAsync();
+		[ProducesResponseType<IEnumerable<ToDoDTO>>(StatusCodes.Status200OK)]
+		public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetToDos(string appointmentId) {
+			return Ok(await _context.ToDos
+				.Where(td => td.Deleted == null && td.AppointmentId == appointmentId)
+				.Select(td => td.ToDTO())
+				.ToListAsync());
 		}
 
 		// GET: api/ToDos/5
@@ -63,29 +68,23 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </param>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> met het gevraagde
-		/// <see cref="ToDo"/> object.
+		/// <see cref="ToDoDTO"/> object.
 		/// </returns>
-		/// <response code="200">
-		/// Retourneert de gevraagde to-do.
-		/// </response>
-		/// <response code="404">
-		/// Indien de to-do met de opgegeven ID niet gevonden is of als de
-		/// afspraak ID overeenkomt.
-		/// </response>
 		[HttpGet("{appointmentId}/{id}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<ToDo>> GetToDo(string appointmentId, string id) {
+		[ProducesResponseType<ToDoDTO>(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<ToDoDTO>> GetToDo(string appointmentId, string id) {
 			var toDo = await _context.ToDos.FindAsync(id);
 
 			if (toDo == null || toDo.AppointmentId != appointmentId || toDo.Deleted == null) {
 				return NotFound();
 			}
 
-			return toDo;
+			return Ok(toDo.ToDTO());
 		}
 
 		// PUT: api/ToDos/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		/// <summary>
 		/// Werkt een bestaande to-do bij.
 		/// </summary>
@@ -97,47 +96,42 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de to-do die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="toDo">
+		/// <param name="toDoDTO">
 		/// De bijgewerkte to-do gegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
-		/// Een <see cref="IActionResult"/> die de status van de
+		/// Een <see cref="ActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de to-do succesvol is bijgewerkt (No Content).
-		/// </response>
-		/// <response code="400">
-		/// Indien de opgegeven ID in de route niet overeenkomt met de
-		/// ID in de body.
-		/// </response>
-		/// <response code="404">
-		/// Indien de to-do niet gevonden is.
-		/// </response>
 		[HttpPut("{id}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<IActionResult> PutToDo(string id, ToDo toDo) {
-			if (id != toDo.Id) {
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> PutToDo(string id, ToDoDTO toDoDTO) {
+			if (id != toDoDTO.Id) {
 				return BadRequest();
 			}
 
+			var toDo = await _context.ToDos.FindAsync(id);
+			if (toDo == null) {
+				return NotFound();
+			}
+
+			toDo.Description = toDoDTO.Description;
+			toDo.AppointmentId = toDoDTO.AppointmentId;
 			_context.Entry(toDo).State = EntityState.Modified;
 
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateConcurrencyException) {
-				if (!ToDoExists(id)) {
-					return NotFound();
-				} else {
-					throw;
-				}
+			} catch (DbUpdateConcurrencyException) when (!ToDoExists(id)) {
+				return NotFound();
 			}
 
 			return NoContent();
 		}
 
 		// POST: api/ToDos
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		/// <summary>
 		/// Maakt een nieuwe to-do aan.
 		/// </summary>
@@ -146,39 +140,38 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "User", "UserAdmin", "Admin", "Employee".
 		/// </remarks>
-		/// <param name="toDo">
-		/// Het <see cref="ToDo"/> object dat moet worden toegevoegd.
+		/// <param name="toDoDTO">
+		/// Het <see cref="ToDoDTO"/> object dat moet worden toegevoegd.
 		/// </param>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> die de zojuist aangemaakte
 		/// to-do retourneert.
 		/// </returns>
-		/// <response code="201">
-		/// Retourneert het aangemaakte item (Created).
-		/// </response>
-		/// <response code="400">
-		/// Indien de invoergegevens ongeldig zijn.
-		/// </response>
-		/// <response code="409">
-		/// Als de to-do ID al bestaat in de database.
-		/// </response>
 		[HttpPost]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<ToDo>> PostToDo(ToDo toDo) {
+		[ProducesResponseType<ToDoDTO>(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status409Conflict)]
+		public async Task<ActionResult<ToDoDTO>> PostToDo(ToDoDTO toDoDTO) {
+			ToDo toDo = new() {
+				Description = toDoDTO.Description,
+				AppointmentId = toDoDTO.AppointmentId
+			};
+
 			_context.ToDos.Add(toDo);
+
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateException) {
-				if (ToDoExists(toDo.Id)) {
-					return Conflict();
-				} else {
-					throw;
-				}
+			} catch (DbUpdateException) when (ToDoExists(toDo.Id)) {
+				return Conflict();
 			}
 
-			return CreatedAtAction("GetToDo", new {
-				id = toDo.Id
-			}, toDo);
+			return CreatedAtAction(
+				nameof(PostToDo),
+				new {
+					id = toDo.Id
+				},
+				toDo.ToDTO());
 		}
 
 		// DELETE: api/ToDos/5
@@ -194,18 +187,14 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// De ID van de to-do die moet worden verwijderd.
 		/// </param>
 		/// <returns>
-		/// Een <see cref="IActionResult"/> die de status van de
+		/// Een <see cref="ActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de to-do succesvol is verwijderd (No Content).
-		/// </response>
-		/// <response code="404">
-		/// Indien de to-do niet gevonden is.
-		/// </response>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
-		public async Task<IActionResult> DeleteToDo(string id) {
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteToDo(string id) {
 			var toDo = await _context.ToDos.FindAsync(id);
 			if (toDo == null) {
 				return NotFound();

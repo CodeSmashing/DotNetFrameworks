@@ -1,8 +1,10 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.CustomServices;
+using Models.DTO;
+using System.Net.Mime;
 
 namespace GardenPlanner_Web.Controllers.Api {
 	/// <summary>
@@ -10,6 +12,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Consumes(MediaTypeNames.Application.Json)]
+	[Produces(MediaTypeNames.Application.Json)]
 	public class VehiclesController : ControllerBase {
 		private readonly AgendaDbContext _context;
 
@@ -35,15 +39,16 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </remarks>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> die een lijst met
-		/// <see cref="Vehicle"/> objecten bevat.
+		/// <see cref="VehicleDTO"/> objecten bevat.
 		/// </returns>
-		/// <response code="200">
-		/// Retourneert de lijst met de voertuigen.
-		/// </response>
 		[HttpGet]
 		[Authorize(Roles = "UserAdmin,Admin,Employee")]
-		public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles() {
-			return await _context.Vehicles.Where(v => v.Deleted == null).ToListAsync();
+		[ProducesResponseType<IEnumerable<VehicleDTO>>(StatusCodes.Status200OK)]
+		public async Task<ActionResult<IEnumerable<VehicleDTO>>> GetVehicles() {
+			return Ok(await _context.Vehicles
+				.Where(v => v.Deleted == null)
+				.Select(v => v.ToDTO())
+				.ToListAsync());
 		}
 
 		// GET: api/Vehicles/5
@@ -60,16 +65,12 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// </param>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> met het gevraagde
-		/// <see cref="Vehicle"/> object.
+		/// <see cref="VehicleDTO"/> object.
 		/// </returns>
-		/// <response code="200">
-		/// Retourneert de gevraagde voertuig.
-		/// </response>
-		/// <response code="404">
-		/// Indien de voertuig met de opgegeven ID niet gevonden is.
-		/// </response>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "UserAdmin,Admin,Employee")]
+		[ProducesResponseType<VehicleDTO>(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<Vehicle>> GetVehicle(string id) {
 			var vehicle = await _context.Vehicles.FindAsync(id);
 
@@ -77,11 +78,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			return vehicle;
+			return Ok(vehicle.ToDTO());
 		}
 
 		// PUT: api/Vehicles/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		/// <summary>
 		/// Werkt een bestaande voertuig bij.
 		/// </summary>
@@ -93,47 +93,47 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de voertuig die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="vehicle">
+		/// <param name="vehicleDTO">
 		/// De bijgewerkte voertuig gegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
-		/// Een <see cref="IActionResult"/> die de status van de
+		/// Een <see cref="ActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de voertuig succesvol is bijgewerkt (No Content).
-		/// </response>
-		/// <response code="400">
-		/// Indien de opgegeven ID in de route niet overeenkomt met de
-		/// ID in de body.
-		/// </response>
-		/// <response code="404">
-		/// Indien de voertuig niet gevonden is.
-		/// </response>
 		[HttpPut("{id}")]
 		[Authorize(Roles = "UserAdmin,Admin")]
-		public async Task<IActionResult> PutVehicle(string id, Vehicle vehicle) {
-			if (id != vehicle.Id) {
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> PutVehicle(string id, VehicleDTO vehicleDTO) {
+			if (id != vehicleDTO.Id) {
 				return BadRequest();
 			}
 
+			var vehicle = await _context.Vehicles.FindAsync(id);
+			if (vehicle == null) {
+				return NotFound();
+			}
+
+			vehicle.LicencePlate = vehicleDTO.LicencePlate;
+			vehicle.VehicleType = vehicleDTO.VehicleType;
+			vehicle.Brand = vehicleDTO.Brand;
+			vehicle.Model = vehicleDTO.Model;
+			vehicle.LoadCapacity = vehicleDTO.LoadCapacity;
+			vehicle.WeightCapacity = vehicleDTO.WeightCapacity;
+			vehicle.FuelType = vehicleDTO.FuelType;
 			_context.Entry(vehicle).State = EntityState.Modified;
 
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateConcurrencyException) {
-				if (!VehicleExists(id)) {
-					return NotFound();
-				} else {
-					throw;
-				}
+			} catch (DbUpdateConcurrencyException) when (!VehicleExists(id)) {
+				return NotFound();
 			}
 
 			return NoContent();
 		}
 
 		// POST: api/Vehicles
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		/// <summary>
 		/// Maakt een nieuwe voertuig aan.
 		/// </summary>
@@ -142,40 +142,44 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "Admin".
 		/// </remarks>
-		/// <param name="vehicle">
-		/// Het <see cref="Vehicle"/> object dat moet worden
+		/// <param name="vehicleDTO">
+		/// Het <see cref="VehicleDTO"/> object dat moet worden
 		/// toegevoegd.
 		/// </param>
 		/// <returns>
 		/// Een <see cref="ActionResult{T}"/> die de zojuist aangemaakte
 		/// voertuig retourneert.
 		/// </returns>
-		/// <response code="201">
-		/// Retourneert het aangemaakte item (Created).
-		/// </response>
-		/// <response code="400">
-		/// Indien de invoergegevens ongeldig zijn.
-		/// </response>
-		/// <response code="409">
-		/// Als de voertuig ID al bestaat in de database.
-		/// </response>
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle) {
+		[ProducesResponseType<VehicleDTO>(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status409Conflict)]
+		public async Task<ActionResult<VehicleDTO>> PostVehicle(VehicleDTO vehicleDTO) {
+			Vehicle vehicle = new() {
+				LicencePlate = vehicleDTO.LicencePlate,
+				VehicleType = vehicleDTO.VehicleType,
+				Brand = vehicleDTO.Brand,
+				Model = vehicleDTO.Model,
+				LoadCapacity = vehicleDTO.LoadCapacity,
+				WeightCapacity = vehicleDTO.WeightCapacity,
+				FuelType = vehicleDTO.FuelType
+			};
+
 			_context.Vehicles.Add(vehicle);
+
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateException) {
-				if (VehicleExists(vehicle.Id)) {
-					return Conflict();
-				} else {
-					throw;
-				}
+			} catch (DbUpdateException) when (VehicleExists(vehicle.Id)) {
+				return Conflict();
 			}
 
-			return CreatedAtAction("GetVehicle", new {
-				id = vehicle.Id
-			}, vehicle);
+			return CreatedAtAction(
+				nameof(PostVehicle),
+				new {
+					id = vehicle.Id
+				},
+				vehicle.ToDTO());
 		}
 
 		// DELETE: api/Vehicles/5
@@ -191,18 +195,14 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// De ID van de voertuig die moet worden verwijderd.
 		/// </param>
 		/// <returns>
-		/// Een <see cref="IActionResult"/> die de status van de
+		/// Een <see cref="ActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de voertuig succesvol is verwijderd (No Content).
-		/// </response>
-		/// <response code="404">
-		/// Indien de voertuig niet gevonden is.
-		/// </response>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> DeleteVehicle(string id) {
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteVehicle(string id) {
 			var vehicle = await _context.Vehicles.FindAsync(id);
 			if (vehicle == null) {
 				return NotFound();
