@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Models;
 using Models.CustomServices;
 using Models.CustomValidation;
@@ -77,26 +77,17 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
 });
 
 // MVC & Views met lokalisatie
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
-builder.Services
-	.AddMvc()
+builder.Services.AddRazorPages()
 	.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
 	.AddDataAnnotationsLocalization(options => {
-	 options.DataAnnotationLocalizerProvider = (type, factory) =>
-		 factory.Create(typeof(Models.SharedResource));
- });
+		options.DataAnnotationLocalizerProvider = (type, factory) =>
+			factory.Create(typeof(Models.SharedResource));
+	});
 
 // Voor de configuratie van Restful API's
+builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
-
-// Voor het gebruik van Swagger
-builder.Services.AddSwaggerGen(action => {
-	action.SwaggerDoc("v1", new OpenApiInfo {
-		Title = "GardenPlanner_Web",
-		Version = "v1"
-	});
-});
+builder.Services.AddOpenApi();
 
 // Utilities
 builder.Services.AddTransient<Utilities>();
@@ -120,11 +111,8 @@ if (!app.Environment.IsDevelopment()) {
 	// De standaardwaarde voor HSTS is 30 dagen. Mogelijk wilt u dit wijzigen voor productiescenario's; zie https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 } else {
-	app.UseSwagger();
-	app.UseSwaggerUI(action => action.SwaggerEndpoint("/swagger/v1/swagger.json", "GardenPlanner_Web v1"));
+	app.MapOpenApi();
 }
-
-app.UseHttpsRedirection();
 
 // Lokalisatie middleware (Moet voor Routing/Authentication komen)
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
@@ -145,6 +133,7 @@ app.UseAuthorization();
 app.UseUserIdResolver();
 
 // Eindpunten
+app.UseHttpsRedirection();
 app.MapStaticAssets();
 app.MapControllers();
 app.MapControllerRoute(

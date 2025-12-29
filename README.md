@@ -124,6 +124,7 @@ Run the test suite using the following command:
  - [AddOptions() vs Multiple Configure(...)](https://stackoverflow.com/a/55763194)
  - [HttpContextExtensions simple example](https://stackoverflow.com/a/16809951)
  - [HttpContextExtensions expanded example](https://github.com/RickStrahl/Westwind.AspNetCore/blob/master/Westwind.AspNetCore/Extensions/HttpContextExtensions.cs)
+ - [Solving problem between Swashbuckle and OpenAPI](https://github.com/wiremock/WireMock.Net/issues/1287#issuecomment-2847023250)
 
 ### Used NuGet packages
 
