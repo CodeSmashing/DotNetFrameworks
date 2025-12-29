@@ -125,6 +125,11 @@ Run the test suite using the following command:
  - [HttpContextExtensions simple example](https://stackoverflow.com/a/16809951)
  - [HttpContextExtensions expanded example](https://github.com/RickStrahl/Westwind.AspNetCore/blob/master/Westwind.AspNetCore/Extensions/HttpContextExtensions.cs)
  - [Solving problem between Swashbuckle and OpenAPI](https://github.com/wiremock/WireMock.Net/issues/1287#issuecomment-2847023250)
+ - **Using DTO:**
+   - [Protecting from overposting](https://go.microsoft.com/fwlink/?linkid=2123754)
+   - [Why C# extension methods beat AutoMapper](https://www.linkedin.com/posts/juliocasal_5-reasons-why-a-simple-c-extension-method-activity-7315365345953755136-rMXM)
+   - [Object Mapping Without any Mapping Framework in C# Using Extension Methods](https://medium.com/@bernaduswidaryanto/object-mapping-without-any-mapping-framework-in-c-using-extension-methods-8f4cd0043cbc)
+   - [DTO conversion best practices](https://softwareengineering.stackexchange.com/a/301586)
 
 ### Used NuGet packages
 

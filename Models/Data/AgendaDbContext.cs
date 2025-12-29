@@ -2,35 +2,72 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Models {
+	/// <summary>
+	/// De databasecontext voor de globale GardenPlanner SQL-omgeving, verantwoordelijk voor de
+	/// online gegevensopslag.
+	/// Beheert de toegang tot afspraken, voertuigen en gerelateerde gegevens.
+	/// </summary>
 	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
+		/// <summary>
+		/// De verschillende types afspraken die beschikbaar zijn in het systeem.
+		/// </summary>
 		public DbSet<AppointmentType> AppointmentTypes {
 			get; set;
 		}
 
+		/// <summary>
+		/// De geplande afspraken van de gebruikers.
+		/// </summary>
 		public DbSet<Appointment> Appointments {
 			get; set;
 		}
 
+		/// <summary>
+		/// De voertuigen die geregistreerd staan voor afspraken of onderhoud.
+		/// </summary>
 		public DbSet<Vehicle> Vehicles {
 			get; set;
 		}
 
+		/// <summary>
+		/// De lijst met taken of to-do items.
+		/// </summary>
 		public DbSet<ToDo> ToDos {
 			get; set;
 		}
 
+		/// <summary>
+		/// De ondersteunde talen voor lokalisatie binnen de applicatie.
+		/// </summary>
 		public DbSet<Language> Languages {
 			get; set;
 		}
 
+		/// <summary>
+		/// Initialiseert een nieuwe instantie van de <see cref="AgendaDbContext"/> klasse
+		/// met standaard opties.
+		/// </summary>
 		public AgendaDbContext() : base() { }
 
+		/// <summary>
+		/// Initialiseert een nieuwe instantie van de <see cref="AgendaDbContext"/> klasse
+		/// met de opgegeven configuratie.
+		/// </summary>
+		/// <param name="options">
+		/// De configuratie-opties voor deze database context.
+		/// </param>
 		public AgendaDbContext(DbContextOptions<AgendaDbContext> options) : base(options) { }
 
+		/// <summary>
+		/// Configureert het databasemodel en de entiteitsrelaties via de Fluent API.
+		/// Hier worden zaken als primaire sleutels, indexen en zaadgegevens (seed data) gedefinieerd.
+		/// </summary>
+		/// <param name="modelBuilder">
+		/// De builder die wordt gebruikt om het model te construeren.
+		/// </param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			base.OnModelCreating(modelBuilder);
 
@@ -43,6 +80,13 @@ namespace Models {
 				.IsUnique();
 		}
 
+		/// <summary>
+		/// Configureert de databaseverbinding en andere opties voor de context.
+		/// Wordt aangeroepen als de context niet via Dependency Injection is geconfigureerd.
+		/// </summary>
+		/// <param name="optionsBuilder">
+		/// De builder voor de configuratie-opties van de context.
+		/// </param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			// Define the connection string to the database
 			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
@@ -57,8 +101,9 @@ namespace Models {
 						.Build();
 					string? con = config.GetConnectionString("ServerConnection");
 
-					if (!con.IsNullOrEmpty())
+					if (!string.IsNullOrEmpty(con)) {
 						connectionString = con;
+					}
 				} catch {
 					throw;
 				}
@@ -73,6 +118,15 @@ namespace Models {
 			});
 		}
 
+		/// <summary>
+		/// Voegt initiële data (seed data) toe aan de database indien deze leeg is.
+		/// </summary>
+		/// <param name="serviceProvider">
+		/// De service provider voor het ophalen van benodigde services zoals de database context.
+		/// </param>
+		/// <returns>
+		/// Een task die de asynchrone operatie representeert.
+		/// </returns>
 		public static async Task Seeder(IServiceProvider serviceProvider) {
 			var context = serviceProvider.GetRequiredService<AgendaDbContext>();
 			var userManager = serviceProvider.GetRequiredService<UserManager<AgendaUser>>();
@@ -161,7 +215,7 @@ namespace Models {
 					// Only use regular users
 					context.Users
 						.Where(user => context.UserRoles
-								.Any(ur => ur.UserId == user.Id && ur.RoleId == "User"))
+							.Any(ur => ur.UserId == user.Id && ur.RoleId == "User"))
 						.Select(u => u.Id)
 						.ToArray(),
 
