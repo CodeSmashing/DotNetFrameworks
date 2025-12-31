@@ -16,10 +16,10 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Databasecontext
-builder.Services.AddDbContext<AgendaDbContext>(options =>
+builder.Services.AddDbContext<GlobalDbContext>(options =>
 	options.UseSqlServer(
-		builder.Configuration.GetConnectionString("AgendaDbContextConnection")
-		?? throw new InvalidOperationException("Connection string 'AgendaDbContextConnection' not found.")
+		builder.Configuration.GetConnectionString("GlobalDbContextConnection")
+		?? throw new InvalidOperationException("Connection string 'GlobalDbContextConnection' not found.")
 	));
 
 // Identiteitssysteem
@@ -36,7 +36,7 @@ builder.Services
 		options.SignIn.RequireConfirmedAccount = false;
 	})
 	.AddRoles<IdentityRole>()
-	.AddEntityFrameworkStores<AgendaDbContext>()
+	.AddEntityFrameworkStores<GlobalDbContext>()
 	.AddPasswordlessLoginTotpTokenProvider();
 
 // Registreer de Ajax (Unobtrusive) service
@@ -98,7 +98,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope()) {
 	var services = scope.ServiceProvider;
 	try {
-		await AgendaDbContext.Seeder(services);
+		await GlobalDbContext.Seeder(services);
 	} catch (Exception ex) {
 		var logger = services.GetRequiredService<ILogger<Program>>();
 		logger.LogError(ex, "An error occurred while seeding the database.");
