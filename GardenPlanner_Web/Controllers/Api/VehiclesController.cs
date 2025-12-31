@@ -15,7 +15,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 	[Consumes(MediaTypeNames.Application.Json)]
 	[Produces(MediaTypeNames.Application.Json)]
 	public class VehiclesController : ControllerBase {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 
 		/// <summary>
 		/// Initialiseert een nieuwe instantie van de
@@ -24,7 +24,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="context">
 		/// De context voor voertuig beheer (dependency injection).
 		/// </param>
-		public VehiclesController(AgendaDbContext context) {
+		public VehiclesController(GlobalDbContext context) {
 			_context = context;
 		}
 

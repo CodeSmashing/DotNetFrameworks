@@ -11,7 +11,7 @@ using Models;
 
 namespace Models.Migrations
 {
-    [DbContext(typeof(AgendaDbContext))]
+    [DbContext(typeof(GlobalDbContext))]
     [Migration("20251114165911_AddColumnCreatedToAppointmentTypeAndToDoAndVehicle")]
     partial class AddColumnCreatedToAppointmentTypeAndToDoAndVehicle
     {

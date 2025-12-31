@@ -11,7 +11,7 @@ namespace GardenPlanner_Web.Controllers {
 	/// </summary>
 	[Authorize(Roles = "UserAdmin,Admin,Employee")]
 	public class VehiclesController : Controller {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly Utilities _utilities;
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace GardenPlanner_Web.Controllers {
 		/// Hulp-methodes en voorzieningen (dependency injection).
 		/// </param>
 		public VehiclesController(
-			AgendaDbContext context,
+			GlobalDbContext context,
 			Utilities utilities) {
 			_context = context;
 			_utilities = utilities;

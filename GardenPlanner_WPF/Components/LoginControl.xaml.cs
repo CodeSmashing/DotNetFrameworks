@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace GardenPlanner_WPF {
 	public partial class LoginControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
 		public event EventHandler<AgendaUser> LoginSuccess = null!;
@@ -17,7 +17,7 @@ namespace GardenPlanner_WPF {
 		public Dictionary<Control, string> loginRequirements = new();
 
 		// Constructor with dependency injection
-		public LoginControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public LoginControl(GlobalDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

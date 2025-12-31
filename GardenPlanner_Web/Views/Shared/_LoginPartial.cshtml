@@ -7,7 +7,7 @@
 
 @inject SignInManager<AgendaUser> SignInManager
 @inject UserManager<AgendaUser> UserManager
-@inject AgendaDbContext AgendaDbContext
+@inject GlobalDbContext GlobalDbContext
 @inject IOptions<GlobalAppSettings> GlobalAppSettingsOptions
 @inject IHtmlLocalizer<GardenPlanner_Web.SharedResource> _sharedLocalizer
 
@@ -38,7 +38,7 @@
 			languageCode = cookieCulture.Substring(2, 2);
 		}
 		var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/index.html" : $"~{Context.Request.Path.Value}";
-		string? defaultLanguage = AgendaDbContext.Languages.FirstOrDefault(l => l.Code == languageCode)?.Name;
+		string? defaultLanguage = GlobalDbContext.Languages.FirstOrDefault(l => l.Code == languageCode)?.Name;
 
 		<li class="nav-button">
 			<a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">@_sharedLocalizer["Register"]</a>
@@ -49,7 +49,7 @@
 		<li class="nav-button dropdown">
 			<a class="nav-link text-light dropdown" data-bs-toggle="dropdown">@defaultLanguage</a>
 			<ul class="dropdown-menu">
-				@foreach(Language language in AgendaDbContext.Languages) {
+				@foreach(Language language in GlobalDbContext.Languages) {
 					if (language.Code != languageCode && language.IsSystemLanguage) {
 						<li class="nav-item">
 							<a class="nav-link text-dark"

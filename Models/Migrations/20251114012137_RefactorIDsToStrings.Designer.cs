@@ -11,7 +11,7 @@ using Models;
 
 namespace Models.Migrations
 {
-    [DbContext(typeof(AgendaDbContext))]
+    [DbContext(typeof(GlobalDbContext))]
     [Migration("20251114012137_RefactorIDsToStrings")]
     partial class RefactorIDsToStrings
     {

@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace GardenPlanner_WPF {
 	public partial class VehicleAssignmentControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		public List<Tuple<Vehicle, ComboBoxItem>> selectedVehicles = new List<Tuple<Vehicle, ComboBoxItem>>();
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
@@ -27,7 +27,7 @@ namespace GardenPlanner_WPF {
 		// Key: Field name, Value: Human-readable name
 		public Dictionary<Control, string> inputRequirements = new();
 
-		public VehicleAssignmentControl(AgendaDbContext context) {
+		public VehicleAssignmentControl(GlobalDbContext context) {
 			_context = context;
 			InitializeComponent();
 

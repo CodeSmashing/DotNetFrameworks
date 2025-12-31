@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace GardenPlanner_WPF {
 	public partial class AgendaUserControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
@@ -22,7 +22,7 @@ namespace GardenPlanner_WPF {
 		// Key: Field name, Value: Human-readable name
 		public Dictionary<Control, string> inputRequirements = new();
 
-		public AgendaUserControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public AgendaUserControl(GlobalDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

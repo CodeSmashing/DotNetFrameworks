@@ -11,7 +11,7 @@ using Models;
 
 namespace Models.Migrations
 {
-    [DbContext(typeof(AgendaDbContext))]
+    [DbContext(typeof(GlobalDbContext))]
     [Migration("20251020114420_AppointmentTypeRemoveUserForeignKey")]
     partial class AppointmentTypeRemoveUserForeignKey
     {

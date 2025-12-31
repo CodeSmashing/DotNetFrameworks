@@ -11,7 +11,7 @@ using Models;
 
 namespace Models.Migrations
 {
-    [DbContext(typeof(AgendaDbContext))]
+    [DbContext(typeof(GlobalDbContext))]
     [Migration("20251023092752_AddAgendaUserDisplayNameColumn")]
     partial class AddAgendaUserDisplayNameColumn
     {

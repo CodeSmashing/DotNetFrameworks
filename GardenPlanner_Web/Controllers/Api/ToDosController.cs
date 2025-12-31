@@ -15,7 +15,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 	[Consumes(MediaTypeNames.Application.Json)]
 	[Produces(MediaTypeNames.Application.Json)]
 	public class ToDosController : ControllerBase {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 
 		/// <summary>
 		/// Initialiseert een nieuwe instantie van de
@@ -24,7 +24,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="context">
 		/// De context voor to-do item beheer (dependency injection).
 		/// </param>
-		public ToDosController(AgendaDbContext context) {
+		public ToDosController(GlobalDbContext context) {
 			_context = context;
 		}
 

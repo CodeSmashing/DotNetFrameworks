@@ -9,7 +9,7 @@ namespace GardenPlanner_Web.Controllers {
 	/// </summary>
 	[Authorize(Roles = "UserAdmin,Admin,Employee")]
 	public class ToDosController : Controller {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 
 		/// <summary>
 		/// Initialiseert een nieuwe instantie van de
@@ -18,7 +18,7 @@ namespace GardenPlanner_Web.Controllers {
 		/// <param name="context">
 		/// De context voor to-do item beheer (dependency injection).
 		/// </param>
-		public ToDosController(AgendaDbContext context) {
+		public ToDosController(GlobalDbContext context) {
 			_context = context;
 		}
 

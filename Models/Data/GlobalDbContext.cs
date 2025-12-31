@@ -10,7 +10,7 @@ namespace Models {
 	/// online gegevensopslag.
 	/// Beheert de toegang tot afspraken, voertuigen en gerelateerde gegevens.
 	/// </summary>
-	public class AgendaDbContext : IdentityDbContext<AgendaUser> {
+	public class GlobalDbContext : IdentityDbContext<AgendaUser> {
 		/// <summary>
 		/// De verschillende types afspraken die beschikbaar zijn in het systeem.
 		/// </summary>
@@ -47,19 +47,19 @@ namespace Models {
 		}
 
 		/// <summary>
-		/// Initialiseert een nieuwe instantie van de <see cref="AgendaDbContext"/> klasse
+		/// Initialiseert een nieuwe instantie van de <see cref="GlobalDbContext"/> klasse
 		/// met standaard opties.
 		/// </summary>
-		public AgendaDbContext() : base() { }
+		public GlobalDbContext() : base() { }
 
 		/// <summary>
-		/// Initialiseert een nieuwe instantie van de <see cref="AgendaDbContext"/> klasse
+		/// Initialiseert een nieuwe instantie van de <see cref="GlobalDbContext"/> klasse
 		/// met de opgegeven configuratie.
 		/// </summary>
 		/// <param name="options">
 		/// De configuratie-opties voor deze database context.
 		/// </param>
-		public AgendaDbContext(DbContextOptions<AgendaDbContext> options) : base(options) { }
+		public GlobalDbContext(DbContextOptions<GlobalDbContext> options) : base(options) { }
 
 		/// <summary>
 		/// Configureert het databasemodel en de entiteitsrelaties via de Fluent API.
@@ -96,7 +96,7 @@ namespace Models {
 					var config = new ConfigurationBuilder()
 						.SetBasePath(AppContext.BaseDirectory)  // The directory of the Model library, not the executing project
 						.AddJsonFile("appsettings.json", optional: true) // Get the connection string from the Json-file
-						.AddUserSecrets<AgendaDbContext>(optional: true) // Add the User Secrets
+						.AddUserSecrets<GlobalDbContext>(optional: true) // Add the User Secrets
 						.AddEnvironmentVariables()
 						.Build();
 					string? con = config.GetConnectionString("ServerConnection");
@@ -128,7 +128,7 @@ namespace Models {
 		/// Een task die de asynchrone operatie representeert.
 		/// </returns>
 		public static async Task Seeder(IServiceProvider serviceProvider) {
-			var context = serviceProvider.GetRequiredService<AgendaDbContext>();
+			var context = serviceProvider.GetRequiredService<GlobalDbContext>();
 			var userManager = serviceProvider.GetRequiredService<UserManager<AgendaUser>>();
 
 			if (!context.Languages.Any()) {

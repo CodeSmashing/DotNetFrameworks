@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace GardenPlanner_WPF {
 	public partial class RegisterControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		public event EventHandler SwapRequested = null!;
 		public event EventHandler<AgendaUser> RegisterSuccess = null!;
@@ -15,7 +15,7 @@ namespace GardenPlanner_WPF {
 		// Key: Field name, Value: Human-readable name
 		public Dictionary<Control, string> registerRequirements = new();
 
-		public RegisterControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public RegisterControl(GlobalDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

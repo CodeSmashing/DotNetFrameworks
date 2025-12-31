@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace GardenPlanner_WPF {
 	public partial class RoleControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		private bool _isUnselecting = false;
 
@@ -16,7 +16,7 @@ namespace GardenPlanner_WPF {
 			get => (AgendaUser) dgUsers.SelectedItem;
 		}
 
-		public RoleControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public RoleControl(GlobalDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

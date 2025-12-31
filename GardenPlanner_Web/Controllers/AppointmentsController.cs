@@ -11,7 +11,7 @@ namespace GardenPlanner_Web.Controllers {
 	/// </summary>
 	[Authorize(Roles = "User,UserAdmin,Admin")]
 	public class AppointmentsController : Controller {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 
 		/// <summary>
 		/// Initialiseert een nieuwe instantie van de
@@ -20,7 +20,7 @@ namespace GardenPlanner_Web.Controllers {
 		/// <param name="context">
 		/// De context voor afsprakenbeheer (dependency injection).
 		/// </param>
-		public AppointmentsController(AgendaDbContext context) {
+		public AppointmentsController(GlobalDbContext context) {
 			_context = context;
 		}
 
@@ -40,11 +40,11 @@ namespace GardenPlanner_Web.Controllers {
 					return View();
 				}
 
-				var agendaDbContext = _context.Appointments.Where(a => a.AgendaUserId == currentUserId && a.Deleted == null);
+				var contextAppointments = _context.Appointments.Where(a => a.AgendaUserId == currentUserId && a.Deleted == null);
 				ViewData["SelectListAppointmentType"] = new SelectList(_context.AppointmentTypes.Where(appt => appt.Id != "-" && appt.Deleted == null), "Id", "Description");
 				ViewData["UserId"] = currentUserId;
 				ViewData["AppointmentTypeId"] = _context.AppointmentTypes.First(appt => appt.Id != "-").Id;
-				return View(await agendaDbContext.ToListAsync());
+				return View(await contextAppointments.ToListAsync());
 			} catch (Exception ex) {
 				// Log the exception (you can use a logging framework here)
 				return View();

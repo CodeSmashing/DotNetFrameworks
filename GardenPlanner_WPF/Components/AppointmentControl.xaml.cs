@@ -11,7 +11,7 @@ using System.Windows.Media;
 namespace GardenPlanner_WPF {
 	public partial class AppointmentControl : UserControl {
 		static public event EventHandler AppointmentCreated = delegate { };
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private bool _isSettingDataContext = false;
 		private bool _isEditing = false;
 
@@ -19,7 +19,7 @@ namespace GardenPlanner_WPF {
 		// Key: Field name, Value: Human-readable name
 		public Dictionary<Control, string> inputRequirements = new();
 
-		public AppointmentControl(AgendaDbContext context) {
+		public AppointmentControl(GlobalDbContext context) {
 			_context = context;
 			InitializeComponent();
 

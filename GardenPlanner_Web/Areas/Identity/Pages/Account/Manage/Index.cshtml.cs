@@ -16,13 +16,13 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account.Manage {
 	public class IndexModel : PageModel {
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly SignInManager<AgendaUser> _signInManager;
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly GlobalAppSettings _globalAppSettings;
 
 		public IndexModel(
 			UserManager<AgendaUser> userManager,
 			SignInManager<AgendaUser> signInManager,
-			AgendaDbContext context,
+			GlobalDbContext context,
 			GlobalAppSettings globalAppSettings) {
 			_userManager = userManager;
 			_signInManager = signInManager;

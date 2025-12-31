@@ -21,7 +21,7 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 		private readonly IUserEmailStore<AgendaUser> _emailStore;
 		private readonly ILogger<RegisterModel> _logger;
 		private readonly IEmailSender _emailSender;
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 
 		public RegisterModel(
 			UserManager<AgendaUser> userManager,
@@ -29,7 +29,7 @@ namespace GardenPlanner_Web.Areas.Identity.Pages.Account {
 			SignInManager<AgendaUser> signInManager,
 			ILogger<RegisterModel> logger,
 			IEmailSender emailSender,
-			AgendaDbContext context) {
+			GlobalDbContext context) {
 			_userManager = userManager;
 			_userStore = userStore;
 			_emailStore = GetEmailStore();

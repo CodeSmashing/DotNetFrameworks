@@ -22,7 +22,7 @@ namespace GardenPlanner_WPF {
 
 					// Assumes every user has a role to it
 					string currentRole = ServiceProvider
-						.GetRequiredService<AgendaDbContext>().UserRoles
+						.GetRequiredService<GlobalDbContext>().UserRoles
 						.First(role => role.UserId == User.Id).RoleId;
 					OnUserChanged(currentRole);
 				}
@@ -58,7 +58,7 @@ namespace GardenPlanner_WPF {
 				// Setup DbContext as service
 				var totpProvider = typeof(PasswordlessLoginTotpTokenProvider<>).MakeGenericType(typeof(AgendaUser));
 				serviceSet.AddLogging()
-					.AddDbContext<AgendaDbContext>()
+					.AddDbContext<GlobalDbContext>()
 					.AddIdentityCore<AgendaUser>(options => {
 						options.Password.RequireDigit = false;
 						options.Password.RequireLowercase = false;
@@ -70,20 +70,20 @@ namespace GardenPlanner_WPF {
 						options.User.RequireUniqueEmail = true;
 					})
 					.AddRoles<IdentityRole>()
-					.AddEntityFrameworkStores<AgendaDbContext>()
+					.AddEntityFrameworkStores<GlobalDbContext>()
 					.AddPasswordlessLoginTotpTokenProvider();
 
 				// Create the service provider which wil be accessible throughout the app
 				ServiceProvider = serviceSet.BuildServiceProvider();
 
 				// Seed the database
-				await AgendaDbContext.Seeder(ServiceProvider);
+				await GlobalDbContext.Seeder(ServiceProvider);
 
 				// Set the initial or "default" user
 				_user = AgendaUser.Dummy;
 
 				MainWindow = new(
-					ServiceProvider.GetRequiredService<AgendaDbContext>(),
+					ServiceProvider.GetRequiredService<GlobalDbContext>(),
 					ServiceProvider.GetRequiredService<UserManager<AgendaUser>>());
 				MainWindow.Show();
 			} catch (Exception ex) {

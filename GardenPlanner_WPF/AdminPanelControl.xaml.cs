@@ -4,14 +4,14 @@ using System.Windows.Controls;
 
 namespace GardenPlanner_WPF {
 	public partial class AdminPanelControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly AgendaUserControl agendaUserControl;
 		private readonly RoleControl roleControl;
 		private readonly VehicleAssignmentControl vehicleControl;
 		private readonly ToDoControl toDoControl;
 
-		public AdminPanelControl(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public AdminPanelControl(GlobalDbContext context, UserManager<AgendaUser> userManager) {
 			_context = context;
 			_userManager = userManager;
 			InitializeComponent();

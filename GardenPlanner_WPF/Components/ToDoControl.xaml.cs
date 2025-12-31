@@ -4,9 +4,9 @@ using System.Windows.Controls;
 
 namespace GardenPlanner_WPF {
 	public partial class ToDoControl : UserControl {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 
-		public ToDoControl(AgendaDbContext context) {
+		public ToDoControl(GlobalDbContext context) {
 			_context = context;
 			InitializeComponent();
 

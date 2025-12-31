@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace GardenPlanner_WPF {
 	public partial class MainWindow : Window {
-		private readonly AgendaDbContext _context;
+		private readonly GlobalDbContext _context;
 		private readonly UserManager<AgendaUser> _userManager;
 		private readonly LoginControl loginControl;
 		private readonly RegisterControl registerControl;
@@ -14,7 +14,7 @@ namespace GardenPlanner_WPF {
 		private readonly AppointmentControl appointmentControl;
 		private readonly AdminPanelControl adminPanelControl;
 
-		public MainWindow(AgendaDbContext context, UserManager<AgendaUser> userManager) {
+		public MainWindow(GlobalDbContext context, UserManager<AgendaUser> userManager) {
 			Application.Current.MainWindow.WindowState = WindowState.Maximized;
 
 			_context = context;
