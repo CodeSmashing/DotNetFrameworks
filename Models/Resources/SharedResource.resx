@@ -123,6 +123,21 @@
   <data name="Deleted" xml:space="preserve">
     <value>Deleted at</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Invalid email format.</value>
+  </data>
+  <data name="ExpiresAt" xml:space="preserve">
+    <value>Expires at</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
   <data name="Required" xml:space="preserve">
     <value>{0} is required</value>
   </data>

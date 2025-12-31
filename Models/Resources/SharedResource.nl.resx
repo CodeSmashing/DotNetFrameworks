@@ -123,6 +123,21 @@
   <data name="Deleted" xml:space="preserve">
     <value>Verwijderd op</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Ongeldig e-mailformaat.</value>
+  </data>
+  <data name="ExpiresAt" xml:space="preserve">
+    <value>Vervalt op</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Wachtwoord</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Onthoud mij</value>
+  </data>
   <data name="Required" xml:space="preserve">
     <value>{0} is vereist</value>
   </data>

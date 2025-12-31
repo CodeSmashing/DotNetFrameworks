@@ -14,6 +14,7 @@ namespace Models {
 		/// verplicht en uniek is.
 		/// </remarks>
 		[Key]
+		[EmailAddress]
 		[Display(Name = "Email")]
 		public required string Email {
 			get; set;
@@ -26,6 +27,8 @@ namespace Models {
 		/// De invoer wordt verborgen door <see cref="PasswordPropertyTextAttribute"/>.
 		/// </remarks>
 		[Display(Name = "Password")]
+		[StringLength(100, MinimumLength = 6)]
+		[DataType(DataType.Password)]
 		[PasswordPropertyText]
 		public required string Password {
 			get; set;
