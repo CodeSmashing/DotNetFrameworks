@@ -12,9 +12,9 @@
 	Appointment? appointment = null;
 	if (ViewData["UserId"] != null && ViewBag.UserId.ToString() != "") {
 		appointment = new() {
-			AgendaUserId = ViewData["UserId"].ToString(),
+			AgendaUserId = ViewBag.UserId.ToString(),
 			Date = DateTime.Now,
-			AppointmentTypeId = ViewData["AppointmentTypeId"].ToString(),
+			AppointmentTypeId = ViewBag.AppointmentTypeId.ToString(),
 			Description = string.Empty,
 			Title = string.Empty
 		};
