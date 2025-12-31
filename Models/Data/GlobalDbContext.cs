@@ -89,7 +89,7 @@ namespace Models {
 		/// </param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			// Define the connection string to the database
-			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AgendaDb;Trusted_Connection=true;MultipleActiveResultSets=true";
+			string connectionString = "Server=(localdb)\\mssqllocaldb;Database=GardenPlannerDb;Trusted_Connection=true;MultipleActiveResultSets=true";
 
 			if (!optionsBuilder.IsConfigured) {
 				try {
