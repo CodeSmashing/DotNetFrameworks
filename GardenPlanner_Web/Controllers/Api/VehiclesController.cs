@@ -71,7 +71,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[Authorize(Roles = "UserAdmin,Admin,Employee")]
 		[ProducesResponseType<VehicleDTO>(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<Vehicle>> GetVehicle(string id) {
+		public async Task<ActionResult<VehicleDTO>> GetVehicle(string id) {
 			var vehicle = await _context.Vehicles.FindAsync(id);
 
 			if (vehicle == null || vehicle.Deleted != null) {
@@ -93,7 +93,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de voertuig die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="vehicleDTO">
+		/// <param name="posted">
 		/// De bijgewerkte voertuig gegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
@@ -105,8 +105,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> PutVehicle(string id, VehicleDTO vehicleDTO) {
-			if (id != vehicleDTO.Id) {
+		public async Task<ActionResult> PutVehicle(string id, VehicleDTO posted) {
+			if (!string.IsNullOrEmpty(posted.GlobalId) || id != posted.GlobalId) {
 				return BadRequest();
 			}
 
@@ -115,13 +115,13 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			vehicle.LicencePlate = vehicleDTO.LicencePlate;
-			vehicle.VehicleType = vehicleDTO.VehicleType;
-			vehicle.Brand = vehicleDTO.Brand;
-			vehicle.Model = vehicleDTO.Model;
-			vehicle.LoadCapacity = vehicleDTO.LoadCapacity;
-			vehicle.WeightCapacity = vehicleDTO.WeightCapacity;
-			vehicle.FuelType = vehicleDTO.FuelType;
+			vehicle.LicencePlate = posted.LicencePlate;
+			vehicle.VehicleType = posted.VehicleType;
+			vehicle.Brand = posted.Brand;
+			vehicle.Model = posted.Model;
+			vehicle.LoadCapacity = posted.LoadCapacity;
+			vehicle.WeightCapacity = posted.WeightCapacity;
+			vehicle.FuelType = posted.FuelType;
 			_context.Entry(vehicle).State = EntityState.Modified;
 
 			try {
@@ -142,7 +142,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "Admin".
 		/// </remarks>
-		/// <param name="vehicleDTO">
+		/// <param name="posted">
 		/// Het <see cref="VehicleDTO"/> object dat moet worden
 		/// toegevoegd.
 		/// </param>
@@ -155,15 +155,15 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType<VehicleDTO>(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
-		public async Task<ActionResult<VehicleDTO>> PostVehicle(VehicleDTO vehicleDTO) {
+		public async Task<ActionResult<VehicleDTO>> PostVehicle(VehicleDTO posted) {
 			Vehicle vehicle = new() {
-				LicencePlate = vehicleDTO.LicencePlate,
-				VehicleType = vehicleDTO.VehicleType,
-				Brand = vehicleDTO.Brand,
-				Model = vehicleDTO.Model,
-				LoadCapacity = vehicleDTO.LoadCapacity,
-				WeightCapacity = vehicleDTO.WeightCapacity,
-				FuelType = vehicleDTO.FuelType
+				LicencePlate = posted.LicencePlate,
+				VehicleType = posted.VehicleType,
+				Brand = posted.Brand,
+				Model = posted.Model,
+				LoadCapacity = posted.LoadCapacity,
+				WeightCapacity = posted.WeightCapacity,
+				FuelType = posted.FuelType
 			};
 
 			_context.Vehicles.Add(vehicle);

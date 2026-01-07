@@ -1,4 +1,5 @@
 ﻿using Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.DTO {
 	/// <summary>
@@ -7,9 +8,16 @@ namespace Models.DTO {
 	/// </summary>
 	public class VehicleDTO {
 		/// <summary>
-		/// De unieke identificatie van het voertuig.
+		/// De unieke identificatie van het lokale voertuig.
 		/// </summary>
-		public required string Id {
+		public string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
+
+		/// <summary>
+		/// De unieke identificatie van het globale voertuig.
+		/// </summary>
+		public string? GlobalId {
 			get; set;
 		}
 

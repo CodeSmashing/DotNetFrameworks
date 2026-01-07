@@ -96,7 +96,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de to-do die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="toDoDTO">
+		/// <param name="posted">
 		/// De bijgewerkte to-do gegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
@@ -108,8 +108,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> PutToDo(string id, ToDoDTO toDoDTO) {
-			if (id != toDoDTO.Id) {
+		public async Task<ActionResult> PutToDo(string id, ToDoDTO posted) {
+			if (!string.IsNullOrEmpty(posted.GlobalId) || id != posted.GlobalId) {
 				return BadRequest();
 			}
 
@@ -118,8 +118,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			toDo.Description = toDoDTO.Description;
-			toDo.AppointmentId = toDoDTO.AppointmentId;
+			toDo.Description = posted.Description;
+			toDo.AppointmentId = posted.AppointmentId;
 			_context.Entry(toDo).State = EntityState.Modified;
 
 			try {
@@ -140,7 +140,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "User", "UserAdmin", "Admin", "Employee".
 		/// </remarks>
-		/// <param name="toDoDTO">
+		/// <param name="posted">
 		/// Het <see cref="ToDoDTO"/> object dat moet worden toegevoegd.
 		/// </param>
 		/// <returns>
@@ -152,10 +152,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType<ToDoDTO>(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
-		public async Task<ActionResult<ToDoDTO>> PostToDo(ToDoDTO toDoDTO) {
+		public async Task<ActionResult<ToDoDTO>> PostToDo(ToDoDTO posted) {
 			ToDo toDo = new() {
-				Description = toDoDTO.Description,
-				AppointmentId = toDoDTO.AppointmentId
+				Description = posted.Description,
+				AppointmentId = posted.AppointmentId
 			};
 
 			_context.ToDos.Add(toDo);

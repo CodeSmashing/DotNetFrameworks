@@ -19,7 +19,7 @@ namespace Models.Extensions.Models {
 		/// </returns>
 		public static AgendaUserDTO? ToDTO(this AgendaUser? model) {
 			return model == null ? null : new() {
-				Id = model.Id,
+				GlobalId = model.Id,
 				FirstName = model.FirstName,
 				LastName = model.LastName
 			};
@@ -38,7 +38,7 @@ namespace Models.Extensions.Models {
 		/// </returns>
 		public static AppointmentDTO? ToDTO(this Appointment? model) {
 			return model == null ? null : new() {
-				Id = model.Id,
+				GlobalId = model.Id,
 				AgendaUserId = model.AgendaUserId,
 				Date = model.Date,
 				Title = model.Title,
@@ -60,7 +60,7 @@ namespace Models.Extensions.Models {
 		/// </returns>
 		public static AppointmentTypeDTO? ToDTO(this AppointmentType? model) {
 			return model == null ? null : new() {
-				Id = model.Id,
+				GlobalId = model.Id,
 				Name = model.Name,
 				Description = model.Description
 			};
@@ -79,7 +79,7 @@ namespace Models.Extensions.Models {
 		/// </returns>
 		public static VehicleDTO? ToDTO(this Vehicle? model) {
 			return model == null ? null : new() {
-				Id = model.Id,
+				GlobalId = model.Id,
 				LicencePlate = model.LicencePlate,
 				Brand = model.Brand,
 				Model = model.Model,
@@ -102,7 +102,7 @@ namespace Models.Extensions.Models {
 		/// </returns>
 		public static ToDoDTO? ToDTO(this ToDo? model) {
 			return model == null ? null : new() {
-				Id = model.Id,
+				GlobalId = model.Id,
 				AppointmentId = model.AppointmentId,
 				Description = model.Description
 			};

@@ -66,12 +66,6 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// Een <see cref="ActionResult{T}"/> met het gevraagde
 		/// <see cref="AppointmentTypeDTO"/> object.
 		/// </returns>
-		/// <response code="200">
-		/// Retourneert de gevraagde afspraak type.
-		/// </response>
-		/// <response code="404">
-		/// Indien de afspraak type met de opgegeven ID niet gevonden is.
-		/// </response>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
 		[ProducesResponseType<AppointmentTypeDTO>(StatusCodes.Status200OK)]
@@ -98,7 +92,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de afspraak type die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="appointmentTypeDTO">
+		/// <param name="posted">
 		/// De bijgewerkte afspraak type gegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
@@ -110,8 +104,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> PutAppointmentType(string id, AppointmentTypeDTO appointmentTypeDTO) {
-			if (id != appointmentTypeDTO.Id) {
+		public async Task<ActionResult> PutAppointmentType(string id, AppointmentTypeDTO posted) {
+			if (!string.IsNullOrEmpty(posted.GlobalId) || id != posted.GlobalId) {
 				return BadRequest();
 			}
 
@@ -120,8 +114,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			appointmentType.Name = appointmentTypeDTO.Name;
-			appointmentType.Description = appointmentTypeDTO.Description;
+			appointmentType.Name = posted.Name;
+			appointmentType.Description = posted.Description;
 			_context.Entry(appointmentType).State = EntityState.Modified;
 
 			try {
@@ -142,7 +136,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "UserAdmin", "Admin", "Employee".
 		/// </remarks>
-		/// <param name="appointmentTypeDTO">
+		/// <param name="posted">
 		/// Het <see cref="AppointmentTypeDTO"/> object dat moet worden
 		/// toegevoegd.
 		/// </param>
@@ -155,10 +149,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType<AppointmentTypeDTO>(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
-		public async Task<ActionResult<AppointmentTypeDTO>> PostAppointmentType(AppointmentTypeDTO appointmentTypeDTO) {
+		public async Task<ActionResult<AppointmentTypeDTO>> PostAppointmentType(AppointmentTypeDTO posted) {
 			AppointmentType appointmentType = new() {
-				Name = appointmentTypeDTO.Name,
-				Description = appointmentTypeDTO.Description
+				Name = posted.Name,
+				Description = posted.Description
 			};
 
 			_context.AppointmentTypes.Add(appointmentType);

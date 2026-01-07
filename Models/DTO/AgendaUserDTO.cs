@@ -1,13 +1,22 @@
-﻿namespace Models.DTO {
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Models.DTO {
 	/// <summary>
 	/// Representeert een data transfer object voor een gebruiker in het systeem.
 	/// Wordt gebruikt om gegevens tussen de API en de MAUI-client te synchroniseren.
 	/// </summary>
 	public class AgendaUserDTO {
 		/// <summary>
-		/// De unieke identificatie van de gebruiker.
+		/// De unieke identificatie van de lokale gebruiker.
 		/// </summary>
-		public required string Id {
+		public string Id {
+			get; private set;
+		} = Guid.NewGuid().ToString();
+
+		/// <summary>
+		/// De unieke identificatie van de globale gebruiker.
+		/// </summary>
+		public string? GlobalId {
 			get; set;
 		}
 

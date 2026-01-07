@@ -53,7 +53,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 
 			if (userId == null) {
 				return BadRequest(new {
-					Message = "No to-do was found."
+					Message = "No user was found."
 				});
 			}
 
@@ -105,7 +105,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// <param name="id">
 		/// De ID van de afspraak die moet worden bijgewerkt.
 		/// </param>
-		/// <param name="appointmentDTO">
+		/// <param name="posted">
 		/// De bijgewerkte afspraakgegevens in de body van het verzoek.
 		/// </param>
 		/// <returns>
@@ -117,8 +117,8 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> PutAppointment(string id, AppointmentDTO appointmentDTO) {
-			if (id != appointmentDTO.Id) {
+		public async Task<ActionResult> PutAppointment(string id, AppointmentDTO posted) {
+			if (!string.IsNullOrEmpty(posted.GlobalId) || id != posted.GlobalId) {
 				return BadRequest();
 			}
 
@@ -127,10 +127,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			appointment.Date = appointmentDTO.Date;
-			appointment.Title = appointmentDTO.Title;
-			appointment.Description = appointmentDTO.Description;
-			appointment.AppointmentTypeId = appointmentDTO.AppointmentTypeId;
+			appointment.Date = posted.Date;
+			appointment.Title = posted.Title;
+			appointment.Description = posted.Description;
+			appointment.AppointmentTypeId = posted.AppointmentTypeId;
 			_context.Entry(appointment).State = EntityState.Modified;
 
 			try {
@@ -151,7 +151,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// rollen hebben toegang: 
 		/// "User", "UserAdmin", "Admin", "Employee".
 		/// </remarks>
-		/// <param name="appointmentDTO">
+		/// <param name="posted">
 		/// Het <see cref="AppointmentDTO"/> object dat moet worden
 		/// toegevoegd.
 		/// </param>
@@ -164,20 +164,20 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType<AppointmentDTO>(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
-		public async Task<ActionResult<AppointmentDTO>> PostAppointment(AppointmentDTO appointmentDTO) {
+		public async Task<ActionResult<AppointmentDTO>> PostAppointment(AppointmentDTO posted) {
 			Appointment appointment = new() {
-				AgendaUserId = appointmentDTO.AgendaUserId,
-				Date = appointmentDTO.Date,
-				Title = appointmentDTO.Title,
-				Description = appointmentDTO.Description,
-				AppointmentTypeId = appointmentDTO.AppointmentTypeId
+				AgendaUserId = posted.AgendaUserId,
+				Date = posted.Date,
+				Title = posted.Title,
+				Description = posted.Description,
+				AppointmentTypeId = posted.AppointmentTypeId
 			};
 
 			_context.Appointments.Add(appointment);
 
 			try {
 				await _context.SaveChangesAsync();
-			} catch (DbUpdateException) when (AppointmentExists(appointmentDTO.Id)) {
+			} catch (DbUpdateException) when (AppointmentExists(posted.Id)) {
 				return Conflict();
 			}
 
@@ -205,12 +205,6 @@ namespace GardenPlanner_Web.Controllers.Api {
 		/// Een <see cref="IActionResult"/> die de status van de
 		/// bewerking weergeeft.
 		/// </returns>
-		/// <response code="204">
-		/// Indien de afspraak succesvol is verwijderd (No Content).
-		/// </response>
-		/// <response code="404">
-		/// Indien de afspraak niet gevonden is.
-		/// </response>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "User,UserAdmin,Admin,Employee")]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
