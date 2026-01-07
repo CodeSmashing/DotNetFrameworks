@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.CustomServices;
 using Models.DTO;
+using Models.Extensions.Models;
 using System.Net.Mime;
 
 namespace GardenPlanner_Web.Controllers.Api {

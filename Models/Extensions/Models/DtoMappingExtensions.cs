@@ -1,6 +1,6 @@
 ﻿using Models.DTO;
 
-namespace Models.CustomServices {
+namespace Models.Extensions.Models {
 	/// <summary>
 	/// Bevat extensiemethoden voor het transformeren van domeinmodellen naar
 	/// Data Transfer Objects (DTO's).
@@ -109,4 +109,3 @@ namespace Models.CustomServices {
 		}
 	}
 }
-
