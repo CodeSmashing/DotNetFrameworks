@@ -127,10 +127,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			appointment.Date = posted.Date;
-			appointment.Title = posted.Title;
-			appointment.Description = posted.Description;
-			appointment.AppointmentTypeId = posted.AppointmentTypeId;
+			posted.ToExisting(appointment);
 			_context.Entry(appointment).State = EntityState.Modified;
 
 			try {
@@ -165,13 +162,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
 		public async Task<ActionResult<AppointmentDTO>> PostAppointment(AppointmentDTO posted) {
-			Appointment appointment = new() {
-				AgendaUserId = posted.AgendaUserId,
-				Date = posted.Date,
-				Title = posted.Title,
-				Description = posted.Description,
-				AppointmentTypeId = posted.AppointmentTypeId
-			};
+			Appointment? appointment = posted.ToModel();
+			if (appointment == null) {
+				return BadRequest();
+			}
 
 			_context.Appointments.Add(appointment);
 

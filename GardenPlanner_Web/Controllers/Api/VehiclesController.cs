@@ -115,13 +115,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			vehicle.LicencePlate = posted.LicencePlate;
-			vehicle.VehicleType = posted.VehicleType;
-			vehicle.Brand = posted.Brand;
-			vehicle.Model = posted.Model;
-			vehicle.LoadCapacity = posted.LoadCapacity;
-			vehicle.WeightCapacity = posted.WeightCapacity;
-			vehicle.FuelType = posted.FuelType;
+			posted.ToExisting(vehicle);
 			_context.Entry(vehicle).State = EntityState.Modified;
 
 			try {
@@ -156,15 +150,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
 		public async Task<ActionResult<VehicleDTO>> PostVehicle(VehicleDTO posted) {
-			Vehicle vehicle = new() {
-				LicencePlate = posted.LicencePlate,
-				VehicleType = posted.VehicleType,
-				Brand = posted.Brand,
-				Model = posted.Model,
-				LoadCapacity = posted.LoadCapacity,
-				WeightCapacity = posted.WeightCapacity,
-				FuelType = posted.FuelType
-			};
+			Vehicle? vehicle = posted.ToModel();
+			if (vehicle == null) {
+				return BadRequest();
+			}
 
 			_context.Vehicles.Add(vehicle);
 

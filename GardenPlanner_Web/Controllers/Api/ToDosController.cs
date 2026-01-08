@@ -118,8 +118,7 @@ namespace GardenPlanner_Web.Controllers.Api {
 				return NotFound();
 			}
 
-			toDo.Description = posted.Description;
-			toDo.AppointmentId = posted.AppointmentId;
+			posted.ToExisting(toDo);
 			_context.Entry(toDo).State = EntityState.Modified;
 
 			try {
@@ -153,10 +152,10 @@ namespace GardenPlanner_Web.Controllers.Api {
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]
 		public async Task<ActionResult<ToDoDTO>> PostToDo(ToDoDTO posted) {
-			ToDo toDo = new() {
-				Description = posted.Description,
-				AppointmentId = posted.AppointmentId
-			};
+			ToDo? toDo = posted.ToModel();
+			if (toDo == null) {
+				return BadRequest();
+			}
 
 			_context.ToDos.Add(toDo);
 
